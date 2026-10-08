@@ -1,9 +1,11 @@
 import patientsData from '../../../data/mock/patients.json';
+import documentsData from '../../../data/mock/documents.json';
 import extractedItemsData from '../../../data/mock/extractedItems.json';
 import medicationRemindersData from '../../../data/mock/medicationReminders.json';
 import tasksData from '../../../data/mock/tasks.json';
 import dayColorsData from '../../../data/mock/dayColors.json';
 import quizSessionsData from '../../../data/mock/quizSessions.json';
+
 
 /**
  * Service adapter for Patient Dashboard data.
@@ -163,3 +165,46 @@ export async function getPatientDischargeInstructions(patientId = 'P001') {
 
   return grouped;
 }
+
+/**
+  * Gather comprehensive clinical prescription data for patient and PDF generation
+  * @param {string} patientId 
+  */
+export async function getPatientPrescriptionData(patientId = 'P001') {
+  const patient = await getPatientById(patientId);
+
+  // Fetch discharge document from API or mock
+  let doc = null;
+  try {
+    const res = await fetch(`/api/documents/patient/${patientId}`);
+    if (res.ok) {
+      const json = await res.json();
+      doc = json.data !== undefined ? json.data : json;
+    }
+  } catch (err) {
+    // fallback
+  }
+  if (!doc) {
+    doc = documentsData.find((d) => d.patientId === patientId) || documentsData[0];
+  }
+
+  // Fetch instructions
+  const instructions = await getPatientDischargeInstructions(patientId);
+
+  // Fetch reminders for timing
+  const reminders = medicationRemindersData.filter((m) => m.patientId === patientId);
+
+  return {
+    patient,
+    document: doc,
+    medications: instructions.medications || [],
+    activity: instructions.activity || [],
+    restrictions: instructions.restrictions || [],
+    diet: instructions.diet || [],
+    woundCare: instructions.woundCare || [],
+    followUp: instructions.followUp || [],
+    warningSigns: instructions.warningSigns || [],
+    reminders
+  };
+}
+

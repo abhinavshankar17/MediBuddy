@@ -8,6 +8,7 @@ import {
   Award,
   Lightbulb,
   FileText,
+  FileCheck,
   Users,
   UserCheck,
   Activity,
@@ -41,10 +42,12 @@ export default function Sidebar() {
 
   const patientNavItems = [
     { label: 'Patient Dashboard', path: '/patient', icon: LayoutDashboard },
+    { label: 'Prescription & Rx', path: '/patient/prescription', icon: FileCheck },
     { label: 'Medication Schedule', path: '/patient/medication', icon: Pill },
     { label: 'Care Insights', path: '/patient/insights', icon: Lightbulb },
     { label: 'Discharge Plan', path: '/patient/discharge', icon: FileText }
   ];
+
 
   const nurseNavItems = [
     { label: 'Nurse Dashboard', path: '/nurse', icon: LayoutDashboard },

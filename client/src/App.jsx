@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage';
 
 // Patient Pages
 import PatientDashboard from './pages/patient/PatientDashboard';
+import PatientPrescription from './pages/patient/PatientPrescription';
 import Medication from './pages/patient/Medication';
 import PatientInsight from './pages/patient/PatientInsight';
 import DischargeInstructions from './pages/patient/DischargeInstructions';
@@ -34,10 +35,13 @@ export default function App() {
         <Route path="/patient" element={<PatientLayout />}>
           <Route index element={<PatientDashboard />} />
           <Route path="dashboard" element={<PatientDashboard />} />
+          <Route path="prescription" element={<PatientPrescription />} />
+          <Route path="prescriptions" element={<PatientPrescription />} />
           <Route path="medication" element={<Medication />} />
           <Route path="insights" element={<PatientInsight />} />
           <Route path="discharge" element={<DischargeInstructions />} />
         </Route>
+
 
         {/* Nurse Portal Routes */}
         <Route path="/nurse" element={<NurseLayout />}>
