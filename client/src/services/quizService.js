@@ -12,8 +12,36 @@ export async function getPatientQuizSession(patientId = 'P001') {
     const res = await fetch(`/api/patients/${patientId}/quiz-session`);
     if (res.ok) {
       const data = await res.json();
-      if (data.questions && data.questions.length === 5) {
-        return data;
+      const payload = data.data !== undefined ? data.data : data;
+      if (payload.questions && payload.questions.length === 5) {
+        let savedState = null;
+        try {
+          const local = localStorage.getItem(`${STORAGE_QUIZ_KEY}${patientId}`);
+          if (local) {
+            savedState = JSON.parse(local);
+          }
+        } catch (e) {
+          console.warn('Could not restore saved quiz progress:', e);
+        }
+
+        const sanitizedQuestions = payload.questions.slice(0, 5).map((q, idx) => ({
+          _id: q._id || `QQ_${idx + 1}`,
+          quizSessionId: payload.session?._id,
+          questionNumber: idx + 1,
+          question: q.question,
+          options: q.options || ['Option A', 'Option B', 'Option C', 'Option D'],
+          correctAnswer: q.correctAnswer,
+          sourceSentence: q.sourceSentence || '',
+          type: q.options && q.options.length === 2 ? 'true_false' : 'multiple_choice'
+        }));
+
+        return {
+          session: payload.session,
+          questions: sanitizedQuestions,
+          savedAnswers: savedState?.answers || {},
+          savedCurrentIndex: savedState?.currentIndex || 0,
+          isCompleted: savedState?.isCompleted || payload.isCompleted || payload.session?.status === 'completed'
+        };
       }
     }
   } catch (err) {
@@ -116,12 +144,33 @@ export async function submitQuizSession(patientId, sessionId, questions, answers
     passed: score >= 60
   };
 
+  const answersArray = Array.isArray(answers)
+    ? answers
+    : Object.keys(answers).map((qId) => ({
+        questionId: qId,
+        selectedAnswer: answers[qId]
+      }));
+
   try {
-    await fetch(`/api/quiz-sessions/${sessionId}/submit`, {
+    const res = await fetch(`/api/quiz-sessions/${sessionId}/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(completionData)
+      body: JSON.stringify({
+        patientId,
+        answers: answersArray
+      })
     });
+    if (res.ok) {
+      const json = await res.json();
+      const result = json.data !== undefined ? json.data : json;
+      saveQuizProgress(patientId, answers, 4, true);
+      return {
+        ...completionData,
+        ...result,
+        correctCount: result.correctAnswers ?? result.correctCount ?? correctCount,
+        passed: (result.score ?? score) >= 60
+      };
+    }
   } catch (err) {
     console.warn('[quizService] Backend POST endpoint offline. Saved quiz completion locally.');
   }

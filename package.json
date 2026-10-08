@@ -4,6 +4,8 @@
   "description": "Medi Buddy – MERN hackathon project",
   "private": true,
   "scripts": {
+    "server": "npm --prefix server start",
+    "server:dev": "npm --prefix server run dev",
     "dev": "npm run dev --prefix client",
     "build": "npm run build --prefix client"
   }
