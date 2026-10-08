@@ -22,8 +22,10 @@ import {
   ShieldCheck,
   Stethoscope,
   Smile,
-  Info
+  Info,
+  RefreshCw
 } from 'lucide-react';
+import { useRealtimeSync } from '../../utils/realtimeSync';
 
 export default function CaregiverCalendar() {
   const { activePatientId, setActivePatientId, currentUser } = useApp();
@@ -42,9 +44,9 @@ export default function CaregiverCalendar() {
   const caregiverId = currentUser?.role === 'caregiver' ? currentUser._id : 'U101';
   const patientId = activePatientId || 'P001';
 
-  const loadCalendar = async () => {
+  const loadCalendar = async (isSilent = false) => {
     try {
-      setLoading(true);
+      if (!isSilent) setLoading(true);
       setError(null);
       const [patientsRes, calRes] = await Promise.all([
         getCaregiverPatients(caregiverId),
@@ -54,15 +56,25 @@ export default function CaregiverCalendar() {
       setLinkedPatients(patientsRes.patients || []);
       setCalendarData(calRes);
     } catch (err) {
-      console.error('Failed to load caregiver calendar:', err);
-      setError('Unable to load loved one’s recovery calendar. Please retry.');
+      if (!isSilent) {
+        console.error('Failed to load caregiver calendar:', err);
+        setError('Unable to load loved one’s recovery calendar. Please retry.');
+      }
     } finally {
-      setLoading(false);
+      if (!isSilent) setLoading(false);
     }
   };
 
+  // Real-time synchronization hook (SSE + BroadcastChannel + localStorage + 4s polling)
+  const { isLiveConnected, isRefreshing, refreshNow } = useRealtimeSync({
+    patientId,
+    onUpdate: (isSilent) => loadCalendar(isSilent),
+    pollingInterval: 4000,
+    enabled: true
+  });
+
   useEffect(() => {
-    loadCalendar();
+    loadCalendar(false);
   }, [patientId, currentYear, currentMonth]);
 
   const handlePrevMonth = () => {
@@ -134,7 +146,28 @@ export default function CaregiverCalendar() {
       title="Recovery & Care Calendar"
       subtitle="Comprehensive view of daily health scores, medication progress, and clinical appointments"
       actions={
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
+          {/* Live Real-Time Connection Indicator */}
+          <div
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-[11px] font-bold shadow-2xs"
+            title={isLiveConnected ? 'Connected to live patient recovery calendar' : 'Auto-polling patient calendar'}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="hidden sm:inline">Live Sync</span>
+            <span className="text-[10px] text-emerald-700 font-semibold">
+              {isRefreshing ? 'Syncing...' : 'Active'}
+            </span>
+          </div>
+
+          <button
+            onClick={() => refreshNow()}
+            disabled={isRefreshing}
+            className="p-1.5 rounded-xl border border-[#E8E2D7] bg-white hover:bg-[#FAF8F5] text-[#78716C] hover:text-[#1C1917] transition-all shadow-2xs cursor-pointer disabled:opacity-60"
+            title="Refresh recovery calendar"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#CC785C]' : ''}`} />
+          </button>
+
           {linkedPatients.length > 1 && (
             <div className="flex items-center bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl px-2.5 py-1.5 shadow-2xs">
               <User className="w-3.5 h-3.5 text-[#78716C] mr-1.5" />

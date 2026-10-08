@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const caregiverController = require('../controllers/caregiver.controller');
+const dataStore = require('../services/dataStore');
 
 /**
  * Caregiver & Family Dashboard Routes (/api/caregiver)
@@ -29,5 +30,38 @@ router.post('/feedback/:feedbackId/review', caregiverController.reviewFeedback);
 // 5. Encouragement & Messages
 router.post('/patients/:patientId/encouragement', caregiverController.sendEncouragement);
 router.post('/encouragement', caregiverController.sendEncouragement);
+
+// 6. Real-Time Server-Sent Events (SSE) Live Stream
+router.get('/patients/:patientId/live-stream', (req, res) => {
+  const patientId = req.params.patientId || 'P001';
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache, no-transform',
+    'Connection': 'keep-alive',
+    'Access-Control-Allow-Origin': '*'
+  });
+
+  // Initial connection handshake
+  res.write(`data: ${JSON.stringify({ type: 'connected', patientId, timestamp: new Date().toISOString() })}\n\n`);
+
+  // Subscribe to patient-specific real-time events
+  const unsubscribe = dataStore.onPatientUpdate(patientId, (update) => {
+    try {
+      res.write(`data: ${JSON.stringify({ patientId, timestamp: new Date().toISOString(), ...update })}\n\n`);
+    } catch (e) {}
+  });
+
+  // Periodic heartbeat to prevent socket timeouts
+  const heartbeat = setInterval(() => {
+    try {
+      res.write(': heartbeat\n\n');
+    } catch (e) {}
+  }, 20000);
+
+  req.on('close', () => {
+    unsubscribe();
+    clearInterval(heartbeat);
+  });
+});
 
 module.exports = router;

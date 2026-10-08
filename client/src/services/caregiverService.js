@@ -3,8 +3,19 @@ import medicationRemindersData from '../../../data/mock/medicationReminders.json
 import dayColorsData from '../../../data/mock/dayColors.json';
 import checkInsData from '../../../data/mock/checkIns.json';
 import feedbacksData from '../../../data/mock/feedbacks.json';
+import { notifyPatientUpdate } from '../utils/realtimeSync';
 
 const API_BASE = '/api';
+const STORAGE_KEY = 'medibuddy_confirmed_reminders';
+
+const getStoredStatuses = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+};
 
 /**
  * Fetch linked patients for a caregiver / family member
@@ -75,11 +86,32 @@ export async function getCaregiverPatients(caregiverId = 'U101') {
  * Fetch comprehensive Daily Report for a loved one
  */
 export async function getDailyReport(patientId = 'P001', caregiverId = 'U101') {
+  const storedStatuses = getStoredStatuses();
+
   try {
     const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/daily-report?caregiverId=${caregiverId}`);
     if (res.ok) {
       const json = await res.json();
-      return json.data !== undefined ? json.data : json;
+      const report = json.data !== undefined ? json.data : json;
+
+      // Sync any local client medication confirmations into backend report
+      if (report?.medications?.todayList) {
+        report.medications.todayList = report.medications.todayList.map((m) => {
+          const stored = storedStatuses[m._id];
+          const isTaken = m.isCompleted || stored?.status === 'taken';
+          return {
+            ...m,
+            isCompleted: isTaken,
+            statusDisplay: isTaken ? 'Taken' : m.statusDisplay
+          };
+        });
+        const confirmed = report.medications.todayList.filter((m) => m.isCompleted).length;
+        const total = report.medications.todayList.length || report.medications.totalCount || 1;
+        report.medications.confirmedCount = confirmed;
+        report.medications.totalCount = total;
+        report.medications.adherenceRate = Math.round((confirmed / total) * 100);
+      }
+      return report;
     }
   } catch (err) {
     // offline fallback
@@ -262,6 +294,13 @@ export async function getPatientFeedbacks(patientId = 'P001') {
  * Caregiver reviews and acknowledges patient feedback
  */
 export async function reviewFeedback(patientId, feedbackId, reviewData = {}) {
+  notifyPatientUpdate({
+    type: 'feedback_reviewed',
+    patientId,
+    feedbackId,
+    timestamp: Date.now()
+  });
+
   try {
     const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/feedback/${feedbackId}/review`, {
       method: 'POST',
@@ -291,6 +330,12 @@ export async function reviewFeedback(patientId, feedbackId, reviewData = {}) {
  * Caregiver sends encouragement message to patient
  */
 export async function sendEncouragement(patientId, payload = {}) {
+  notifyPatientUpdate({
+    type: 'encouragement_sent',
+    patientId,
+    timestamp: Date.now()
+  });
+
   try {
     const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/encouragement`, {
       method: 'POST',

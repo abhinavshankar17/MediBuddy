@@ -11,6 +11,7 @@ import {
   sendEncouragement
 } from '../../services/caregiverService';
 import { useApp } from '../../context/AppContext';
+import { useRealtimeSync } from '../../utils/realtimeSync';
 import {
   Heart,
   Pill,
@@ -28,7 +29,8 @@ import {
   Coffee,
   Moon,
   Info,
-  PhoneCall
+  PhoneCall,
+  RefreshCw
 } from 'lucide-react';
 
 export default function CaregiverDashboard() {
@@ -50,9 +52,9 @@ export default function CaregiverDashboard() {
   const caregiverId = currentUser?.role === 'caregiver' ? currentUser._id : 'U101';
   const patientId = activePatientId || 'P001';
 
-  const loadDashboard = async () => {
+  const loadDashboard = async (isSilent = false) => {
     try {
-      setLoading(true);
+      if (!isSilent) setLoading(true);
       setError(null);
 
       const [patientsData, reportData] = await Promise.all([
@@ -63,15 +65,25 @@ export default function CaregiverDashboard() {
       setLinkedPatients(patientsData.patients || []);
       setReport(reportData);
     } catch (err) {
-      console.error('Failed to load caregiver daily report:', err);
-      setError('Unable to load loved one’s recovery report. Please retry.');
+      if (!isSilent) {
+        console.error('Failed to load caregiver daily report:', err);
+        setError('Unable to load loved one’s recovery report. Please retry.');
+      }
     } finally {
-      setLoading(false);
+      if (!isSilent) setLoading(false);
     }
   };
 
+  // Real-time synchronization hook (SSE + BroadcastChannel + localStorage + 4s polling)
+  const { isLiveConnected, isRefreshing, lastSyncTime, refreshNow } = useRealtimeSync({
+    patientId,
+    onUpdate: (isSilent) => loadDashboard(isSilent),
+    pollingInterval: 4000,
+    enabled: true
+  });
+
   useEffect(() => {
-    loadDashboard();
+    loadDashboard(false);
   }, [patientId]);
 
   const handlePatientSwitch = (newId) => {
@@ -156,7 +168,29 @@ export default function CaregiverDashboard() {
       title={`Daily Recovery Report: ${patient.name}`}
       subtitle={`Dedicated family care oversight for your ${patient.relationship.toLowerCase()} recovering from ${patient.condition}.`}
       actions={
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Live Real-Time Connection Indicator */}
+          <div
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-[11px] font-bold shadow-2xs"
+            title={isLiveConnected ? 'Direct real-time event stream connected to patient' : 'Automatic polling sync active'}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="hidden sm:inline">Live Sync</span>
+            <span className="text-[10px] text-emerald-700 font-semibold">
+              {isRefreshing ? 'Syncing...' : 'Active'}
+            </span>
+          </div>
+
+          {/* Quick Manual Refresh Button */}
+          <button
+            onClick={() => refreshNow()}
+            disabled={isRefreshing}
+            className="p-1.5 rounded-xl border border-[#E8E2D7] bg-white hover:bg-[#FAF8F5] text-[#78716C] hover:text-[#1C1917] transition-all shadow-2xs cursor-pointer disabled:opacity-60"
+            title="Sync latest patient data now"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#CC785C]' : ''}`} />
+          </button>
+
           {/* Patient Switcher if multiple linked */}
           {linkedPatients.length > 1 && (
             <div className="flex items-center gap-1.5 bg-white border border-[#E8E2D7] rounded-xl px-3 py-1.5 shadow-2xs">

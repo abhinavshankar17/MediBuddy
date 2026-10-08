@@ -1,5 +1,6 @@
 import documentsData from '../../../data/mock/documents.json';
 import patientsData from '../../../data/mock/patients.json';
+import { notifyPatientUpdate } from '../utils/realtimeSync';
 
 const API_BASE = '/api';
 
@@ -41,6 +42,12 @@ export function getDiagnosingDoctor(patientId) {
  * Submit patient condition feedback
  */
 export async function submitFeedback(patientId, feedbackData) {
+  notifyPatientUpdate({
+    type: 'feedback_submitted',
+    patientId,
+    timestamp: Date.now()
+  });
+
   try {
     const res = await fetch(`${API_BASE}/patients/${patientId}/feedback`, {
       method: 'POST',

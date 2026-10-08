@@ -1,6 +1,11 @@
+const EventEmitter = require('events');
 const { loadMockJson } = require('../seed/seed');
 const { getDBStatus } = require('../config/db');
 const { Patient, Document, ExtractedItem, Task, MedicationReminder, Event, QuizSession, QuizQuestion, QuizAnswer, PatientInsight, NurseBrief, Escalation } = require('../models');
+
+// Real-time pub/sub emitter for live updates
+const liveSyncEmitter = new EventEmitter();
+liveSyncEmitter.setMaxListeners(200);
 
 // In-memory cache loaded from authoritative data/mock/
 let memoryCache = {
@@ -392,7 +397,15 @@ const dataStore = {
       ...updates
     };
 
-    return medicationReminders[idx];
+    const updated = medicationReminders[idx];
+    dataStore.emitPatientUpdate(updated.patientId, {
+      type: 'medication_reminder_updated',
+      reminderId,
+      status: updated.status,
+      responseType: updated.responseType
+    });
+
+    return updated;
   },
 
   /**
@@ -418,6 +431,7 @@ const dataStore = {
       ...eventData
     };
     events.push(event);
+    dataStore.emitPatientUpdate(event.patientId, { type: 'event_logged', event });
     return event;
   },
 
@@ -1101,6 +1115,7 @@ const dataStore = {
   async addFeedback(feedback) {
     const { feedbacks } = getCache();
     feedbacks.push(feedback);
+    dataStore.emitPatientUpdate(feedback.patientId, { type: 'feedback_submitted', feedback });
     return feedback;
   },
 
@@ -1186,7 +1201,9 @@ const dataStore = {
       ...feedbacks[idx],
       ...updates
     };
-    return feedbacks[idx];
+    const updated = feedbacks[idx];
+    dataStore.emitPatientUpdate(updated.patientId, { type: 'feedback_reviewed', feedbackId, updates });
+    return updated;
   },
 
   /**
@@ -1232,6 +1249,7 @@ const dataStore = {
   async addEncouragement(encouragement) {
     const { encouragements } = getCache();
     encouragements.push(encouragement);
+    dataStore.emitPatientUpdate(encouragement.patientId, { type: 'encouragement_sent', encouragement });
     return encouragement;
   },
 
@@ -1242,6 +1260,33 @@ const dataStore = {
   async getEncouragementsByPatient(patientId) {
     const { encouragements } = getCache();
     return encouragements.filter(e => e.patientId === patientId);
+  },
+
+  /**
+   * Real-time pub/sub: Emit update event for a patient
+   * @param {string} patientId
+   * @param {Object} payload
+   */
+  emitPatientUpdate(patientId, payload = {}) {
+    if (patientId) {
+      liveSyncEmitter.emit(`patient:${patientId}`, payload);
+      liveSyncEmitter.emit('patient_update', { patientId, ...payload });
+    }
+  },
+
+  /**
+   * Real-time pub/sub: Subscribe to update events for a patient
+   * @param {string} patientId
+   * @param {Function} listener
+   */
+  onPatientUpdate(patientId, listener) {
+    if (patientId) {
+      const channel = `patient:${patientId}`;
+      liveSyncEmitter.on(channel, listener);
+      return () => liveSyncEmitter.off(channel, listener);
+    }
+    liveSyncEmitter.on('patient_update', listener);
+    return () => liveSyncEmitter.off('patient_update', listener);
   }
 };
 
