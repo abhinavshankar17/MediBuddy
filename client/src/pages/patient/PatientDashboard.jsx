@@ -12,7 +12,6 @@ import {
   getPatientRecoveryProgress,
   getPatientDischargeInstructions
 } from '../../services/patientService';
-import { getPatientEncouragements } from '../../services/insightService';
 import { useRealtimeSync } from '../../utils/realtimeSync';
 import PatientMedicationCalendar from '../../components/patient/PatientMedicationCalendar';
 import { useApp } from '../../context/AppContext';
@@ -29,8 +28,6 @@ import {
   ShieldAlert,
   Info,
   Clock,
-  Heart,
-  ChevronRight,
   LogOut
 } from 'lucide-react';
 
@@ -43,7 +40,6 @@ export default function PatientDashboard() {
   const [overview, setOverview] = useState(null);
   const [progress, setProgress] = useState(null);
   const [instructions, setInstructions] = useState(null);
-  const [encouragements, setEncouragements] = useState([]);
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -58,19 +54,17 @@ export default function PatientDashboard() {
       setLoading(true);
       setError(null);
 
-      const [pData, oData, prData, iData, encs] = await Promise.all([
+      const [pData, oData, prData, iData] = await Promise.all([
         getPatientById(targetId),
         getPatientTodayOverview(targetId),
         getPatientRecoveryProgress(targetId),
-        getPatientDischargeInstructions(targetId),
-        getPatientEncouragements(targetId)
+        getPatientDischargeInstructions(targetId)
       ]);
 
       setPatient(pData);
       setOverview(oData);
       setProgress(prData);
       setInstructions(iData);
-      setEncouragements(Array.isArray(encs) ? encs : []);
     } catch (err) {
       console.error('Failed to load patient dashboard:', err);
       setError('Could not load patient dashboard data. Please try again.');
@@ -178,37 +172,6 @@ export default function PatientDashboard() {
           </div>
         </div>
       </Card>
-
-      {/* Family Encouragement Alert Banner */}
-      {encouragements && encouragements.length > 0 && (
-        <div
-          onClick={() => navigate('/patient/insights')}
-          className="p-3.5 rounded-2xl bg-gradient-to-r from-rose-50 via-white to-amber-50/40 border border-rose-200 shadow-2xs hover:shadow-xs hover:border-rose-300 transition-all cursor-pointer flex items-center justify-between gap-3 animate-fade-in"
-        >
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0">
-              <Heart className="w-5 h-5 fill-current" />
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-[#1C1917]">
-                  Message from {encouragements[0].caregiverName || 'Family'}:
-                </span>
-                <span className="text-[10px] text-rose-700 font-semibold bg-rose-100/70 px-2 py-0.5 rounded-full">
-                  ❤️ Family Encouragement
-                </span>
-              </div>
-              <p className="text-xs text-[#78716C] italic truncate mt-0.5">
-                "{encouragements[0].message}"
-              </p>
-            </div>
-          </div>
-          <span className="text-xs font-bold text-[#CC785C] hover:underline flex items-center gap-1 flex-shrink-0">
-            <span>View in Care Insights</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </span>
-        </div>
-      )}
 
       {/* Monthly Recovery & Medication Calendar with Lab Test Dots & Exact Daily Timings */}
       {instructions && (
