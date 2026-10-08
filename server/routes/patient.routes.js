@@ -6,6 +6,7 @@ const eventController = require('../controllers/event.controller');
 const adherenceController = require('../controllers/adherence.controller');
 const quizController = require('../controllers/quiz.controller');
 const insightController = require('../controllers/insight.controller');
+const nurseController = require('../controllers/nurse.controller');
 
 /**
  * Patient Routes (/api/patients)
@@ -61,5 +62,8 @@ router.get('/:id/insights', insightController.getPatientInsights);
 router.get('/:patientId/insights/:id', insightController.getInsightById);
 router.post('/:id/insight/generate', insightController.generateInsight);
 router.post('/:id/insights/generate', insightController.generateInsight);
+
+// Feature 8: Nested Nurse Dashboard Patient Summary
+router.get('/:id/nurse-dashboard', nurseController.getPatientDetail);
 
 module.exports = router;

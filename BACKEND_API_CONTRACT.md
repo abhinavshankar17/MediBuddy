@@ -1139,11 +1139,146 @@ RESPONSE:
 
 ---
 
+### Feature 8: Nurse Dashboard APIs (`/api/nurse/dashboard` & `/api/nurse/patients`)
+
+```text
+METHOD: GET
+PATH: /api/nurse/dashboard
+PATH (alias): /api/nurse/patients
+AUTH: Required / Nurse or Clinician role
+PURPOSE: Retrieve aggregated nurse dashboard overview across all monitored patients
+REQUEST:
+  Headers: None
+  Query:
+    - priority (string, optional): Filter by priority ('HIGH', 'MEDIUM', 'LOW')
+    - caregiverId (string, optional): Filter by assigned caregiver
+    - recoveryPhase (string, optional): Filter by recovery phase
+    - search (string, optional): Search across patient name, ID, surgery, room
+RESPONSE:
+  Status: 200 OK
+  Body:
+    {
+      "success": true,
+      "message": "Nurse dashboard retrieved successfully (8 patients)",
+      "data": {
+        "totalPatients": 8,
+        "highPriorityCount": 2,
+        "mediumPriorityCount": 4,
+        "lowPriorityCount": 2,
+        "patients": [
+          {
+            "patient": {
+              "_id": "P003",
+              "name": "Lakshmi Devi",
+              "age": 47,
+              "gender": "Female",
+              "condition": "Pneumonia recovery",
+              "procedure": "Medical admission and discharge",
+              "surgery": "Medical admission and discharge",
+              "recoveryPhase": "Week 1",
+              "admissionDate": "2026-10-02",
+              "dischargeDate": "2026-10-07",
+              "mobility": "Independent",
+              "caregiverId": "U103"
+            },
+            "medicationAdherence": {
+              "total": 3,
+              "confirmed": 2,
+              "notConfirmed": 0,
+              "missed": 1
+            },
+            "quizPerformance": {
+              "score": 60,
+              "correct": 3,
+              "total": 5
+            },
+            "knowledgeGaps": [
+              "Antibiotic duration",
+              "Warning sign recognition"
+            ],
+            "flags": [
+              "Missed medication",
+              "Medication duration knowledge gap",
+              "Warning sign knowledge gap"
+            ],
+            "latestRelevantEvents": [
+              {
+                "_id": "E118",
+                "patientId": "P003",
+                "type": "medication_missed",
+                "timestamp": "2026-10-08T15:15:00+05:30"
+              }
+            ],
+            "priority": "HIGH",
+            "summary": "Patient missed the afternoon Amoxicillin dose and scored only 60% on the recovery quiz. Immediate nurse intervention recommended."
+          }
+        ]
+      }
+    }
+
+---
+
+METHOD: GET
+PATH: /api/nurse/dashboard/patient/:id
+PATH (alias): /api/nurse/dashboard/:id
+PATH (alias): /api/nurse/patients/:id
+PATH (nested): /api/patients/:id/nurse-dashboard
+AUTH: Required / Nurse or Clinician role
+PURPOSE: Retrieve single patient detailed dashboard view including nurse brief questions and follow-ups
+REQUEST:
+  Headers: None
+  Params:
+    - id (string, required): Patient ID (e.g. P001, P003)
+RESPONSE:
+  Status: 200 OK
+  Body:
+    {
+      "success": true,
+      "message": "Nurse dashboard detail for patient P003 retrieved successfully",
+      "data": {
+        "patient": { ... },
+        "medicationAdherence": {
+          "total": 3,
+          "confirmed": 2,
+          "notConfirmed": 0,
+          "missed": 1
+        },
+        "quizPerformance": {
+          "score": 60,
+          "correct": 3,
+          "total": 5
+        },
+        "knowledgeGaps": [
+          "Antibiotic duration",
+          "Warning sign recognition"
+        ],
+        "flags": [
+          "Missed medication",
+          "Medication duration knowledge gap",
+          "Warning sign knowledge gap"
+        ],
+        "latestRelevantEvents": [ ... ],
+        "priority": "HIGH",
+        "summary": "...",
+        "questionsForNurse": [
+          "Confirm reason for missed afternoon Amoxicillin.",
+          "Educate on the importance of completing the full 7-day course.",
+          "Reinforce warning signs: breathlessness, high fever, confusion, blue lips."
+        ],
+        "recommendedFollowUp": "Priority nurse call.",
+        "brief": { ... },
+        "insight": { ... }
+      }
+    }
+```
+
+---
+
 ## 3. Strict Patient Isolation & Semantic Guarantees
 
 1. **Mandatory Patient Scoping**: Every query requires `patientId` either as a route path parameter (`/api/patients/:id/*`, `/api/documents/patient/:patientId`) or as a mandatory query parameter (`/api/tasks?patientId=...`, `/api/reminders?patientId=...`, `/api/events?patientId=...`, `/api/adherence?patientId=...`, `/api/quiz/today?patientId=...`, `/api/insights?patientId=...`).
 2. **Existence Verification**: Queries against invalid or non-existent patient IDs (e.g. `P999`) return `404 Not Found`.
-3. **Zero Cross-Patient Leakage**: Tasks, documents, extracted instructions, reminders, events, adherence counts, quiz data, and patient insights are strictly isolated. Confirmations, event logs, answer submissions, score queries, or insight lookups with mismatched IDs are blocked with `403 Forbidden`.
+3. **Zero Cross-Patient Leakage**: Tasks, documents, extracted instructions, reminders, events, adherence counts, quiz data, patient insights, and nurse dashboard cards are strictly isolated. Confirmations, event logs, answer submissions, score queries, or insight lookups with mismatched IDs are blocked with `403 Forbidden`.
 4. **Critical Quiz Session Invariant**: Every quiz session strictly enforces `totalQuestions === 5`. Sessions with 4 questions, 6 questions, or duplicate questions are rejected with `400 Bad Request`.
 5. **API Safety Guarantee**: `correctAnswer` is strictly stripped and hidden from the patient prior to quiz submission or completion.
 6. **Feature 6 Semantic Rule (Educational Signal)**: The quiz score is strictly an **educational knowledge and engagement signal**. It must **NEVER** be termed a clinical score, medical risk score, or diagnosis.
@@ -1156,3 +1291,4 @@ RESPONSE:
    - recommend dosage changes
    All summaries are validated against these strict clinical boundary rules.
 10. **Feature 7 Frontend Disclaimer**: Insights supply the mandatory safety disclaimer: `disclaimer: "AI-generated — verify before acting."` with `aiGenerated: true`.
+11. **Feature 8 Nurse Dashboard Association Guarantee**: For each patient card, `patient`, `medicationAdherence` (`{ total, confirmed, notConfirmed, missed }`), `quizPerformance` (`{ score, correct, total: 5 }`), `knowledgeGaps`, `flags`, and `latestRelevantEvents` are strictly derived from and associated with that specific patient's data. Cross-patient data mixing is prohibited and verified.

@@ -1,6 +1,6 @@
 const { loadMockJson } = require('../seed/seed');
 const { getDBStatus } = require('../config/db');
-const { Patient, Document, ExtractedItem, Task, MedicationReminder, Event, QuizSession, QuizQuestion, QuizAnswer, PatientInsight } = require('../models');
+const { Patient, Document, ExtractedItem, Task, MedicationReminder, Event, QuizSession, QuizQuestion, QuizAnswer, PatientInsight, NurseBrief } = require('../models');
 
 // In-memory cache loaded from authoritative data/mock/
 let memoryCache = {
@@ -13,7 +13,8 @@ let memoryCache = {
   quizSessions: null,
   quizQuestions: null,
   quizAnswers: null,
-  patientInsights: null
+  patientInsights: null,
+  nurseBriefs: null
 };
 
 const getCache = () => {
@@ -28,6 +29,7 @@ const getCache = () => {
     memoryCache.quizQuestions = loadMockJson('quizQuestions.json') || [];
     memoryCache.quizAnswers = loadMockJson('quizAnswers.json') || [];
     memoryCache.patientInsights = loadMockJson('patientInsights.json') || [];
+    memoryCache.nurseBriefs = loadMockJson('nurseBriefs.json') || [];
   }
   return memoryCache;
 };
@@ -771,6 +773,77 @@ const dataStore = {
     } else {
       patientInsights.push(insightData);
       return insightData;
+    }
+  },
+
+  /**
+   * Get all nurse briefs
+   */
+  async getNurseBriefs() {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const docs = await NurseBrief.find().sort({ generatedAt: -1 }).lean();
+        if (docs && docs.length > 0) return docs;
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { nurseBriefs } = getCache();
+    return [...nurseBriefs];
+  },
+
+  /**
+   * Get latest nurse brief for a specific patient
+   * @param {string} patientId 
+   */
+  async getNurseBriefByPatient(patientId) {
+    if (!patientId) return null;
+
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const doc = await NurseBrief.findOne({ patientId }).sort({ generatedAt: -1 }).lean();
+        if (doc) return doc;
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { nurseBriefs } = getCache();
+    // Return latest brief for patient
+    const matches = nurseBriefs
+      .filter(nb => nb.patientId === patientId)
+      .sort((a, b) => new Date(b.generatedAt || 0) - new Date(a.generatedAt || 0));
+
+    return matches.length > 0 ? matches[0] : null;
+  },
+
+  /**
+   * Save a nurse brief
+   * @param {Object} briefData 
+   */
+  async saveNurseBrief(briefData) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const newDoc = new NurseBrief(briefData);
+        await newDoc.save();
+        return newDoc.toObject();
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { nurseBriefs } = getCache();
+    const idx = nurseBriefs.findIndex(nb => nb._id === briefData._id);
+    if (idx !== -1) {
+      nurseBriefs[idx] = { ...nurseBriefs[idx], ...briefData };
+      return nurseBriefs[idx];
+    } else {
+      nurseBriefs.push(briefData);
+      return briefData;
     }
   }
 };
