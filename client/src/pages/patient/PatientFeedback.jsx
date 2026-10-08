@@ -58,14 +58,14 @@ const URGENCY_LEVELS = [
   }
 ];
 
-// Steps: feedback → slots → confirmation → done
-const STEPS = ['feedback', 'slots', 'confirmation', 'done'];
+// Steps: feedback → slots → done
+const BOOKING_STEPS = ['feedback', 'slots', 'done'];
 
 export default function PatientFeedback() {
   const { activePatientId, currentUser } = useApp();
   const patientId = activePatientId || currentUser?.patientId || 'P001';
 
-  // Navigation
+  // Navigation: 'feedback' | 'feedback-done' | 'slots' | 'done'
   const [currentStep, setCurrentStep] = useState('feedback');
 
   // Feedback form state
@@ -91,8 +91,9 @@ export default function PatientFeedback() {
   const [showHistory, setShowHistory] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(false);
 
-  // Submission
-  const [submitting, setSubmitting] = useState(false);
+  // Submission states
+  const [submittingFeedback, setSubmittingFeedback] = useState(false);
+  const [loadingSlots, setLoadingSlots] = useState(false);
 
   useEffect(() => {
     loadHistory();
@@ -130,10 +131,32 @@ export default function PatientFeedback() {
     }
   };
 
-  const handleSubmitFeedback = async () => {
+  // 1. Submit Feedback Only (No appointment)
+  const handleSubmitFeedbackOnly = async () => {
     if (!condition.trim()) return;
 
-    setSubmitting(true);
+    setSubmittingFeedback(true);
+    try {
+      const feedback = await submitFeedback(patientId, {
+        condition: condition.trim(),
+        urgency,
+        notes: notes.trim()
+      });
+      setSubmittedFeedback(feedback);
+      setCurrentStep('feedback-done');
+      loadHistory();
+    } catch (err) {
+      console.error('Error submitting feedback:', err);
+    } finally {
+      setSubmittingFeedback(false);
+    }
+  };
+
+  // 2. Book Appointment Flow (Submit feedback & proceed to slots)
+  const handleProceedToBooking = async () => {
+    if (!condition.trim()) return;
+
+    setLoadingSlots(true);
     try {
       const feedback = await submitFeedback(patientId, {
         condition: condition.trim(),
@@ -142,17 +165,38 @@ export default function PatientFeedback() {
       });
       setSubmittedFeedback(feedback);
 
-      // Now load available slots based on urgency
+      // Load available slots based on urgency
       setSlotsLoading(true);
       const slots = await getAvailableSlots(patientId, urgency);
       setSlotsData(slots);
+      if (slots?.diagnosingDoctor) {
+        setSelectedProvider(slots.diagnosingDoctor);
+      }
       setSlotsLoading(false);
 
       setCurrentStep('slots');
+      loadHistory();
     } catch (err) {
-      console.error('Error submitting feedback:', err);
+      console.error('Error proceeding to booking:', err);
     } finally {
-      setSubmitting(false);
+      setLoadingSlots(false);
+    }
+  };
+
+  // Book appointment after having submitted feedback
+  const handleBookFromSubmittedFeedback = async () => {
+    setSlotsLoading(true);
+    try {
+      const slots = await getAvailableSlots(patientId, urgency);
+      setSlotsData(slots);
+      if (slots?.diagnosingDoctor) {
+        setSelectedProvider(slots.diagnosingDoctor);
+      }
+      setCurrentStep('slots');
+    } catch (err) {
+      console.error('Error loading slots:', err);
+    } finally {
+      setSlotsLoading(false);
     }
   };
 
@@ -192,7 +236,20 @@ export default function PatientFeedback() {
     setBookingResult(null);
   };
 
-  const stepIndex = STEPS.indexOf(currentStep);
+  // Steps indicator configuration
+  const isFeedbackOnly = currentStep === 'feedback-done';
+  const displaySteps = isFeedbackOnly
+    ? [
+        { key: 'feedback', label: 'Report Condition' },
+        { key: 'feedback-done', label: 'Feedback Logged ✓' }
+      ]
+    : [
+        { key: 'feedback', label: 'Report Condition' },
+        { key: 'slots', label: 'Choose Slot & Doctor' },
+        { key: 'done', label: 'Booked ✓' }
+      ];
+
+  const stepIndex = displaySteps.findIndex(s => s.key === currentStep);
 
   // ──────────────────────────────────────────────────────
   // RENDER
@@ -225,13 +282,12 @@ export default function PatientFeedback() {
     >
       {/* Progress Steps */}
       <div className="flex items-center gap-1 sm:gap-2 p-3 sm:p-4 bg-white border border-[#E8E2D7] rounded-2xl shadow-xs overflow-x-auto scrollbar-none">
-        {STEPS.map((step, idx) => {
+        {displaySteps.map((step, idx) => {
           const isActive = idx === stepIndex;
           const isCompleted = idx < stepIndex;
-          const labels = ['Report Condition', 'Choose Slot', 'Confirm', 'Booked ✓'];
 
           return (
-            <React.Fragment key={step}>
+            <React.Fragment key={step.key}>
               {idx > 0 && (
                 <div className={`flex-1 h-0.5 rounded-full min-w-[16px] transition-colors ${isCompleted ? 'bg-[#CC785C]' : 'bg-[#E8E2D7]'}`} />
               )}
@@ -247,7 +303,7 @@ export default function PatientFeedback() {
                     {idx + 1}
                   </span>
                 )}
-                <span className="hidden sm:inline">{labels[idx]}</span>
+                <span className="hidden sm:inline">{step.label}</span>
               </div>
             </React.Fragment>
           );
@@ -264,7 +320,7 @@ export default function PatientFeedback() {
             <textarea
               value={condition}
               onChange={(e) => setCondition(e.target.value)}
-              placeholder="e.g., I've been experiencing increased pain around the surgical site since this morning, and there's some swelling..."
+              placeholder="e.g., I've been experiencing discomfort around the surgical site since this morning, and there's some swelling..."
               rows={4}
               className="w-full px-4 py-3 bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl text-sm text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none focus:ring-2 focus:ring-[#CC785C]/30 focus:border-[#CC785C] transition-all resize-none"
             />
@@ -324,25 +380,138 @@ export default function PatientFeedback() {
             />
           </Card>
 
-          {/* Submit Button */}
-          <button
-            onClick={handleSubmitFeedback}
-            disabled={!condition.trim() || submitting}
-            className="w-full flex items-center justify-center gap-2 py-4 px-6 bg-[#CC785C] hover:bg-[#B86549] disabled:bg-[#D6CEBE] disabled:cursor-not-allowed text-white rounded-2xl text-sm font-bold shadow-xs transition-all cursor-pointer"
-          >
-            {submitting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Submitting Feedback...</span>
-              </>
-            ) : (
-              <>
-                <Send className="w-4 h-4" />
-                <span>Submit & View Available Appointments</span>
-                <ChevronRight className="w-4 h-4" />
-              </>
-            )}
-          </button>
+          {/* Separate Submit Options */}
+          <div className="space-y-2 pt-2">
+            <p className="text-xs font-bold text-[#78716C] uppercase tracking-wider">Choose Submission Option</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Option 1: Submit Feedback Only */}
+              <button
+                type="button"
+                onClick={handleSubmitFeedbackOnly}
+                disabled={!condition.trim() || submittingFeedback || loadingSlots}
+                className="flex flex-col items-start gap-1 p-4 bg-white hover:bg-[#FAF8F5] border-2 border-[#CC785C] text-[#1C1917] hover:border-[#B86549] disabled:border-[#E8E2D7] disabled:text-[#A8A29E] disabled:bg-[#FAF8F5] disabled:cursor-not-allowed rounded-2xl shadow-xs transition-all cursor-pointer text-left group"
+              >
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-xl bg-[#CC785C]/10 text-[#CC785C] group-hover:bg-[#CC785C] group-hover:text-white flex items-center justify-center transition-colors">
+                      <Send className="w-4 h-4" />
+                    </div>
+                    <span className="text-sm font-bold text-[#CC785C]">Submit Feedback</span>
+                  </div>
+                  {submittingFeedback && (
+                    <div className="w-4 h-4 border-2 border-[#CC785C]/30 border-t-[#CC785C] rounded-full animate-spin" />
+                  )}
+                </div>
+                <p className="text-xs text-[#78716C] mt-1">
+                  Send your condition update directly to your care team. No doctor visit will be scheduled.
+                </p>
+              </button>
+
+              {/* Option 2: Book Appointment */}
+              <button
+                type="button"
+                onClick={handleProceedToBooking}
+                disabled={!condition.trim() || submittingFeedback || loadingSlots}
+                className="flex flex-col items-start gap-1 p-4 bg-[#0D9488] hover:bg-[#0B8578] disabled:bg-[#D6CEBE] disabled:cursor-not-allowed text-white rounded-2xl shadow-xs transition-all cursor-pointer text-left group"
+              >
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-xl bg-white/20 text-white flex items-center justify-center">
+                      <CalendarCheck className="w-4 h-4" />
+                    </div>
+                    <span className="text-sm font-bold text-white">Book Appointment</span>
+                  </div>
+                  {loadingSlots ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <ChevronRight className="w-4 h-4 text-white/80 group-hover:translate-x-0.5 transition-transform" />
+                  )}
+                </div>
+                <p className="text-xs text-white/85 mt-1">
+                  Find available doctor slots based on your urgency level and schedule a visit.
+                </p>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════ */}
+      {/* STEP: Feedback Submitted (No Appointment) */}
+      {/* ═══════════════════════════════════════════ */}
+      {currentStep === 'feedback-done' && submittedFeedback && (
+        <div className="space-y-5 animate-fade-in">
+          {/* Success Banner Card */}
+          <div className="text-center p-8 bg-gradient-to-b from-emerald-50 to-white border border-emerald-200 rounded-2xl shadow-xs">
+            <div className="w-16 h-16 mx-auto bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-4">
+              <CheckCircle2 className="w-8 h-8" />
+            </div>
+            <h2 className="text-2xl font-extrabold text-[#1C1917] font-serif">Feedback Submitted!</h2>
+            <p className="text-sm text-[#78716C] mt-2 max-w-md mx-auto">
+              Your condition report has been logged and sent to your clinical care team for review.
+            </p>
+          </div>
+
+          {/* Feedback Details Card */}
+          <Card title="Submitted Details" subtitle={`Reference ID: ${submittedFeedback._id}`}>
+            <div className="space-y-3">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Reported Condition</p>
+                <p className="text-sm font-semibold text-[#1C1917] mt-1">{submittedFeedback.condition}</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-[#E8E2D7]">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Urgency Level</p>
+                  <div className="mt-1">
+                    <StatusBadge
+                      status={submittedFeedback.urgency === 'urgent' || submittedFeedback.urgency === 'emergency' ? 'missed' : submittedFeedback.urgency === 'moderate' ? 'pending' : 'completed'}
+                      label={submittedFeedback.urgency.toUpperCase()}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Submitted At</p>
+                  <p className="text-xs font-semibold text-[#1C1917] mt-1">
+                    {new Date(submittedFeedback.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},{' '}
+                    {new Date(submittedFeedback.submittedAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </p>
+                </div>
+              </div>
+
+              {submittedFeedback.notes && (
+                <div className="pt-3 border-t border-[#E8E2D7]">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Additional Notes</p>
+                  <p className="text-xs text-[#78716C] mt-1">{submittedFeedback.notes}</p>
+                </div>
+              )}
+            </div>
+          </Card>
+
+          {/* Next Steps / Actions */}
+          <div className="p-4 bg-[#FAF8F5] border border-[#E8E2D7] rounded-2xl space-y-3">
+            <p className="text-xs font-bold text-[#1C1917]">Need to see a doctor for this issue?</p>
+            <p className="text-xs text-[#78716C]">
+              You can schedule an appointment now based on your condition's urgency, or submit another update anytime.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
+              <button
+                onClick={handleBookFromSubmittedFeedback}
+                disabled={loadingSlots}
+                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-[#0D9488] hover:bg-[#0B8578] text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
+              >
+                <CalendarCheck className="w-4 h-4" />
+                <span>{loadingSlots ? 'Loading Slots...' : 'Book Appointment for this Condition'}</span>
+              </button>
+              <button
+                onClick={resetForm}
+                className="flex items-center justify-center gap-2 py-3 px-4 bg-white hover:bg-[#FAF8F5] border border-[#E8E2D7] text-[#1C1917] rounded-xl text-xs font-bold transition-all cursor-pointer"
+              >
+                <MessageSquarePlus className="w-4 h-4 text-[#CC785C]" />
+                <span>Submit New Feedback</span>
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -461,38 +630,32 @@ export default function PatientFeedback() {
                 </Card>
               )}
 
-              {/* Provider selection (if slot selected) */}
+              {/* Diagnosing Doctor */}
               {selectedSlot && (
-                <Card title="Assigned Doctor" subtitle="Available doctor for your selected time slot">
+                <Card title="Diagnosing Doctor" subtitle="Follow-up consultation with the doctor who diagnosed and treated you">
                   {(() => {
                     const daySlots = slotsData.slots.find(d => d.date === selectedDate);
                     const slotInfo = daySlots?.timeSlots.find(s => s.time === selectedSlot);
-                    const providers = slotInfo?.providers || [];
+                    const doctor = slotInfo?.providers?.[0] || selectedProvider || slotsData?.diagnosingDoctor;
 
                     return (
-                      <div className="space-y-2.5">
-                        {providers.map(prov => (
-                          <button
-                            key={prov._id}
-                            onClick={() => setSelectedProvider(prov)}
-                            className={`w-full flex items-center gap-3 p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                              selectedProvider?._id === prov._id
-                                ? 'bg-[#CC785C]/10 border-[#CC785C] shadow-xs'
-                                : 'bg-[#FAF8F5] border-[#E8E2D7] hover:border-[#D6CEBE]'
-                            }`}
-                          >
-                            <div className="w-10 h-10 rounded-xl bg-[#0D9488] text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
-                              <Stethoscope className="w-5 h-5" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-xs font-bold text-[#1C1917]">{prov.name}</p>
-                              <p className="text-[11px] text-[#78716C]">{prov.specialty} • {prov.hospital}</p>
-                            </div>
-                            {selectedProvider?._id === prov._id && (
-                              <CheckCircle2 className="w-5 h-5 text-[#CC785C] flex-shrink-0" />
-                            )}
-                          </button>
-                        ))}
+                      <div className="p-4 bg-[#FAF8F5] border-2 border-[#0D9488]/30 rounded-2xl flex items-center gap-3.5">
+                        <div className="w-12 h-12 rounded-xl bg-[#0D9488] text-white flex items-center justify-center font-bold text-base flex-shrink-0 shadow-xs">
+                          <Stethoscope className="w-6 h-6" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="text-sm font-bold text-[#1C1917]">{doctor?.name}</p>
+                            <span className="px-2 py-0.5 bg-[#0D9488]/10 text-[#0D9488] text-[10px] font-extrabold rounded-md">
+                              Diagnosing Physician
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#78716C] mt-0.5">{doctor?.specialty} • {doctor?.hospital}</p>
+                          <p className="text-[11px] text-[#A8A29E] mt-1">
+                            Your follow-up is scheduled directly with the doctor who diagnosed and managed your care.
+                          </p>
+                        </div>
+                        <CheckCircle2 className="w-5 h-5 text-[#0D9488] flex-shrink-0" />
                       </div>
                     );
                   })()}
@@ -515,7 +678,7 @@ export default function PatientFeedback() {
                     <>
                       <CalendarCheck className="w-4 h-4" />
                       <span>
-                        Book Appointment — {selectedSlot} on {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
+                        Book with {selectedProvider?.name || slotsData?.diagnosingDoctor?.name || 'Diagnosing Doctor'} — {selectedSlot} on {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
                       </span>
                     </>
                   )}

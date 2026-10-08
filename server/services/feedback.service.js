@@ -105,12 +105,44 @@ const feedbackService = {
   },
 
   /**
+   * Helper to retrieve the specific doctor who diagnosed/treated this patient
+   */
+  getDiagnosingDoctor(patient, doc) {
+    const doctorName = doc?.doctorName || patient?.assignedDoctor || 'Dr. Vivek Iyer';
+    const hospital = doc?.hospitalName || 'CareBridge Demo Hospital';
+
+    let specialty = 'General & Internal Medicine';
+    const text = `${patient?.condition || ''} ${patient?.procedure || ''} ${doc?.rawText || ''}`.toLowerCase();
+    
+    if (text.includes('knee') || text.includes('ortho') || text.includes('fracture') || text.includes('joint') || text.includes('ankle')) {
+      specialty = 'Orthopedic Surgery';
+    } else if (text.includes('cardiac') || text.includes('heart') || text.includes('bypass') || text.includes('coronary')) {
+      specialty = 'Cardiology';
+    } else if (text.includes('pneumonia') || text.includes('respiratory') || text.includes('lung') || text.includes('breath')) {
+      specialty = 'Pulmonology';
+    } else if (text.includes('diabet') || text.includes('glucose') || text.includes('endocrine')) {
+      specialty = 'Endocrinology';
+    } else if (text.includes('hernia') || text.includes('surger')) {
+      specialty = 'General Surgery';
+    }
+
+    return {
+      _id: `DOC_${doctorName.replace(/[^a-zA-Z0-9]/g, '_')}`,
+      name: doctorName,
+      specialty,
+      hospital,
+      isDiagnosingDoctor: true
+    };
+  },
+
+  /**
    * Get available appointment slots based on urgency.
+   * Locked to the specific doctor who diagnosed the patient.
    * 
    * Logic:
-   * - urgent/emergency: ALL slots for next 7 days, every day available
-   * - moderate: Regular doctor-availability slots for next 3 days
-   * - mild: Regular doctor-availability slots for next 7 days, only on doctor's available days
+   * - urgent/emergency: ALL slots for next 7 days, every day available with diagnosing doctor
+   * - moderate: Regular slots for next 3 days with diagnosing doctor
+   * - mild: Regular slots for next 7 days with diagnosing doctor
    */
   async getAvailableSlots(patientId, urgency = 'mild') {
     if (!patientId) {
@@ -122,8 +154,10 @@ const feedbackService = {
       throw { statusCode: 404, message: `Patient '${patientId}' not found` };
     }
 
-    // Find relevant providers for this patient's condition
-    const providers = await dataStore.getProviders();
+    // Retrieve the patient's clinical document to find who diagnosed him
+    const doc = await dataStore.getDocumentByPatient(patientId);
+    const diagnosingDoctor = this.getDiagnosingDoctor(patient, doc);
+
     const normalizedUrgency = urgency.toLowerCase();
     const isUrgent = normalizedUrgency === 'urgent' || normalizedUrgency === 'emergency';
     const isModerate = normalizedUrgency === 'moderate';
@@ -145,75 +179,47 @@ const feedbackService = {
       });
 
       if (isUrgent) {
-        // For urgent: ALL time slots available, all providers
-        const availableProviders = providers.slice(0, 5).map(p => ({
-          _id: p._id,
-          name: p.name,
-          specialty: p.specialty,
-          hospital: p.hospital
-        }));
+        // For urgent: ALL time slots available with diagnosing doctor
+        slots.push({
+          date: dateStr,
+          dateLabel,
+          dayName,
+          isToday: d === 0,
+          urgencyNote: d === 0 ? '🔴 URGENT — Immediate slots with diagnosing doctor' : '🔴 Priority booking',
+          timeSlots: this.ALL_TIME_SLOTS.map(time => ({
+            time,
+            available: true,
+            providers: [diagnosingDoctor]
+          }))
+        });
+      } else {
+        // Simulate taken slots from existing booked appointments
+        const takenSlots = new Set();
+        const existingAppointments = await dataStore.getAppointmentsByDate(dateStr);
+        existingAppointments.forEach(apt => takenSlots.add(apt.timeSlot));
+
+        const slotsToShow = this.REGULAR_SLOTS;
 
         slots.push({
           date: dateStr,
           dateLabel,
           dayName,
           isToday: d === 0,
-          urgencyNote: d === 0 ? '🔴 URGENT — Immediate slots available' : '🔴 Priority booking',
-          timeSlots: this.ALL_TIME_SLOTS.map(time => ({
+          urgencyNote: isModerate
+            ? '🟡 Moderate — Next available slots with your doctor'
+            : '🟢 Routine appointment slots with your doctor',
+          timeSlots: slotsToShow.map(time => ({
             time,
-            available: true,
-            providers: availableProviders
+            available: !takenSlots.has(time),
+            providers: [diagnosingDoctor]
           }))
         });
-      } else {
-        // For moderate/mild: only show slots on doctor's available days
-        const availableProviders = providers.filter(p =>
-          p.availability && p.availability.includes(dayName)
-        ).slice(0, 3);
-
-        if (isModerate || availableProviders.length > 0) {
-          const providerInfo = (isModerate && availableProviders.length === 0)
-            ? providers.slice(0, 2).map(p => ({
-                _id: p._id,
-                name: p.name,
-                specialty: p.specialty,
-                hospital: p.hospital
-              }))
-            : availableProviders.map(p => ({
-                _id: p._id,
-                name: p.name,
-                specialty: p.specialty,
-                hospital: p.hospital
-              }));
-
-          // Simulate some slots being taken (for realism)
-          const takenSlots = new Set();
-          const existingAppointments = await dataStore.getAppointmentsByDate(dateStr);
-          existingAppointments.forEach(apt => takenSlots.add(apt.timeSlot));
-
-          // Moderate shows all regular slots; mild only shows regular slots
-          const slotsToShow = this.REGULAR_SLOTS;
-
-          slots.push({
-            date: dateStr,
-            dateLabel,
-            dayName,
-            isToday: d === 0,
-            urgencyNote: isModerate
-              ? '🟡 Moderate — Next available slots'
-              : '🟢 Routine appointment slots',
-            timeSlots: slotsToShow.map(time => ({
-              time,
-              available: !takenSlots.has(time),
-              providers: providerInfo
-            }))
-          });
-        }
       }
     }
 
     return {
       patientId,
+      diagnosingDoctor,
       urgency: normalizedUrgency,
       isUrgent,
       totalDays: slots.length,
@@ -234,18 +240,15 @@ const feedbackService = {
       throw { statusCode: 404, message: `Patient '${patientId}' not found` };
     }
 
-    const { date, timeSlot, providerId, urgency, feedbackId, reason } = appointmentData;
+    const { date, timeSlot, urgency, feedbackId, reason } = appointmentData;
 
     if (!date || !timeSlot) {
       throw { statusCode: 400, message: 'date and timeSlot are required' };
     }
 
-    // Look up provider (optional)
-    let provider = null;
-    if (providerId) {
-      const providers = await dataStore.getProviders();
-      provider = providers.find(p => p._id === providerId);
-    }
+    // Always assign the doctor who diagnosed the patient
+    const doc = await dataStore.getDocumentByPatient(patientId);
+    const diagnosingDoctor = this.getDiagnosingDoctor(patient, doc);
 
     const appointment = {
       _id: `APT${Date.now()}`,
@@ -253,13 +256,13 @@ const feedbackService = {
       patientName: patient.name,
       date,
       timeSlot,
-      providerId: providerId || null,
-      providerName: provider ? provider.name : 'Assigned at visit',
-      providerSpecialty: provider ? provider.specialty : null,
-      hospital: provider ? provider.hospital : 'CareBridge Partner Hospital',
+      providerId: diagnosingDoctor._id,
+      providerName: diagnosingDoctor.name,
+      providerSpecialty: diagnosingDoctor.specialty,
+      hospital: diagnosingDoctor.hospital,
       urgency: urgency || 'mild',
       feedbackId: feedbackId || null,
-      reason: reason || 'Post-discharge follow-up',
+      reason: reason || 'Follow-up with diagnosing physician',
       status: 'confirmed',
       bookedAt: new Date().toISOString()
     };

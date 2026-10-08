@@ -1,6 +1,41 @@
-import providersData from '../../../data/mock/providers.json';
+import documentsData from '../../../data/mock/documents.json';
+import patientsData from '../../../data/mock/patients.json';
 
 const API_BASE = '/api';
+
+/**
+ * Helper to get the doctor who diagnosed the patient
+ */
+export function getDiagnosingDoctor(patientId) {
+  const patient = patientsData.find(p => p._id === patientId) || null;
+  const doc = documentsData.find(d => d.patientId === patientId) || null;
+
+  const doctorName = doc?.doctorName || patient?.assignedDoctor || 'Dr. Vivek Iyer';
+  const hospital = doc?.hospitalName || 'CareBridge Demo Hospital';
+
+  let specialty = 'General & Internal Medicine';
+  const text = `${patient?.condition || ''} ${patient?.procedure || ''} ${doc?.rawText || ''}`.toLowerCase();
+
+  if (text.includes('knee') || text.includes('ortho') || text.includes('fracture') || text.includes('joint') || text.includes('ankle')) {
+    specialty = 'Orthopedic Surgery';
+  } else if (text.includes('cardiac') || text.includes('heart') || text.includes('bypass') || text.includes('coronary')) {
+    specialty = 'Cardiology';
+  } else if (text.includes('pneumonia') || text.includes('respiratory') || text.includes('lung') || text.includes('breath')) {
+    specialty = 'Pulmonology';
+  } else if (text.includes('diabet') || text.includes('glucose') || text.includes('endocrine')) {
+    specialty = 'Endocrinology';
+  } else if (text.includes('hernia') || text.includes('surger')) {
+    specialty = 'General Surgery';
+  }
+
+  return {
+    _id: `DOC_${doctorName.replace(/[^a-zA-Z0-9]/g, '_')}`,
+    name: doctorName,
+    specialty,
+    hospital,
+    isDiagnosingDoctor: true
+  };
+}
 
 /**
  * Submit patient condition feedback
@@ -100,6 +135,7 @@ export async function getAvailableSlots(patientId, urgency = 'mild') {
   }
 
   // Client-side mock fallback
+  const diagnosingDoctor = getDiagnosingDoctor(patientId);
   const normalizedUrgency = urgency.toLowerCase();
   const isUrgent = normalizedUrgency === 'urgent' || normalizedUrgency === 'emergency';
   const isModerate = normalizedUrgency === 'moderate';
@@ -117,34 +153,21 @@ export async function getAvailableSlots(patientId, urgency = 'mild') {
     });
 
     if (isUrgent) {
-      const providers = providersData.slice(0, 5).map(p => ({
-        _id: p._id, name: p.name, specialty: p.specialty, hospital: p.hospital
-      }));
       slots.push({
         date: dateStr, dateLabel, dayName, isToday: d === 0,
-        urgencyNote: d === 0 ? '🔴 URGENT — Immediate slots available' : '🔴 Priority booking',
-        timeSlots: ALL_TIME_SLOTS.map(time => ({ time, available: true, providers }))
+        urgencyNote: d === 0 ? '🔴 URGENT — Immediate slots with diagnosing doctor' : '🔴 Priority booking',
+        timeSlots: ALL_TIME_SLOTS.map(time => ({ time, available: true, providers: [diagnosingDoctor] }))
       });
     } else {
-      const availableProviders = providersData.filter(p =>
-        p.availability && p.availability.includes(dayName)
-      ).slice(0, 3);
-
-      if (isModerate || availableProviders.length > 0) {
-        const providerInfo = (isModerate && availableProviders.length === 0)
-          ? providersData.slice(0, 2).map(p => ({ _id: p._id, name: p.name, specialty: p.specialty, hospital: p.hospital }))
-          : availableProviders.map(p => ({ _id: p._id, name: p.name, specialty: p.specialty, hospital: p.hospital }));
-
-        slots.push({
-          date: dateStr, dateLabel, dayName, isToday: d === 0,
-          urgencyNote: isModerate ? '🟡 Moderate — Next available slots' : '🟢 Routine appointment slots',
-          timeSlots: REGULAR_SLOTS.map(time => ({ time, available: Math.random() > 0.2, providers: providerInfo }))
-        });
-      }
+      slots.push({
+        date: dateStr, dateLabel, dayName, isToday: d === 0,
+        urgencyNote: isModerate ? '🟡 Moderate — Next available slots with your doctor' : '🟢 Routine appointment slots with your doctor',
+        timeSlots: REGULAR_SLOTS.map(time => ({ time, available: true, providers: [diagnosingDoctor] }))
+      });
     }
   }
 
-  return { patientId, urgency: normalizedUrgency, isUrgent, totalDays: slots.length, slots };
+  return { patientId, diagnosingDoctor, urgency: normalizedUrgency, isUrgent, totalDays: slots.length, slots };
 }
 
 /**
@@ -165,9 +188,14 @@ export async function bookAppointment(patientId, appointmentData) {
     // offline fallback
   }
 
+  const diagnosingDoctor = getDiagnosingDoctor(patientId);
   return {
     _id: `APT${Date.now()}`,
     patientId,
+    providerId: diagnosingDoctor._id,
+    providerName: diagnosingDoctor.name,
+    providerSpecialty: diagnosingDoctor.specialty,
+    hospital: diagnosingDoctor.hospital,
     ...appointmentData,
     status: 'confirmed',
     bookedAt: new Date().toISOString()
