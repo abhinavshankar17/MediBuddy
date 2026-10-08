@@ -5,8 +5,17 @@ const AppContext = createContext();
 
 export function AppProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(() => getCurrentUser());
-  const [portalRole, setPortalRole] = useState(() => (currentUser?.role === 'nurse' || currentUser?.role === 'clinician' ? 'nurse' : 'patient'));
-  const [activePatientId, setActivePatientId] = useState(() => currentUser?.patientId || 'P001');
+  const [portalRole, setPortalRole] = useState(() => {
+    if (currentUser?.role === 'nurse' || currentUser?.role === 'clinician') return 'nurse';
+    if (currentUser?.role === 'caregiver') return 'caregiver';
+    return 'patient';
+  });
+  const [activePatientId, setActivePatientId] = useState(() => {
+    if (currentUser?.role === 'caregiver' && currentUser?.patientIds?.length > 0) {
+      return currentUser.patientIds[0];
+    }
+    return currentUser?.patientId || 'P001';
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -18,6 +27,9 @@ export function AppProvider({ children }) {
     if (user.role === 'nurse' || user.role === 'clinician') {
       setPortalRole('nurse');
       setActivePatientId(user.assignedPatients ? user.assignedPatients[0] : 'P001');
+    } else if (user.role === 'caregiver') {
+      setPortalRole('caregiver');
+      setActivePatientId(user.patientIds ? user.patientIds[0] : (user.patientId || 'P001'));
     } else {
       setPortalRole('patient');
       setActivePatientId(user.patientId || 'P001');

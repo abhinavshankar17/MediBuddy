@@ -1546,4 +1546,13 @@ RESPONSE:
     - `GET /api/patients/:patientId/quiz-session`: Direct alias returning today's daily quiz with exactly 5 questions.
     - `POST /api/quiz-sessions/:id/submit`: Top-level mount supporting quiz answer evaluation and educational knowledge scoring.
     - Envelope unwrapping: All frontend service adapters (`insightService`, `medicationService`, `nurseService`, `patientService`, `quizService`) seamlessly unpack `{ success: true, data: ... }` response payloads while preserving robust mock fallback when backend is offline.
+17. **Feature 11 Caregiver & Family Member Portal API Contract**:
+    - `GET /api/caregiver/patients?caregiverId=...`: Returns linked patients, familial relationship (e.g., Mother, Father), condition, and quick recovery status.
+    - `GET /api/caregiver/patients/:patientId/daily-report`: Executive loved-one daily report compiling recovery day, traffic-light status (`GREEN`/`YELLOW`/`RED`), executive AI digest in empathetic family-friendly language, family action tips, medication checklist, care tasks, vitals check-in snapshot, and safety warning signs.
+    - `GET /api/caregiver/patients/:patientId/calendar?year=...&month=...`: 30-day recovery calendar providing daily recovery score, dose counts, milestones, and scheduled appointments.
+    - `GET /api/caregiver/patients/:patientId/feedback`: Feed of patient feedback entries (symptoms, pain ratings, personal comments) awaiting or marked reviewed.
+    - `POST /api/caregiver/patients/:patientId/feedback/:feedbackId/review`: Caregiver acknowledgment endpoint updating status to `reviewed`, storing caregiver note, reviewer timestamp, and audit event.
+    - `POST /api/caregiver/patients/:patientId/encouragement`: Endpoint to submit family encouragement notes with emotional support tags (`love`, `strength`, `celebration`).
+    - **Family AI Safety & Tone Guarantee**: The caregiver digest and action tips use empathetic, plain-language guidance and strictly never generate clinical diagnoses, prescriptions, or dosage modifications. Every summary includes the explicit informational disclaimer: `"AI-generated family digest — for informational support only. Consult attending physician for medical decisions."`.
+
 

@@ -12,6 +12,7 @@ const quizRoutes = require('./quiz.routes');
 const insightRoutes = require('./insight.routes');
 const nurseRoutes = require('./nurse.routes');
 const escalationRoutes = require('./escalation.routes');
+const caregiverRoutes = require('./caregiver.routes');
 
 // System Health Check
 router.use('/health', healthRoutes);
@@ -30,6 +31,8 @@ router.use('/quiz-sessions', quizRoutes);
 router.use('/insights', insightRoutes);
 router.use('/nurse', nurseRoutes);
 router.use('/escalations', escalationRoutes);
+router.use('/caregiver', caregiverRoutes);
+router.use('/caregivers', caregiverRoutes);
 
 // Root API information endpoint
 router.get('/', (req, res) => {

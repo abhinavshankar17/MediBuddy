@@ -30,6 +30,8 @@ export default function LoginPage() {
     loginUser(user);
     if (user.role === 'nurse' || user.role === 'clinician') {
       navigate('/nurse');
+    } else if (user.role === 'caregiver') {
+      navigate('/caregiver');
     } else {
       navigate('/patient');
     }

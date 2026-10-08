@@ -29,7 +29,8 @@ export default function Header() {
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   const isLoginPage = location.pathname === '/login';
-  const isNurseUser = currentUser?.role === 'nurse' || currentUser?.role === 'clinician';
+  const isCaregiverUser = currentUser?.role === 'caregiver' || location.pathname.startsWith('/caregiver');
+  const isNurseUser = !isCaregiverUser && (currentUser?.role === 'nurse' || currentUser?.role === 'clinician');
 
   const handleLogout = () => {
     logout();
@@ -53,7 +54,7 @@ export default function Header() {
 
           <div
             className="flex items-center gap-2.5 cursor-pointer min-w-0"
-            onClick={() => navigate(isNurseUser ? '/nurse' : '/patient')}
+            onClick={() => navigate(isCaregiverUser ? '/caregiver' : isNurseUser ? '/nurse' : '/patient')}
           >
             <div className="w-9 h-9 rounded-xl bg-[#CC785C] flex items-center justify-center text-white shadow-sm shadow-[#CC785C]/30 flex-shrink-0">
               <Stethoscope className="w-5 h-5" />
@@ -66,7 +67,9 @@ export default function Header() {
                 {!isLoginPage && currentUser?.role && (
                   <span
                     className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-wider flex-shrink-0 ${
-                      isNurseUser
+                      isCaregiverUser
+                        ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                        : isNurseUser
                         ? 'bg-[#0D9488]/10 text-[#0D9488] border border-[#0D9488]/20'
                         : 'bg-[#CC785C]/10 text-[#CC785C] border border-[#CC785C]/20'
                     }`}
@@ -97,7 +100,9 @@ export default function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={
-                  isNurseUser
+                  isCaregiverUser
+                    ? 'Search recovery reports, notes, calendar events...'
+                    : isNurseUser
                     ? 'Search patients, clinical briefs, alerts...'
                     : 'Search medications, care insights, discharge instructions...'
                 }
@@ -123,14 +128,22 @@ export default function Header() {
             {/* Dedicated Authenticated Workspace Badge */}
             <div
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 shadow-2xs ${
-                isNurseUser
+                isCaregiverUser
+                  ? 'bg-amber-50 text-amber-800 border-amber-200'
+                  : isNurseUser
                   ? 'bg-[#0D9488]/10 text-[#0D9488] border-[#0D9488]/20'
                   : 'bg-[#CC785C]/10 text-[#CC785C] border-[#CC785C]/20'
               }`}
             >
-              {isNurseUser ? <UserCheck className="w-3.5 h-3.5" /> : <User className="w-3.5 h-3.5" />}
+              {isCaregiverUser ? (
+                <User className="w-3.5 h-3.5 text-amber-700" />
+              ) : isNurseUser ? (
+                <UserCheck className="w-3.5 h-3.5" />
+              ) : (
+                <User className="w-3.5 h-3.5" />
+              )}
               <span className="hidden sm:inline">
-                {isNurseUser ? 'Nurse Portal' : 'Patient App'}
+                {isCaregiverUser ? 'Caregiver Portal' : isNurseUser ? 'Nurse Portal' : 'Patient App'}
               </span>
             </div>
 

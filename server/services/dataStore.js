@@ -18,7 +18,11 @@ let memoryCache = {
   escalations: null,
   providers: null,
   feedbacks: null,
-  appointments: null
+  appointments: null,
+  dayColors: null,
+  checkIns: null,
+  users: null,
+  encouragements: null
 };
 
 const getCache = () => {
@@ -38,6 +42,10 @@ const getCache = () => {
     memoryCache.providers = loadMockJson('providers.json') || [];
     memoryCache.feedbacks = loadMockJson('feedbacks.json') || [];
     memoryCache.appointments = loadMockJson('appointments.json') || [];
+    memoryCache.dayColors = loadMockJson('dayColors.json') || [];
+    memoryCache.checkIns = loadMockJson('checkIns.json') || [];
+    memoryCache.users = loadMockJson('users.json') || [];
+    memoryCache.encouragements = [];
   }
   return memoryCache;
 };
@@ -1154,6 +1162,86 @@ const dataStore = {
     const { appointments } = getCache();
     appointments.push(appointment);
     return appointment;
+  },
+
+  /**
+   * Get feedback by ID
+   * @param {string} feedbackId
+   */
+  async getFeedbackById(feedbackId) {
+    const { feedbacks } = getCache();
+    return feedbacks.find(f => f._id === feedbackId) || null;
+  },
+
+  /**
+   * Update feedback record
+   * @param {string} feedbackId
+   * @param {Object} updates
+   */
+  async updateFeedback(feedbackId, updates) {
+    const { feedbacks } = getCache();
+    const idx = feedbacks.findIndex(f => f._id === feedbackId);
+    if (idx === -1) return null;
+    feedbacks[idx] = {
+      ...feedbacks[idx],
+      ...updates
+    };
+    return feedbacks[idx];
+  },
+
+  /**
+   * Get day colors / recovery status by patientId
+   * @param {string} patientId
+   */
+  async getDayColorsByPatient(patientId) {
+    const { dayColors } = getCache();
+    return dayColors.filter(dc => dc.patientId === patientId);
+  },
+
+  /**
+   * Get check-ins by patientId
+   * @param {string} patientId
+   */
+  async getCheckInsByPatient(patientId) {
+    const { checkIns } = getCache();
+    return checkIns.filter(ci => ci.patientId === patientId);
+  },
+
+  /**
+   * Get user by ID
+   * @param {string} userId
+   */
+  async getUserById(userId) {
+    const { users } = getCache();
+    return users.find(u => u._id === userId) || null;
+  },
+
+  /**
+   * Get users by role
+   * @param {string} role
+   */
+  async getUsersByRole(role) {
+    const { users } = getCache();
+    return users.filter(u => u.role === role);
+  },
+
+  /**
+   * Add encouragement note from caregiver to patient
+   * @param {Object} encouragement
+   */
+  async addEncouragement(encouragement) {
+    const { encouragements } = getCache();
+    encouragements.push(encouragement);
+    return encouragement;
+  },
+
+  /**
+   * Get encouragements by patientId
+   * @param {string} patientId
+   */
+  async getEncouragementsByPatient(patientId) {
+    const { encouragements } = getCache();
+    return encouragements.filter(e => e.patientId === patientId);
   }
 };
 

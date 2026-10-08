@@ -18,6 +18,9 @@ import {
   HeartPulse,
   LogOut,
   MessageSquarePlus,
+  Calendar,
+  Heart,
+  MessageSquare,
   X
 } from 'lucide-react';
 
@@ -39,7 +42,8 @@ export default function Sidebar() {
     closeMobileMenu();
   }, [location.pathname]);
 
-  const isNurse = portalRole === 'nurse' || location.pathname.startsWith('/nurse');
+  const isCaregiver = portalRole === 'caregiver' || location.pathname.startsWith('/caregiver');
+  const isNurse = !isCaregiver && (portalRole === 'nurse' || location.pathname.startsWith('/nurse'));
 
   const patientNavItems = [
     { label: 'Patient Dashboard', path: '/patient', icon: LayoutDashboard },
@@ -50,6 +54,11 @@ export default function Sidebar() {
     { label: 'Feedback & Book', path: '/patient/feedback', icon: MessageSquarePlus }
   ];
 
+  const caregiverNavItems = [
+    { label: 'Daily Report', path: '/caregiver', icon: LayoutDashboard },
+    { label: 'Recovery Calendar', path: '/caregiver/calendar', icon: Calendar },
+    { label: 'Patient Feedback', path: '/caregiver/feedback', icon: MessageSquare, badge: 'Review' }
+  ];
 
   const nurseNavItems = [
     { label: 'Nurse Dashboard', path: '/nurse', icon: LayoutDashboard },
@@ -60,7 +69,7 @@ export default function Sidebar() {
     { label: 'Escalation Alerts', path: '/nurse/escalations', icon: ShieldAlert, badge: 'Active' }
   ];
 
-  const navItems = isNurse ? nurseNavItems : patientNavItems;
+  const navItems = isCaregiver ? caregiverNavItems : isNurse ? nurseNavItems : patientNavItems;
 
   const handleLogout = () => {
     logout();
@@ -76,7 +85,7 @@ export default function Sidebar() {
             <HeartPulse className="w-4 h-4" />
           </div>
           <span className="font-bold text-sm text-[#1C1917] font-serif">
-            {isNurse ? 'Clinical Controls' : 'Care Navigation'}
+            {isCaregiver ? 'Family Caregiver' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
           </span>
         </div>
         <button
@@ -96,7 +105,9 @@ export default function Sidebar() {
           </div>
           <div>
             <p className="text-[10px] uppercase tracking-wider font-extrabold text-[#78716C]">Active View</p>
-            <p className="text-xs font-bold text-[#1C1917]">{isNurse ? 'Nurse Workspace' : 'Patient Portal'}</p>
+            <p className="text-xs font-bold text-[#1C1917]">
+              {isCaregiver ? 'Caregiver Portal' : isNurse ? 'Nurse Workspace' : 'Patient Portal'}
+            </p>
           </div>
         </div>
         <span className="w-2 h-2 rounded-full bg-[#059669] ring-4 ring-[#059669]/20 animate-pulse" />
@@ -105,7 +116,7 @@ export default function Sidebar() {
       {/* Navigation List */}
       <div className="flex-1 space-y-1 overflow-y-auto pr-1">
         <p className="px-3 text-[10px] font-extrabold uppercase tracking-widest text-[#78716C] mb-2 hidden md:block">
-          {isNurse ? 'Clinical Controls' : 'Care Navigation'}
+          {isCaregiver ? 'Caregiver Views' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
         </p>
 
         {navItems.map((item) => {

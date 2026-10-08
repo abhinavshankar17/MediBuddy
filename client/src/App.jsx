@@ -4,6 +4,8 @@ import AppLayout from './layouts/AppLayout';
 import PatientLayout from './layouts/PatientLayout';
 import NurseLayout from './layouts/NurseLayout';
 
+import CaregiverLayout from './layouts/CaregiverLayout';
+
 // Landing & Login Pages
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -23,6 +25,11 @@ import PatientDetail from './pages/nurse/PatientDetail';
 import MedicationAdherence from './pages/nurse/MedicationAdherence';
 import AISummary from './pages/nurse/AISummary';
 import Escalations from './pages/nurse/Escalations';
+
+// Caregiver / Family Portal Pages
+import CaregiverDashboard from './pages/caregiver/CaregiverDashboard';
+import CaregiverCalendar from './pages/caregiver/CaregiverCalendar';
+import CaregiverFeedback from './pages/caregiver/CaregiverFeedback';
 
 export default function App() {
   return (
@@ -44,6 +51,13 @@ export default function App() {
           <Route path="feedback" element={<PatientFeedback />} />
         </Route>
 
+        {/* Caregiver / Family Member Portal Routes */}
+        <Route path="/caregiver" element={<CaregiverLayout />}>
+          <Route index element={<CaregiverDashboard />} />
+          <Route path="dashboard" element={<CaregiverDashboard />} />
+          <Route path="calendar" element={<CaregiverCalendar />} />
+          <Route path="feedback" element={<CaregiverFeedback />} />
+        </Route>
 
         {/* Nurse Portal Routes */}
         <Route path="/nurse" element={<NurseLayout />}>

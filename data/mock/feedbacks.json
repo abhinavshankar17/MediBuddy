@@ -1,1 +1,95 @@
-[]
+[
+  {
+    "_id": "FB001",
+    "patientId": "P001",
+    "patientName": "Meena Krishnan",
+    "condition": "Post-knee surgery recovery feeling",
+    "symptoms": [
+      "mild stiffness in right knee",
+      "slight swelling after evening walk"
+    ],
+    "painLevel": 3,
+    "urgency": "mild",
+    "notes": "Did the 15-minute walker session today. Knee felt slightly tight when bending 45 degrees, but iced it immediately. Feeling hopeful!",
+    "submittedAt": "2026-10-08T15:30:00+05:30",
+    "status": "pending_review",
+    "reviewStatus": "pending",
+    "caregiverNote": null,
+    "reviewedAt": null,
+    "reviewedBy": null
+  },
+  {
+    "_id": "FB002",
+    "patientId": "P001",
+    "patientName": "Meena Krishnan",
+    "condition": "Morning medication inquiry",
+    "symptoms": [
+      "slight nausea after morning pill"
+    ],
+    "painLevel": 2,
+    "urgency": "moderate",
+    "notes": "Felt a bit queasy after taking the antibiotic before breakfast. Will try taking it strictly after food as instructed tomorrow.",
+    "submittedAt": "2026-10-07T09:15:00+05:30",
+    "status": "reviewed",
+    "reviewStatus": "reviewed",
+    "caregiverNote": "Reminded mother to always take with warm idli or toast. Called clinic nurse just to confirm.",
+    "reviewedAt": "2026-10-07T11:00:00+05:30",
+    "reviewedBy": "U101"
+  },
+  {
+    "_id": "FB003",
+    "patientId": "P002",
+    "patientName": "Ravi Kumar",
+    "condition": "Chest tightness check after walking",
+    "symptoms": [
+      "mild shortness of breath",
+      "fatigue"
+    ],
+    "painLevel": 4,
+    "urgency": "moderate",
+    "notes": "Walked up the veranda steps and felt my heart beating a little fast. Sat down for 10 minutes and pulse returned to normal (78 bpm).",
+    "submittedAt": "2026-10-08T17:45:00+05:30",
+    "status": "pending_review",
+    "reviewStatus": "pending",
+    "caregiverNote": null,
+    "reviewedAt": null,
+    "reviewedBy": null
+  },
+  {
+    "_id": "FB004",
+    "patientId": "P003",
+    "patientName": "Lakshmi Devi",
+    "condition": "Cough frequency update",
+    "symptoms": [
+      "cough with clear phlegm",
+      "throat dry"
+    ],
+    "painLevel": 3,
+    "urgency": "mild",
+    "notes": "Drank warm water with honey. Coughing less frequently during the afternoon compared to yesterday.",
+    "submittedAt": "2026-10-08T14:20:00+05:30",
+    "status": "pending_review",
+    "reviewStatus": "pending",
+    "caregiverNote": null,
+    "reviewedAt": null,
+    "reviewedBy": null
+  },
+  {
+    "_id": "FB005",
+    "patientId": "P006",
+    "patientName": "Vikram Shah",
+    "condition": "Surgical incision check",
+    "symptoms": [
+      "dressing feels slightly tight"
+    ],
+    "painLevel": 2,
+    "urgency": "mild",
+    "notes": "Incision looks dry and clean. No bleeding or drainage noticed. Bandage still firmly in place.",
+    "submittedAt": "2026-10-08T18:00:00+05:30",
+    "status": "pending_review",
+    "reviewStatus": "pending",
+    "caregiverNote": null,
+    "reviewedAt": null,
+    "reviewedBy": null
+  }
+]
