@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const caregiverController = require('../controllers/caregiver.controller');
+const dataStore = require('../services/dataStore');
 
 /**
  * Caregiver & Family Dashboard Routes (/api/caregiver)
@@ -27,12 +28,10 @@ router.post('/patients/:patientId/feedback/:feedbackId/review', caregiverControl
 router.post('/feedback/:feedbackId/review', caregiverController.reviewFeedback);
 
 // 5. Encouragement & Messages
+router.get('/patients/:patientId/encouragement', caregiverController.getPatientEncouragements);
+router.get('/patients/:patientId/encouragements', caregiverController.getPatientEncouragements);
+router.get('/encouragement/:patientId', caregiverController.getPatientEncouragements);
 router.post('/patients/:patientId/encouragement', caregiverController.sendEncouragement);
 router.post('/encouragement', caregiverController.sendEncouragement);
-
-// 6. Notifications
-const notificationController = require('../controllers/notification.controller');
-router.get('/notifications', notificationController.getNotifications);
-router.get('/patients/:patientId/notifications', notificationController.getNotifications);
 
 module.exports = router;

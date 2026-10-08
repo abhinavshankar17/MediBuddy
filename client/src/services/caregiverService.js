@@ -3,8 +3,20 @@ import medicationRemindersData from '../../../data/mock/medicationReminders.json
 import dayColorsData from '../../../data/mock/dayColors.json';
 import checkInsData from '../../../data/mock/checkIns.json';
 import feedbacksData from '../../../data/mock/feedbacks.json';
+import { notifyPatientUpdate } from '../utils/realtimeSync';
+import { getLocalFeedbacks, updateLocalFeedbackReview } from './feedbackService';
 
 const API_BASE = '/api';
+const STORAGE_KEY = 'medibuddy_confirmed_reminders';
+
+const getStoredStatuses = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+};
 
 /**
  * Fetch linked patients for a caregiver / family member
@@ -75,11 +87,39 @@ export async function getCaregiverPatients(caregiverId = 'U101') {
  * Fetch comprehensive Daily Report for a loved one
  */
 export async function getDailyReport(patientId = 'P001', caregiverId = 'U101') {
+  const storedStatuses = getStoredStatuses();
+
   try {
     const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/daily-report?caregiverId=${caregiverId}`);
     if (res.ok) {
       const json = await res.json();
-      return json.data !== undefined ? json.data : json;
+      const report = json.data !== undefined ? json.data : json;
+
+      // Sync any local client medication confirmations into backend report
+      if (report?.medications?.todayList) {
+        report.medications.todayList = report.medications.todayList.map((m) => {
+          const stored = storedStatuses[m._id];
+          const isTaken = m.isCompleted || stored?.status === 'taken';
+          return {
+            ...m,
+            isCompleted: isTaken,
+            statusDisplay: isTaken ? 'Taken' : m.statusDisplay
+          };
+        });
+        const confirmed = report.medications.todayList.filter((m) => m.isCompleted).length;
+        const total = report.medications.todayList.length || report.medications.totalCount || 1;
+        report.medications.confirmedCount = confirmed;
+        report.medications.totalCount = total;
+        report.medications.adherenceRate = Math.round((confirmed / total) * 100);
+      }
+
+      // Merge fresh patient feedbacks fetched from patient portal
+      const freshFeedbacks = await getPatientFeedbacks(patientId);
+      if (freshFeedbacks && freshFeedbacks.length > 0) {
+        report.recentFeedbacks = freshFeedbacks;
+      }
+
+      return report;
     }
   } catch (err) {
     // offline fallback
@@ -242,26 +282,81 @@ export async function getCalendarData(patientId = 'P001', year = 2026, month = 1
 
 /**
  * Fetch patient feedbacks submitted for caregiver review
+ * Directly queries patient endpoint, caregiver endpoint, and local persistence
  */
 export async function getPatientFeedbacks(patientId = 'P001') {
+  const localList = getLocalFeedbacks(patientId);
+  const feedbackMap = new Map();
+
+  // 1. Fetch directly from patient endpoint
   try {
-    const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/feedback`);
-    if (res.ok) {
-      const json = await res.json();
-      return json.data !== undefined ? json.data : json;
+    const resPatient = await fetch(`${API_BASE}/patients/${patientId}/feedback`);
+    if (resPatient.ok) {
+      const json = await resPatient.json();
+      const list = json.data !== undefined ? json.data : json;
+      if (Array.isArray(list)) {
+        list.forEach((f) => feedbackMap.set(f._id, f));
+      }
     }
   } catch (err) {
-    // offline fallback
+    // network fallback
   }
 
-  const patientFeedbacks = feedbacksData.filter((f) => f.patientId === patientId);
-  return patientFeedbacks.length > 0 ? patientFeedbacks : feedbacksData.slice(0, 3);
+  // 2. Fetch from caregiver feedback endpoint
+  try {
+    const resCg = await fetch(`${API_BASE}/caregiver/patients/${patientId}/feedback`);
+    if (resCg.ok) {
+      const json = await resCg.json();
+      const list = json.data !== undefined ? json.data : json;
+      if (Array.isArray(list)) {
+        list.forEach((f) => {
+          if (feedbackMap.has(f._id)) {
+            feedbackMap.set(f._id, { ...feedbackMap.get(f._id), ...f });
+          } else {
+            feedbackMap.set(f._id, f);
+          }
+        });
+      }
+    }
+  } catch (err) {
+    // network fallback
+  }
+
+  // 3. Merge local storage submitted feedbacks from patient portal
+  localList.forEach((f) => {
+    if (feedbackMap.has(f._id)) {
+      feedbackMap.set(f._id, { ...feedbackMap.get(f._id), ...f });
+    } else {
+      feedbackMap.set(f._id, f);
+    }
+  });
+
+  // 4. Fallback to mock data if empty
+  if (feedbackMap.size === 0) {
+    const mock = feedbacksData.filter((f) => f.patientId === patientId);
+    (mock.length > 0 ? mock : feedbacksData.slice(0, 2)).forEach((f) => feedbackMap.set(f._id, f));
+  }
+
+  return Array.from(feedbackMap.values()).sort(
+    (a, b) => new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0)
+  );
 }
 
 /**
  * Caregiver reviews and acknowledges patient feedback
  */
 export async function reviewFeedback(patientId, feedbackId, reviewData = {}) {
+  // Update local storage record so patient portal immediately reflects review note
+  updateLocalFeedbackReview(patientId, feedbackId, reviewData);
+
+  notifyPatientUpdate({
+    type: 'feedback_reviewed',
+    patientId,
+    feedbackId,
+    reviewData,
+    timestamp: Date.now()
+  });
+
   try {
     const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/feedback/${feedbackId}/review`, {
       method: 'POST',
@@ -287,25 +382,30 @@ export async function reviewFeedback(patientId, feedbackId, reviewData = {}) {
   };
 }
 
+const STORAGE_ENCOURAGEMENTS_PREFIX = 'medi_buddy_patient_encouragements_';
+
+export function getLocalEncouragements(patientId) {
+  try {
+    const raw = localStorage.getItem(`${STORAGE_ENCOURAGEMENTS_PREFIX}${patientId}`);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveLocalEncouragements(patientId, items) {
+  try {
+    localStorage.setItem(`${STORAGE_ENCOURAGEMENTS_PREFIX}${patientId}`, JSON.stringify(items));
+  } catch (e) {
+    console.error('Failed to save local encouragements:', e);
+  }
+}
+
 /**
  * Caregiver sends encouragement message to patient
  */
 export async function sendEncouragement(patientId, payload = {}) {
-  try {
-    const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/encouragement`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    if (res.ok) {
-      const json = await res.json();
-      return json.data !== undefined ? json.data : json;
-    }
-  } catch (err) {
-    // offline fallback
-  }
-
-  return {
+  const newEnc = {
     _id: `ENC${Date.now()}`,
     patientId,
     caregiverId: payload.caregiverId || 'U101',
@@ -314,4 +414,80 @@ export async function sendEncouragement(patientId, payload = {}) {
     tag: payload.tag || 'love',
     sentAt: new Date().toISOString()
   };
+
+  // 1. Immediately persist to localStorage
+  const existing = getLocalEncouragements(patientId);
+  saveLocalEncouragements(patientId, [newEnc, ...existing]);
+
+  // 2. Broadcast real-time sync update
+  notifyPatientUpdate({
+    type: 'encouragement_sent',
+    patientId,
+    encouragement: newEnc,
+    timestamp: Date.now()
+  });
+
+  // 3. Sync to backend
+  try {
+    const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/encouragement`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      const json = await res.json();
+      const serverEnc = json.data !== undefined ? json.data : json;
+      if (serverEnc && serverEnc._id) {
+        const current = getLocalEncouragements(patientId);
+        const updated = current.map((item) =>
+          item._id === newEnc._id ? { ...newEnc, ...serverEnc } : item
+        );
+        saveLocalEncouragements(patientId, updated);
+        return { ...newEnc, ...serverEnc };
+      }
+    }
+  } catch (err) {
+    // offline fallback
+  }
+
+  return newEnc;
+}
+
+/**
+ * Get all encouragement messages for a patient
+ */
+export async function getPatientEncouragements(patientId = 'P001') {
+  const localList = getLocalEncouragements(patientId);
+  const encMap = new Map();
+
+  // 1. Fetch from patient endpoint
+  try {
+    const res = await fetch(`${API_BASE}/patients/${patientId}/encouragement`);
+    if (res.ok) {
+      const json = await res.json();
+      const list = json.data !== undefined ? json.data : json;
+      if (Array.isArray(list)) {
+        list.forEach((e) => encMap.set(e._id, e));
+      }
+    }
+  } catch (e) {}
+
+  // 2. Fetch from caregiver endpoint
+  try {
+    const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/encouragement`);
+    if (res.ok) {
+      const json = await res.json();
+      const list = json.data !== undefined ? json.data : json;
+      if (Array.isArray(list)) {
+        list.forEach((e) => encMap.set(e._id, e));
+      }
+    }
+  } catch (e) {}
+
+  // 3. Merge local storage messages
+  localList.forEach((e) => encMap.set(e._id, e));
+
+  return Array.from(encMap.values()).sort(
+    (a, b) => new Date(b.sentAt || 0) - new Date(a.sentAt || 0)
+  );
 }

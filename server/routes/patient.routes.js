@@ -9,7 +9,6 @@ const insightController = require('../controllers/insight.controller');
 const nurseController = require('../controllers/nurse.controller');
 const escalationController = require('../controllers/escalation.controller');
 const feedbackController = require('../controllers/feedback.controller');
-const notificationController = require('../controllers/notification.controller');
 
 /**
  * Patient Routes (/api/patients)
@@ -91,9 +90,5 @@ router.delete('/:id/feedback', feedbackController.clearPatientFeedbacks);
 router.get('/:id/appointments/slots', feedbackController.getAvailableSlots);
 router.get('/:id/appointments', feedbackController.getPatientAppointments);
 router.post('/:id/appointments', feedbackController.bookAppointment);
-
-// Feature: Patient Notifications
-router.get('/:patientId/notifications', notificationController.getNotifications);
-router.get('/:id/notifications', notificationController.getNotifications);
 
 module.exports = router;

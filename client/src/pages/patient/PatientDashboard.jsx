@@ -12,6 +12,7 @@ import {
   getPatientRecoveryProgress,
   getPatientDischargeInstructions
 } from '../../services/patientService';
+import { useRealtimeSync } from '../../utils/realtimeSync';
 import PatientMedicationCalendar from '../../components/patient/PatientMedicationCalendar';
 import { useApp } from '../../context/AppContext';
 import {
@@ -27,13 +28,13 @@ import {
   ShieldAlert,
   Info,
   Clock,
-  Heart,
   LogOut
 } from 'lucide-react';
 
 export default function PatientDashboard() {
   const { currentUser, logout, activePatientId } = useApp();
   const navigate = useNavigate();
+  const patientId = activePatientId || currentUser?.patientId || 'P001';
 
   const [patient, setPatient] = useState(null);
   const [overview, setOverview] = useState(null);
@@ -48,16 +49,16 @@ export default function PatientDashboard() {
     navigate('/login');
   };
 
-  const loadDashboardData = async (patientId) => {
+  const loadDashboardData = async (targetId = patientId) => {
     try {
       setLoading(true);
       setError(null);
 
       const [pData, oData, prData, iData] = await Promise.all([
-        getPatientById(patientId),
-        getPatientTodayOverview(patientId),
-        getPatientRecoveryProgress(patientId),
-        getPatientDischargeInstructions(patientId)
+        getPatientById(targetId),
+        getPatientTodayOverview(targetId),
+        getPatientRecoveryProgress(targetId),
+        getPatientDischargeInstructions(targetId)
       ]);
 
       setPatient(pData);
@@ -72,9 +73,16 @@ export default function PatientDashboard() {
     }
   };
 
+  useRealtimeSync({
+    patientId,
+    onUpdate: () => loadDashboardData(patientId),
+    pollingInterval: 3000,
+    enabled: true
+  });
+
   useEffect(() => {
-    loadDashboardData(activePatientId || currentUser?.patientId || 'P001');
-  }, [activePatientId, currentUser]);
+    loadDashboardData(patientId);
+  }, [patientId]);
 
   if (loading) {
     return (

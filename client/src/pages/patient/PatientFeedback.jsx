@@ -12,6 +12,7 @@ import {
   getPatientAppointments,
   clearPatientHistory
 } from '../../services/feedbackService';
+import { useRealtimeSync } from '../../utils/realtimeSync';
 import {
   MessageSquarePlus,
   AlertTriangle,
@@ -98,6 +99,13 @@ export default function PatientFeedback() {
   useEffect(() => {
     loadHistory();
   }, [patientId]);
+
+  useRealtimeSync({
+    patientId,
+    onUpdate: () => loadHistory(),
+    pollingInterval: 3000,
+    enabled: true
+  });
 
   const loadHistory = async () => {
     setHistoryLoading(true);
@@ -835,6 +843,12 @@ export default function PatientFeedback() {
                     <p className="text-[11px] text-[#78716C]">
                       Reported on {new Date(fb.submittedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </p>
+                    {fb.caregiverNote && (
+                      <div className="mt-2 p-2.5 bg-emerald-50/80 border border-emerald-200/90 rounded-lg text-xs text-emerald-950">
+                        <span className="font-bold text-emerald-900 block mb-0.5">Reviewed by Family:</span>
+                        <p className="italic">"{fb.caregiverNote}"</p>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

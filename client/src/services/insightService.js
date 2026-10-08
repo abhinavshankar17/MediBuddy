@@ -38,3 +38,38 @@ export async function getEvidenceEvents(evidenceEventIds = []) {
 
   return eventsData.filter((evt) => evidenceEventIds.includes(evt._id));
 }
+
+/**
+ * Fetch encouragement messages and care notes sent by family / caregiver
+ */
+export async function getPatientEncouragements(patientId = 'P001') {
+  let remoteList = [];
+  try {
+    const res = await fetch(`/api/patients/${patientId}/encouragement`);
+    if (res.ok) {
+      const json = await res.json();
+      const data = json.data || json;
+      if (Array.isArray(data)) remoteList = data;
+    }
+  } catch (err) {}
+
+  let localList = [];
+  try {
+    const raw = localStorage.getItem(`medi_buddy_patient_encouragements_${patientId}`);
+    if (raw) localList = JSON.parse(raw);
+  } catch (e) {}
+
+  const map = new Map();
+  remoteList.forEach((e) => map.set(e._id, e));
+  localList.forEach((e) => {
+    if (map.has(e._id)) {
+      map.set(e._id, { ...map.get(e._id), ...e });
+    } else {
+      map.set(e._id, e);
+    }
+  });
+
+  return Array.from(map.values()).sort(
+    (a, b) => new Date(b.sentAt || 0) - new Date(a.sentAt || 0)
+  );
+}

@@ -1,5 +1,6 @@
 import medicationRemindersData from '../../../data/mock/medicationReminders.json';
 import extractedItemsData from '../../../data/mock/extractedItems.json';
+import { notifyPatientUpdate } from '../utils/realtimeSync';
 
 const STORAGE_KEY = 'medibuddy_confirmed_reminders';
 
@@ -119,6 +120,14 @@ export async function confirmMedicationTaken(reminderId, patientId = 'P001') {
     responseType: 'taken',
     respondedAt: now,
     confirmedFormattedTime: formattedTime
+  });
+
+  // Notify all tabs, windows, and listeners in real-time
+  notifyPatientUpdate({
+    type: 'medication_confirmed',
+    patientId,
+    reminderId,
+    timestamp: Date.now()
   });
 
   try {
