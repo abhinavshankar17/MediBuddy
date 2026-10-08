@@ -28,7 +28,8 @@ import {
   ShieldAlert,
   Info,
   Clock,
-  LogOut
+  LogOut,
+  TestTube
 } from 'lucide-react';
 
 export default function PatientDashboard() {
@@ -270,6 +271,44 @@ export default function PatientDashboard() {
               </div>
             ) : (
               <p className="text-xs text-[#78716C]">Follow preferred dietary plan ({patient.dietaryPreference}). Stay well hydrated.</p>
+            )}
+          </Card>
+
+          {/* Diagnostic & Lab Tests Category */}
+          <Card title="Scheduled Diagnostic & Lab Tests" subtitle="Upcoming lab tests, imaging & preparation checklist">
+            {instructions.labTests && instructions.labTests.length > 0 ? (
+              <div className="space-y-3">
+                {instructions.labTests.map((item) => (
+                  <div key={item._id} className="p-3 bg-purple-50/60 rounded-xl border border-purple-200/80 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-purple-950 flex items-center gap-1.5">
+                        <TestTube className="w-3.5 h-3.5 text-purple-600" />
+                        {item.name}
+                      </span>
+                      <StatusBadge status="info" label={item.scheduledDate ? `${item.scheduledDate} ${item.scheduledTime ? `@ ${item.scheduledTime}` : ''}` : 'Scheduled'} />
+                    </div>
+                    {item.location && (
+                      <p className="text-xs text-purple-900 font-medium">📍 Location: {item.location}</p>
+                    )}
+                    <p className="text-xs text-purple-800">{item.instructions || item.sourceSentence}</p>
+                    {item.preparationChecklist && item.preparationChecklist.length > 0 && (
+                      <div className="mt-2 pt-2 border-t border-purple-200/60">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 block mb-1">Preparation Checklist:</span>
+                        <ul className="space-y-1">
+                          {item.preparationChecklist.map((step, sIdx) => (
+                            <li key={sIdx} className="text-xs text-purple-900 flex items-start gap-1.5">
+                              <span className="text-purple-600 font-bold">•</span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-[#78716C]">No specific upcoming lab or diagnostic tests scheduled.</p>
             )}
           </Card>
 

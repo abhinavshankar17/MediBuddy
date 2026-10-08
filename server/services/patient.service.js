@@ -73,6 +73,7 @@ const patientService = {
     // Group instructions by category for rich client presentation
     const grouped = {
       medications: isolatedItems.filter(i => i.type === 'medication'),
+      labTests: isolatedItems.filter(i => i.type === 'lab_test' || i.type === 'investigation' || i.type === 'diagnostic'),
       activities: isolatedItems.filter(i => i.type === 'activity' || i.type === 'exercise'),
       restrictions: isolatedItems.filter(i => i.type === 'restriction'),
       dietAndHydration: isolatedItems.filter(i => i.type === 'diet' || i.type === 'hydration'),

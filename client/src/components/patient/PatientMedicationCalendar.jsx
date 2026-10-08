@@ -443,6 +443,8 @@ export default function PatientMedicationCalendar({
                   className={`group relative h-10 sm:h-11 rounded-xl p-1 flex flex-col justify-between items-center transition-all cursor-pointer border text-center ${
                     isOpened
                       ? 'border-[#CC785C] bg-[#CC785C]/15 ring-2 ring-[#CC785C]/40 shadow-xs'
+                      : cell.hasLabTest
+                      ? 'border-purple-400 bg-purple-50/80 text-purple-950 font-bold hover:border-purple-600 hover:bg-purple-100/70 shadow-2xs'
                       : cell.isDischargeDay
                       ? 'border-[#0D9488] bg-[#0D9488]/10 text-[#0D9488] font-extrabold hover:border-[#0D9488]'
                       : cell.isMedicationDay
@@ -456,6 +458,8 @@ export default function PatientMedicationCalendar({
                       className={`text-xs font-bold leading-none ${
                         isOpened
                           ? 'text-[#CC785C]'
+                          : cell.hasLabTest
+                          ? 'text-purple-900 font-extrabold'
                           : cell.isDischargeDay
                           ? 'text-[#0D9488]'
                           : cell.isMedicationDay
@@ -467,29 +471,31 @@ export default function PatientMedicationCalendar({
                     </span>
 
                     {/* Small Dot / Marker */}
-                    {cell.isDischargeDay ? (
+                    {cell.hasLabTest ? (
+                      <span
+                        title="Scheduled Diagnostic / Lab Test"
+                        className="w-2.5 h-2.5 rounded-full bg-purple-600 ring-2 ring-purple-200 animate-pulse flex items-center justify-center text-[7px] text-white font-bold"
+                      >
+                        •
+                      </span>
+                    ) : cell.isDischargeDay ? (
                       <span className="text-[8px] font-bold bg-[#0D9488] text-white px-1 rounded-sm leading-tight">
                         ★
                       </span>
-                    ) : cell.hasLabTest ? (
-                      <span
-                        title="Scheduled Lab Test"
-                        className="w-2 h-2 rounded-full bg-purple-600 ring-2 ring-purple-200 animate-pulse"
-                      />
                     ) : null}
                   </div>
 
                   {/* Micro Indicator Label */}
                   <div className="w-full flex items-center justify-center gap-0.5 text-[9px] leading-none">
-                    {cell.isMedicationDay && (
-                      <span className="text-[#CC785C] font-semibold flex items-center gap-0.5">
-                        <Pill className="w-2.5 h-2.5" />
+                    {cell.hasLabTest ? (
+                      <span className="text-purple-800 font-extrabold px-1.5 py-0.5 rounded bg-purple-200/80 text-[9px]">
+                        Lab
+                      </span>
+                    ) : cell.isMedicationDay ? (
+                      <span className="text-[#CC785C] font-semibold text-[9px]">
                         <span className="hidden sm:inline">Rx</span>
                       </span>
-                    )}
-                    {cell.hasLabTest && (
-                      <span className="text-purple-700 font-bold sm:hidden">•</span>
-                    )}
+                    ) : null}
                   </div>
                 </button>
               );

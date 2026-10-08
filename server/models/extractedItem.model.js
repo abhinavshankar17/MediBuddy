@@ -9,6 +9,9 @@ const ExtractedItemSchema = new mongoose.Schema({
     required: true,
     enum: [
       'medication',
+      'lab_test',
+      'investigation',
+      'diagnostic',
       'activity',
       'exercise',
       'follow_up',
@@ -26,6 +29,11 @@ const ExtractedItemSchema = new mongoose.Schema({
   foodRelation: { type: String, default: null },
   timing: { type: String, default: null },
   duration: { type: String, default: null },
+  scheduledDate: { type: String, default: null },
+  scheduledTime: { type: String, default: null },
+  location: { type: String, default: null },
+  instructions: { type: String, default: null },
+  preparationChecklist: { type: [String], default: [] },
   sourceSentence: { type: String, default: null },
   confidence: { type: Number, default: 0.9 },
   status: {

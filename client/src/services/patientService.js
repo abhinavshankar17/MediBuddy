@@ -155,7 +155,7 @@ export async function getPatientDischargeInstructions(patientId = 'P001') {
 
   const grouped = {
     medications: patientItems.filter((i) => i.type === 'medication'),
-    labTests: patientItems.filter((i) => i.type === 'lab_test' || i.type === 'investigation'),
+    labTests: patientItems.filter((i) => i.type === 'lab_test' || i.type === 'investigation' || i.type === 'diagnostic'),
     activity: patientItems.filter((i) => i.type === 'activity' || i.type === 'exercise'),
     restrictions: patientItems.filter((i) => i.type === 'restriction'),
     diet: patientItems.filter((i) => i.type === 'diet'),
