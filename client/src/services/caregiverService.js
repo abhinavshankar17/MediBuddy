@@ -382,31 +382,30 @@ export async function reviewFeedback(patientId, feedbackId, reviewData = {}) {
   };
 }
 
+const STORAGE_ENCOURAGEMENTS_PREFIX = 'medi_buddy_patient_encouragements_';
+
+export function getLocalEncouragements(patientId) {
+  try {
+    const raw = localStorage.getItem(`${STORAGE_ENCOURAGEMENTS_PREFIX}${patientId}`);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveLocalEncouragements(patientId, items) {
+  try {
+    localStorage.setItem(`${STORAGE_ENCOURAGEMENTS_PREFIX}${patientId}`, JSON.stringify(items));
+  } catch (e) {
+    console.error('Failed to save local encouragements:', e);
+  }
+}
+
 /**
  * Caregiver sends encouragement message to patient
  */
 export async function sendEncouragement(patientId, payload = {}) {
-  notifyPatientUpdate({
-    type: 'encouragement_sent',
-    patientId,
-    timestamp: Date.now()
-  });
-
-  try {
-    const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/encouragement`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    if (res.ok) {
-      const json = await res.json();
-      return json.data !== undefined ? json.data : json;
-    }
-  } catch (err) {
-    // offline fallback
-  }
-
-  return {
+  const newEnc = {
     _id: `ENC${Date.now()}`,
     patientId,
     caregiverId: payload.caregiverId || 'U101',
@@ -415,4 +414,80 @@ export async function sendEncouragement(patientId, payload = {}) {
     tag: payload.tag || 'love',
     sentAt: new Date().toISOString()
   };
+
+  // 1. Immediately persist to localStorage
+  const existing = getLocalEncouragements(patientId);
+  saveLocalEncouragements(patientId, [newEnc, ...existing]);
+
+  // 2. Broadcast real-time sync update
+  notifyPatientUpdate({
+    type: 'encouragement_sent',
+    patientId,
+    encouragement: newEnc,
+    timestamp: Date.now()
+  });
+
+  // 3. Sync to backend
+  try {
+    const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/encouragement`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      const json = await res.json();
+      const serverEnc = json.data !== undefined ? json.data : json;
+      if (serverEnc && serverEnc._id) {
+        const current = getLocalEncouragements(patientId);
+        const updated = current.map((item) =>
+          item._id === newEnc._id ? { ...newEnc, ...serverEnc } : item
+        );
+        saveLocalEncouragements(patientId, updated);
+        return { ...newEnc, ...serverEnc };
+      }
+    }
+  } catch (err) {
+    // offline fallback
+  }
+
+  return newEnc;
+}
+
+/**
+ * Get all encouragement messages for a patient
+ */
+export async function getPatientEncouragements(patientId = 'P001') {
+  const localList = getLocalEncouragements(patientId);
+  const encMap = new Map();
+
+  // 1. Fetch from patient endpoint
+  try {
+    const res = await fetch(`${API_BASE}/patients/${patientId}/encouragement`);
+    if (res.ok) {
+      const json = await res.json();
+      const list = json.data !== undefined ? json.data : json;
+      if (Array.isArray(list)) {
+        list.forEach((e) => encMap.set(e._id, e));
+      }
+    }
+  } catch (e) {}
+
+  // 2. Fetch from caregiver endpoint
+  try {
+    const res = await fetch(`${API_BASE}/caregiver/patients/${patientId}/encouragement`);
+    if (res.ok) {
+      const json = await res.json();
+      const list = json.data !== undefined ? json.data : json;
+      if (Array.isArray(list)) {
+        list.forEach((e) => encMap.set(e._id, e));
+      }
+    }
+  } catch (e) {}
+
+  // 3. Merge local storage messages
+  localList.forEach((e) => encMap.set(e._id, e));
+
+  return Array.from(encMap.values()).sort(
+    (a, b) => new Date(b.sentAt || 0) - new Date(a.sentAt || 0)
+  );
 }

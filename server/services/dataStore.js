@@ -49,8 +49,26 @@ const getCache = () => {
     memoryCache.appointments = loadMockJson('appointments.json') || [];
     memoryCache.dayColors = loadMockJson('dayColors.json') || [];
     memoryCache.checkIns = loadMockJson('checkIns.json') || [];
-    memoryCache.users = loadMockJson('users.json') || [];
-    memoryCache.encouragements = [];
+    memoryCache.encouragements = [
+      {
+        _id: 'ENC001',
+        patientId: 'P001',
+        caregiverId: 'U101',
+        caregiverName: 'Priya Krishnan (Daughter)',
+        message: 'So proud of your walking practice today, Amma! Keep taking your medications on time and rest well.',
+        tag: 'love',
+        sentAt: '2026-10-08T14:30:00+05:30'
+      },
+      {
+        _id: 'ENC002',
+        patientId: 'P002',
+        caregiverId: 'U102',
+        caregiverName: 'Suresh Kumar (Son)',
+        message: 'Great job with today’s mobility routine, Dad! We are all rooting for your swift recovery.',
+        tag: 'support',
+        sentAt: '2026-10-08T16:00:00+05:30'
+      }
+    ];
   }
   return memoryCache;
 };

@@ -9,6 +9,7 @@ const insightController = require('../controllers/insight.controller');
 const nurseController = require('../controllers/nurse.controller');
 const escalationController = require('../controllers/escalation.controller');
 const feedbackController = require('../controllers/feedback.controller');
+const caregiverController = require('../controllers/caregiver.controller');
 
 /**
  * Patient Routes (/api/patients)
@@ -90,5 +91,9 @@ router.delete('/:id/feedback', feedbackController.clearPatientFeedbacks);
 router.get('/:id/appointments/slots', feedbackController.getAvailableSlots);
 router.get('/:id/appointments', feedbackController.getPatientAppointments);
 router.post('/:id/appointments', feedbackController.bookAppointment);
+
+// Feature: Caregiver Encouragements & Heartfelt Messages
+router.get('/:id/encouragements', caregiverController.getPatientEncouragements);
+router.get('/:id/encouragement', caregiverController.getPatientEncouragements);
 
 module.exports = router;

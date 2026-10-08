@@ -519,6 +519,18 @@ const caregiverService = {
     });
 
     return encouragementRecord;
+  },
+
+  /**
+   * Retrieve encouragement messages sent by caregivers to the patient
+   * @param {string} patientId
+   */
+  async getPatientEncouragements(patientId) {
+    if (!patientId) {
+      throw { statusCode: 400, message: 'patientId is required' };
+    }
+    const encouragements = await dataStore.getEncouragementsByPatient(patientId);
+    return encouragements.slice().reverse();
   }
 };
 

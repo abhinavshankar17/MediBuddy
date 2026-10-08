@@ -5,8 +5,9 @@ import StatusBadge from '../../components/StatusBadge';
 import LoadingState from '../../components/LoadingState';
 import ErrorState from '../../components/ErrorState';
 import EmptyState from '../../components/EmptyState';
-import { getPatientInsight, getEvidenceEvents } from '../../services/insightService';
+import { getPatientInsight, getEvidenceEvents, getPatientEncouragements } from '../../services/insightService';
 import { useApp } from '../../context/AppContext';
+import { useRealtimeSync } from '../../utils/realtimeSync';
 import {
   Lightbulb,
   Sparkles,
@@ -19,26 +20,33 @@ import {
   CheckCircle2,
   XCircle,
   Eye,
+  Heart,
   X
 } from 'lucide-react';
 
 export default function PatientInsight() {
   const { currentUser, activePatientId } = useApp();
+  const patientId = activePatientId || currentUser?.patientId || 'P001';
 
   const [insight, setInsight] = useState(null);
   const [evidenceEvents, setEvidenceEvents] = useState([]);
+  const [encouragements, setEncouragements] = useState([]);
   
   const [showEvidenceModal, setShowEvidenceModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const loadInsightData = async (patientId) => {
+  const loadInsightData = async (targetId = patientId) => {
     try {
       setLoading(true);
       setError(null);
 
-      const pInsight = await getPatientInsight(patientId);
+      const [pInsight, encs] = await Promise.all([
+        getPatientInsight(targetId),
+        getPatientEncouragements(targetId)
+      ]);
       setInsight(pInsight);
+      setEncouragements(Array.isArray(encs) ? encs : []);
 
       if (pInsight && pInsight.evidenceEventIds && pInsight.evidenceEventIds.length > 0) {
         const events = await getEvidenceEvents(pInsight.evidenceEventIds);
@@ -54,9 +62,16 @@ export default function PatientInsight() {
     }
   };
 
+  useRealtimeSync({
+    patientId,
+    onUpdate: () => loadInsightData(patientId),
+    pollingInterval: 3000,
+    enabled: true
+  });
+
   useEffect(() => {
-    loadInsightData(activePatientId || currentUser?.patientId || 'P001');
-  }, [activePatientId, currentUser]);
+    loadInsightData(patientId);
+  }, [patientId]);
 
   if (loading) {
     return (
@@ -152,6 +167,77 @@ export default function PatientInsight() {
             "{insight.aiSummary}"
           </p>
         </div>
+      </Card>
+
+      {/* Family Encouragements & Caregiver Messages Section */}
+      <Card
+        className="border-[#E8E2D7] bg-gradient-to-br from-white via-[#FAF8F5] to-rose-50/20 shadow-xs"
+        title="Family Encouragements & Caregiver Messages"
+        subtitle="Personal words of love and support sent by your family to cheer on your daily recovery"
+        badge={
+          encouragements.length > 0 ? (
+            <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+              <Heart className="w-3 h-3 text-rose-500 fill-current" />
+              <span>{encouragements.length} {encouragements.length === 1 ? 'Message' : 'Messages'}</span>
+            </span>
+          ) : null
+        }
+      >
+        {encouragements.length === 0 ? (
+          <div className="p-6 text-center rounded-2xl bg-[#FAF8F5] border border-[#E8E2D7]">
+            <Heart className="w-8 h-8 text-[#A8A29E] mx-auto mb-2 opacity-50" />
+            <p className="text-xs font-bold text-[#1C1917]">No family messages yet today</p>
+            <p className="text-[11px] text-[#78716C] mt-0.5 max-w-sm mx-auto">
+              When your family members or caregivers send supportive notes from their portal, they will appear here in real time.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            {encouragements.map((enc) => {
+              const tagConfig = {
+                love: { label: 'With Love', bg: 'bg-rose-50 text-rose-700 border-rose-200', icon: '❤️' },
+                thumbs_up: { label: 'High Five', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: '👍' },
+                support: { label: 'Stay Strong', bg: 'bg-amber-50 text-amber-700 border-amber-200', icon: '💪' },
+                reminder: { label: 'Care Note', bg: 'bg-sky-50 text-sky-700 border-sky-200', icon: '💌' }
+              }[enc.tag] || { label: 'Family Note', bg: 'bg-rose-50 text-rose-700 border-rose-200', icon: '❤️' };
+
+              return (
+                <div
+                  key={enc._id}
+                  className="p-4 rounded-2xl bg-white border border-[#E8E2D7] shadow-2xs hover:shadow-xs hover:border-[#CC785C]/40 transition-all space-y-2.5"
+                >
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-rose-100/70 text-rose-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                        <Heart className="w-3.5 h-3.5 fill-current" />
+                      </div>
+                      <span className="font-bold text-xs text-[#1C1917]">
+                        {enc.caregiverName || 'Family Member'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${tagConfig.bg}`}>
+                        {tagConfig.icon} {tagConfig.label}
+                      </span>
+                      <span className="text-[10px] text-[#78716C]">
+                        {enc.sentAt
+                          ? new Date(enc.sentAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                          : 'Today'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E2D7]/80">
+                    <p className="text-xs text-[#1C1917] leading-relaxed italic font-medium">
+                      "{enc.message}"
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </Card>
 
       {/* Strengths & Weaknesses Breakdown */}

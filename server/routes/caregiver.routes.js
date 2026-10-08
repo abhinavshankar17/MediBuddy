@@ -28,6 +28,9 @@ router.post('/patients/:patientId/feedback/:feedbackId/review', caregiverControl
 router.post('/feedback/:feedbackId/review', caregiverController.reviewFeedback);
 
 // 5. Encouragement & Messages
+router.get('/patients/:patientId/encouragement', caregiverController.getPatientEncouragements);
+router.get('/patients/:patientId/encouragements', caregiverController.getPatientEncouragements);
+router.get('/encouragement/:patientId', caregiverController.getPatientEncouragements);
 router.post('/patients/:patientId/encouragement', caregiverController.sendEncouragement);
 router.post('/encouragement', caregiverController.sendEncouragement);
 

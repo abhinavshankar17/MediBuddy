@@ -90,6 +90,21 @@ const caregiverController = {
     } catch (err) {
       return next(err);
     }
+  },
+
+  /**
+   * GET /api/caregiver/patients/:patientId/encouragement
+   * GET /api/patients/:id/encouragements
+   * Retrieve encouragement messages sent by caregivers to the patient
+   */
+  async getPatientEncouragements(req, res, next) {
+    try {
+      const patientId = req.params.patientId || req.params.id || req.query.patientId || 'P001';
+      const encouragements = await caregiverService.getPatientEncouragements(patientId);
+      return successResponse(res, encouragements, `Encouragements for patient ${patientId} retrieved successfully`);
+    } catch (err) {
+      return next(err);
+    }
   }
 };
 
