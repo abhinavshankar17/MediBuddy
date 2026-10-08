@@ -155,6 +155,7 @@ export async function getPatientDischargeInstructions(patientId = 'P001') {
 
   const grouped = {
     medications: patientItems.filter((i) => i.type === 'medication'),
+    labTests: patientItems.filter((i) => i.type === 'lab_test' || i.type === 'investigation'),
     activity: patientItems.filter((i) => i.type === 'activity' || i.type === 'exercise'),
     restrictions: patientItems.filter((i) => i.type === 'restriction'),
     diet: patientItems.filter((i) => i.type === 'diet'),
@@ -293,11 +294,17 @@ export async function getPatientPrescriptionData(patientId = 'P001') {
 
   const allCompiledMedications = Array.from(medMap.values());
 
+  // Collect Lab Tests
+  const labTests = instructions.labTests && instructions.labTests.length > 0
+    ? instructions.labTests
+    : extractedItemsData.filter((i) => i.patientId === patientId && (i.type === 'lab_test' || i.type === 'investigation'));
+
   return {
     patient,
     document: doc,
     uploadedDocuments: uploadedDocs,
     medications: allCompiledMedications,
+    labTests: labTests || [],
     activity: instructions.activity || [],
     restrictions: instructions.restrictions || [],
     diet: instructions.diet || [],
@@ -307,5 +314,6 @@ export async function getPatientPrescriptionData(patientId = 'P001') {
     reminders
   };
 }
+
 
 

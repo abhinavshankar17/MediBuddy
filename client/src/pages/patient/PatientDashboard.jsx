@@ -12,6 +12,7 @@ import {
   getPatientRecoveryProgress,
   getPatientDischargeInstructions
 } from '../../services/patientService';
+import PatientMedicationCalendar from '../../components/patient/PatientMedicationCalendar';
 import { useApp } from '../../context/AppContext';
 import {
   User,
@@ -163,6 +164,16 @@ export default function PatientDashboard() {
           </div>
         </div>
       </Card>
+
+      {/* Monthly Recovery & Medication Calendar with Lab Test Dots & Exact Daily Timings */}
+      {instructions && (
+        <PatientMedicationCalendar
+          patient={patient}
+          medications={instructions.medications || []}
+          labTests={instructions.labTests || []}
+          followUp={instructions.followUp || []}
+        />
+      )}
 
       {/* Grouped Discharge Instructions Section */}
       <div className="space-y-6 pt-2">

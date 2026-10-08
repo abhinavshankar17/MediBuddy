@@ -597,5 +597,183 @@
     "status": "APPROVED",
     "trust": "HIGH",
     "verifiedSource": true
+  },
+  {
+    "_id": "EI_LAB_001",
+    "documentId": "D001",
+    "patientId": "P001",
+    "type": "lab_test",
+    "name": "Right Knee X-Ray (AP & Lateral) & CRP",
+    "scheduledDate": "2026-10-12",
+    "scheduledTime": "09:30 AM",
+    "location": "Radiology & Imaging Dept, Room 102",
+    "instructions": "Bring previous operative X-ray films. Fasting not required.",
+    "preparationChecklist": [
+      "Bring previous operative X-ray films and discharge summary",
+      "Wear loose-fitting trousers or shorts allowing knee exposure",
+      "Take morning medications with water as scheduled (no fasting required)",
+      "Arrive at Room 102 at least 15 minutes before 09:30 AM"
+    ],
+    "sourceSentence": "Post-operative right knee X-ray (AP & Lateral) and CRP test scheduled on October 12, 2026.",
+    "status": "APPROVED",
+    "trust": "HIGH",
+    "verifiedSource": true,
+    "createdAt": "2026-10-08T09:30:00Z"
+  },
+  {
+    "_id": "EI_LAB_002",
+    "documentId": "D002",
+    "patientId": "P002",
+    "type": "lab_test",
+    "name": "Fasting Lipid Profile, ECG & Electrolytes",
+    "scheduledDate": "2026-10-06",
+    "scheduledTime": "08:30 AM",
+    "location": "Cardiac Diagnostics Wing",
+    "instructions": "Overnight fasting (10-12 hours) required for accurate lipid measurement.",
+    "preparationChecklist": [
+      "Strict overnight fasting for 10-12 hours prior to 08:30 AM (plain water allowed)",
+      "Avoid heavy physical exertion, caffeine, and smoking on the morning of test",
+      "Hold morning blood pressure / cardiac medications until blood sample is drawn",
+      "Bring hospital discharge card & national ID for admission verification",
+      "Arrive at Cardiac Diagnostics Wing by 08:15 AM"
+    ],
+    "sourceSentence": "Follow-up 12-lead ECG, Lipid Profile and Serum Electrolytes scheduled on October 6, 2026.",
+    "status": "APPROVED",
+    "trust": "HIGH",
+    "verifiedSource": true,
+    "createdAt": "2026-10-08T09:30:00Z"
+  },
+  {
+    "_id": "EI_LAB_003",
+    "documentId": "D003",
+    "patientId": "P003",
+    "type": "lab_test",
+    "name": "Repeat Chest X-Ray & Complete Blood Count (CBC)",
+    "scheduledDate": "2026-10-10",
+    "scheduledTime": "10:00 AM",
+    "location": "Pulmonology Outpatient Lab",
+    "instructions": "Wear loose clothing. No fasting required.",
+    "preparationChecklist": [
+      "Wear comfortable clothing with no metal zippers, snaps, or necklaces",
+      "Light breakfast permitted (no fasting required for routine CBC & X-Ray)",
+      "Drink 1-2 glasses of water before coming to help vein access",
+      "Bring doctor's lab requisition slip and government ID",
+      "Arrive at Pulmonology Lab 15 minutes early"
+    ],
+    "sourceSentence": "Chest X-ray and CBC follow-up scheduled on October 10, 2026.",
+    "status": "APPROVED",
+    "trust": "HIGH",
+    "verifiedSource": true,
+    "createdAt": "2026-10-08T09:30:00Z"
+  },
+  {
+    "_id": "EI_LAB_004",
+    "documentId": "D004",
+    "patientId": "P004",
+    "type": "lab_test",
+    "name": "Left Ankle X-Ray (Weight-Bearing Series)",
+    "scheduledDate": "2026-10-04",
+    "scheduledTime": "11:00 AM",
+    "location": "Orthopedic Radiology Lab",
+    "instructions": "Use crutches when arriving at the diagnostic center.",
+    "preparationChecklist": [
+      "Bring crutches or walking aid for safe weight-bearing transition",
+      "Wear removable footwear and loose trousers/shorts",
+      "Take prescribed pain medication 1 hour before appointment if experiencing discomfort",
+      "Bring operative discharge notes and prior ankle radiographs"
+    ],
+    "sourceSentence": "Weight-bearing ankle radiography review scheduled on October 4, 2026.",
+    "status": "APPROVED",
+    "trust": "HIGH",
+    "verifiedSource": true,
+    "createdAt": "2026-10-08T09:30:00Z"
+  },
+  {
+    "_id": "EI_LAB_005",
+    "documentId": "D005",
+    "patientId": "P005",
+    "type": "lab_test",
+    "name": "HbA1c & Fasting Blood Glucose (FBG)",
+    "scheduledDate": "2026-10-13",
+    "scheduledTime": "08:00 AM",
+    "location": "Endocrinology Clinical Laboratory",
+    "instructions": "8-10 hours fasting prior to blood draw. Take morning Metformin after blood sample is taken.",
+    "preparationChecklist": [
+      "Strict 8-10 hours overnight fasting before the 08:00 AM sample collection",
+      "Hold morning dose of Metformin / anti-diabetic medications until after the blood draw",
+      "Carry your morning breakfast & medications to consume immediately after blood draw",
+      "Drink 1-2 glasses of plain water in the morning to aid vein access"
+    ],
+    "sourceSentence": "Fasting blood sugar and HbA1c lab evaluation scheduled on October 13, 2026.",
+    "status": "APPROVED",
+    "trust": "HIGH",
+    "verifiedSource": true,
+    "createdAt": "2026-10-08T09:30:00Z"
+  },
+  {
+    "_id": "EI_LAB_006",
+    "documentId": "D006",
+    "patientId": "P006",
+    "type": "lab_test",
+    "name": "Complete Blood Count (CBC) & Liver Function Test (LFT)",
+    "scheduledDate": "2026-10-11",
+    "scheduledTime": "09:00 AM",
+    "location": "Surgical Pathology Lab",
+    "instructions": "Routine post-surgical blood panel check.",
+    "preparationChecklist": [
+      "Overnight fasting (minimum 6-8 hours) recommended for accurate enzyme levels",
+      "Drink water freely to remain hydrated",
+      "Avoid alcohol and heavy/fatty meals the evening before",
+      "Take daily non-diabetic routine medicines with a sip of water unless told otherwise"
+    ],
+    "sourceSentence": "Routine blood count and liver panel scheduled on October 11, 2026.",
+    "status": "APPROVED",
+    "trust": "HIGH",
+    "verifiedSource": true,
+    "createdAt": "2026-10-08T09:30:00Z"
+  },
+  {
+    "_id": "EI_LAB_007",
+    "documentId": "D007",
+    "patientId": "P007",
+    "type": "lab_test",
+    "name": "Pelvic & Hip Radiography Series",
+    "scheduledDate": "2026-10-15",
+    "scheduledTime": "10:30 AM",
+    "location": "Joint Reconstruction Imaging Center",
+    "instructions": "Assisted wheelchair access available at entrance.",
+    "preparationChecklist": [
+      "Wheelchair assistance is available at the main entrance if needed",
+      "Wear elastic-waist pants without metal buttons or zippers",
+      "Bring previous post-arthroplasty implant documentation",
+      "Continue regular medications with water"
+    ],
+    "sourceSentence": "Post-arthroplasty pelvic X-ray series scheduled on October 15, 2026.",
+    "status": "APPROVED",
+    "trust": "HIGH",
+    "verifiedSource": true,
+    "createdAt": "2026-10-08T09:30:00Z"
+  },
+  {
+    "_id": "EI_LAB_008",
+    "documentId": "D008",
+    "patientId": "P008",
+    "type": "lab_test",
+    "name": "Abdominal Ultrasound & Hemoglobin Check",
+    "scheduledDate": "2026-10-12",
+    "scheduledTime": "09:15 AM",
+    "location": "Ultrasonography Suite 3",
+    "instructions": "Drink 500ml water 1 hour prior to scan; do not void bladder.",
+    "preparationChecklist": [
+      "Drink 500 mL (approx. 2 full glasses) of plain water 1 hour prior to scan",
+      "Do not empty / void bladder until ultrasound scan is completed",
+      "Wear a two-piece loose outfit allowing easy abdominal access",
+      "Bring past ultrasound and abdominal imaging reports"
+    ],
+    "sourceSentence": "Abdominal ultrasonography review scheduled on October 12, 2026.",
+    "status": "APPROVED",
+    "trust": "HIGH",
+    "verifiedSource": true,
+    "createdAt": "2026-10-08T09:30:00Z"
   }
 ]

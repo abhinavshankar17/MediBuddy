@@ -30,7 +30,8 @@ import {
   Layers,
   ArrowRight,
   Eye,
-  ExternalLink
+  ExternalLink,
+  TestTube
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -448,8 +449,42 @@ export default function PatientPrescription() {
               </div>
             </div>
 
+            {/* Scheduled Lab Diagnostics & Investigations */}
+            {labTests && labTests.length > 0 && (
+              <div className="space-y-2.5 pt-2">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#78716C] border-b border-[#E8E2D7] pb-1 flex items-center gap-1.5">
+                  <TestTube className="w-3.5 h-3.5 text-purple-600" />
+                  Scheduled Diagnostics & Laboratory Investigations
+                </h3>
+
+                <div className="space-y-2">
+                  {labTests.map((lab, idx) => (
+                    <div
+                      key={lab._id || idx}
+                      className="p-3 bg-purple-50/60 border border-purple-200/70 rounded-xl flex items-start justify-between gap-3 text-xs"
+                    >
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-purple-950 font-serif block text-sm">
+                          {lab.name}
+                        </span>
+                        <p className="text-[11px] text-purple-800">
+                          <strong>Location:</strong> {lab.location || 'Hospital Diagnostics Center'} • {lab.instructions || 'Bring previous medical records.'}
+                        </p>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <span className="px-2 py-0.5 bg-purple-200/80 text-purple-900 font-bold rounded-md text-[10px] block">
+                          {lab.scheduledDate} • {lab.scheduledTime || '09:30 AM'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* 5. Follow-Up Consultation & Doctor Signature Footer */}
             <div className="pt-4 border-t-2 border-[#1C1917]/10 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+
               {/* Follow-up Details */}
               <div className="space-y-1 text-xs">
                 <span className="text-[10px] uppercase font-bold text-[#78716C] block">Follow-up Consultation</span>
