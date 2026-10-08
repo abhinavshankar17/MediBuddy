@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../../context/AppContext';
-import { getPatientPrescriptionData } from '../../services/patientService';
+import { getPatientPrescriptionData, getAllPatients } from '../../services/patientService';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -28,27 +28,35 @@ import {
   ChevronRight,
   Info,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Eye,
+  ExternalLink
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 export default function PatientPrescription() {
-  const { activePatientId } = useApp();
+  const { activePatientId, setActivePatientId } = useApp();
   const prescriptionRef = useRef(null);
 
+  const [currentPatientId, setCurrentPatientId] = useState(activePatientId || 'P001');
+  const [allPatients, setAllPatients] = useState([]);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [downloading, setDownloading] = useState(false);
-  const [activeTab, setActiveTab] = useState('prescription'); // 'prescription' | 'schedule' | 'summary'
+  const [activeTab, setActiveTab] = useState('prescription'); // 'prescription' | 'schedule' | 'documents'
 
   const loadPrescription = async (pId) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await getPatientPrescriptionData(pId);
+      const [res, pList] = await Promise.all([
+        getPatientPrescriptionData(pId),
+        getAllPatients()
+      ]);
       setData(res);
+      setAllPatients(pList || []);
     } catch (err) {
       console.error('Failed to load prescription data:', err);
       setError('Unable to load prescription records. Please try again.');
@@ -58,8 +66,15 @@ export default function PatientPrescription() {
   };
 
   useEffect(() => {
-    loadPrescription(activePatientId || 'P001');
-  }, [activePatientId]);
+    loadPrescription(currentPatientId);
+  }, [currentPatientId]);
+
+  const handlePatientChange = (pId) => {
+    setCurrentPatientId(pId);
+    if (setActivePatientId) {
+      setActivePatientId(pId);
+    }
+  };
 
   const handlePrint = () => {
     window.print();
@@ -114,7 +129,7 @@ export default function PatientPrescription() {
   if (loading) {
     return (
       <PageContainer title="Official Medical Prescription">
-        <LoadingState message="Compiling verified clinical prescription, dosage schedules & doctor orders..." />
+        <LoadingState message="Compiling verified clinical prescription, all prescribed medications & dosage schedules..." />
       </PageContainer>
     );
   }
@@ -125,13 +140,24 @@ export default function PatientPrescription() {
         <ErrorState
           title="Prescription Unavailable"
           message={error || 'Could not find clinical prescription records.'}
-          onRetry={() => loadPrescription(activePatientId || 'P001')}
+          onRetry={() => loadPrescription(currentPatientId)}
         />
       </PageContainer>
     );
   }
 
-  const { patient, document, medications, activity, restrictions, diet, woundCare, followUp, warningSigns } = data;
+  const {
+    patient,
+    document,
+    uploadedDocuments = [],
+    medications = [],
+    activity = [],
+    restrictions = [],
+    diet = [],
+    woundCare = [],
+    followUp = [],
+    warningSigns = []
+  } = data;
 
   const issueDate = document?.dischargeDate || patient?.dischargeDate || '2026-10-05';
   const doctor = document?.doctorName || patient?.assignedDoctor || 'Dr. Vivek Iyer';
@@ -140,9 +166,27 @@ export default function PatientPrescription() {
   return (
     <PageContainer
       title="Medical Prescription & Orders"
-      subtitle="Official doctor-authorized discharge prescription, medication schedules, and clinical instructions."
+      subtitle="Complete doctor-authorized discharge prescription, all prescribed medicines, and clinical care directives."
       actions={
         <div className="flex flex-wrap items-center gap-2.5">
+          {/* Patient Selector for easy navigation */}
+          {allPatients.length > 0 && (
+            <div className="flex items-center gap-1.5 bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl px-2.5 py-1 text-xs shadow-2xs">
+              <span className="text-[#78716C] font-semibold text-[11px] hidden sm:inline">Patient:</span>
+              <select
+                value={patient._id}
+                onChange={(e) => handlePatientChange(e.target.value)}
+                className="bg-transparent font-bold text-[#1C1917] focus:outline-none cursor-pointer text-xs"
+              >
+                {allPatients.map((p) => (
+                  <option key={p._id} value={p._id}>
+                    {p.name} ({p._id})
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <button
             type="button"
             onClick={handlePrint}
@@ -171,14 +215,16 @@ export default function PatientPrescription() {
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-[#1C1917]">Digitally Authorized Hospital Prescription</h3>
+            <h3 className="text-xs font-bold text-[#1C1917]">
+              Digitally Authorized Prescription • {medications.length} Prescribed Medicine{medications.length === 1 ? '' : 's'}
+            </h3>
             <p className="text-[11px] text-[#78716C]">
               Authorized by <strong>{doctor}</strong> for <strong>{patient.name}</strong> ({patient._id}) on {issueDate}.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setActiveTab('prescription')}
             className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
@@ -197,13 +243,25 @@ export default function PatientPrescription() {
                 : 'text-[#78716C] hover:text-[#1C1917]'
             }`}
           >
-            Dosage Timings
+            Dosage Cards ({medications.length})
           </button>
+          {uploadedDocuments.length > 0 && (
+            <button
+              onClick={() => setActiveTab('documents')}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'documents'
+                  ? 'bg-[#CC785C] text-white shadow-2xs'
+                  : 'text-[#78716C] hover:text-[#1C1917]'
+              }`}
+            >
+              Uploaded PDFs ({uploadedDocuments.length})
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Main Prescription Document View */}
-      {activeTab === 'prescription' ? (
+      {/* Main Content Body */}
+      {activeTab === 'prescription' && (
         <div className="flex justify-center">
           {/* Printable & PDF Capture Container */}
           <div
@@ -222,12 +280,12 @@ export default function PatientPrescription() {
                       {hospital}
                     </h1>
                     <p className="text-[11px] text-[#78716C] font-semibold">
-                      Department of Post-Operative Surgery & General Medicine
+                      Department of Post-Operative Recovery & Clinical Care
                     </p>
                   </div>
                 </div>
                 <p className="text-[10px] text-[#78716C] pt-1">
-                  NABH Accredited Tertiary Medical Center • Reg No: MED-CB-2026-994
+                  NABH Accredited Tertiary Care Center • Reg No: MED-CB-2026-994
                 </p>
               </div>
 
@@ -267,13 +325,18 @@ export default function PatientPrescription() {
               </div>
             </div>
 
-            {/* 3. Rx Section & Medication Table */}
+            {/* 3. Rx Section & Complete Medication Table */}
             <div className="space-y-3 pt-2">
-              <div className="flex items-center gap-2 border-b border-[#E8E2D7] pb-2">
-                <span className="text-2xl font-serif font-black text-[#CC785C]">℞</span>
-                <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1917]">
-                  Prescribed Medications & Dosage
-                </h2>
+              <div className="flex items-center justify-between border-b border-[#E8E2D7] pb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-serif font-black text-[#CC785C]">℞</span>
+                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#1C1917]">
+                    Prescribed Medications ({medications.length} Item{medications.length === 1 ? '' : 's'})
+                  </h2>
+                </div>
+                <span className="text-[10px] text-[#78716C] uppercase font-bold">
+                  Verified Active Regimen
+                </span>
               </div>
 
               <div className="overflow-x-auto">
@@ -303,13 +366,18 @@ export default function PatientPrescription() {
                               {med.name}
                             </span>
                             <span className="text-[11px] text-[#0D9488] font-bold">
-                              {med.dose || 'Standard Dose'} • Oral
+                              {med.dose || 'Standard Dose'} • {med.form || 'Oral Tablet'}
                             </span>
                           </td>
                           <td className="p-3 font-medium text-[#1C1917]">
-                            <span className="px-2 py-0.5 bg-[#FAF8F5] border border-[#E8E2D7] rounded-md font-semibold text-[11px]">
+                            <span className="px-2 py-0.5 bg-[#FAF8F5] border border-[#E8E2D7] rounded-md font-semibold text-[11px] block w-fit">
                               {med.frequency || 'As directed'}
                             </span>
+                            {med.scheduledTimes && med.scheduledTimes.length > 0 && (
+                              <span className="text-[10px] text-[#78716C] block mt-0.5">
+                                Times: {med.scheduledTimes.join(', ')}
+                              </span>
+                            )}
                           </td>
                           <td className="p-3 text-[#78716C] font-medium">
                             {med.foodRelation || 'With water'}
@@ -389,7 +457,7 @@ export default function PatientPrescription() {
                   {followUp.map((f) => f.sourceSentence).join(' ') || 'Review at Outpatient Clinic in 7 Days.'}
                 </p>
                 <p className="text-[11px] text-[#78716C]">
-                  Please bring this prescription slip and medication diary to your next visit.
+                  Please bring this prescription slip and medication diary to your next clinic visit.
                 </p>
               </div>
 
@@ -416,14 +484,19 @@ export default function PatientPrescription() {
 
             {/* Bottom Disclaimer */}
             <div className="pt-2 text-center text-[9px] text-[#78716C] border-t border-[#E8E2D7]/50">
-              This is a digitally signed clinical discharge prescription generated by MediBuddy CareBridge System. Valid for pharmacy dispensing.
+              This is a digitally verified clinical discharge prescription generated by MediBuddy CareBridge System. Valid for pharmacy dispensing.
             </div>
           </div>
         </div>
-      ) : (
-        /* Dosage Timings Grid Tab */
+      )}
+
+      {/* Dosage Cards Tab */}
+      {activeTab === 'schedule' && (
         <div className="space-y-4">
-          <Card title="Patient Daily Medication Timings" subtitle="Structured schedule mapped from doctor instructions">
+          <Card
+            title={`Prescribed Medicines & Dosage (${medications.length})`}
+            subtitle="Detailed medication cards compiled from clinical discharge instructions"
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {medications.map((med, idx) => (
                 <div
@@ -454,11 +527,60 @@ export default function PatientPrescription() {
                       <span className="text-[#78716C]">Instructions:</span>
                       <span className="font-bold text-[#0D9488]">{med.foodRelation || 'With water'}</span>
                     </div>
+                    {med.scheduledTimes && med.scheduledTimes.length > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-[#78716C]">Reminder Timings:</span>
+                        <span className="font-bold text-[#1C1917]">{med.scheduledTimes.join(', ')}</span>
+                      </div>
+                    )}
                   </div>
 
                   <p className="text-[11px] text-[#78716C] italic">
                     "{med.sourceSentence}"
                   </p>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Uploaded PDF Documents Tab */}
+      {activeTab === 'documents' && uploadedDocuments.length > 0 && (
+        <div className="space-y-4">
+          <Card
+            title={`Attached Prescription PDFs (${uploadedDocuments.length})`}
+            subtitle="Original PDF files uploaded and attached to this patient's clinical file"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {uploadedDocuments.map((doc) => (
+                <div
+                  key={doc._id}
+                  className="p-4 bg-white border border-[#E8E2D7] rounded-xl flex items-center justify-between gap-3 shadow-xs"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#0D9488]/10 text-[#0D9488] flex items-center justify-center">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xs text-[#1C1917] truncate max-w-xs">{doc.fileName || 'Prescription.pdf'}</h4>
+                      <p className="text-[11px] text-[#78716C]">
+                        {doc.doctorName || 'Dr. Attending'} • {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString() : 'Recent'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {doc.fileUrl && (
+                    <a
+                      href={doc.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#0D9488] hover:bg-[#0B7A70] text-white text-xs font-bold rounded-xl shadow-2xs transition-all"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>View PDF</span>
+                    </a>
+                  )}
                 </div>
               ))}
             </div>

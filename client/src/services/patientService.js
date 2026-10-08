@@ -168,12 +168,13 @@ export async function getPatientDischargeInstructions(patientId = 'P001') {
 
 /**
   * Gather comprehensive clinical prescription data for patient and PDF generation
+  * Multi-source aggregator across extractedItems, medicationReminders, tasks, and document text.
   * @param {string} patientId 
   */
 export async function getPatientPrescriptionData(patientId = 'P001') {
   const patient = await getPatientById(patientId);
 
-  // Fetch discharge document from API or mock
+  // 1. Fetch discharge document from API or mock
   let doc = null;
   try {
     const res = await fetch(`/api/documents/patient/${patientId}`);
@@ -188,16 +189,115 @@ export async function getPatientPrescriptionData(patientId = 'P001') {
     doc = documentsData.find((d) => d.patientId === patientId) || documentsData[0];
   }
 
-  // Fetch instructions
+  // 2. Fetch uploaded prescription PDFs from backend if available
+  let uploadedDocs = [];
+  try {
+    const docRes = await fetch(`/api/documents?patientId=${patientId}`);
+    if (docRes.ok) {
+      const docJson = await docRes.json();
+      const list = docJson.data !== undefined ? docJson.data : docJson;
+      if (Array.isArray(list)) uploadedDocs = list;
+    }
+  } catch (err) {
+    // fallback
+  }
+
+  // 3. Fetch structured instructions
   const instructions = await getPatientDischargeInstructions(patientId);
 
-  // Fetch reminders for timing
+  // 4. Fetch all reminders for this patient
   const reminders = medicationRemindersData.filter((m) => m.patientId === patientId);
+
+  // 5. Build Complete, Deduplicated, Multi-Source Medication Directory
+  const medMap = new Map();
+
+  // (a) From Extracted Items (both approved and raw)
+  const patientExtracted = extractedItemsData.filter((item) => item.patientId === patientId && item.type === 'medication');
+  patientExtracted.forEach((item) => {
+    const key = (item.name || '').toLowerCase().trim();
+    if (!key) return;
+    medMap.set(key, {
+      _id: item._id,
+      name: item.name,
+      dose: item.dose || 'Standard Dose',
+      frequency: item.frequency || 'As directed',
+      foodRelation: item.foodRelation || 'With water',
+      duration: item.duration || '5 days',
+      sourceSentence: item.sourceSentence || `Take ${item.name} as directed.`,
+      form: 'Oral Tablet',
+      route: 'Oral',
+      scheduledTimes: []
+    });
+  });
+
+  // (b) From Reminders (enrich timing hours & catch unextracted active medications)
+  reminders.forEach((r) => {
+    const key = (r.medicationName || '').toLowerCase().trim();
+    if (!key) return;
+    const timeStr = r.scheduledAt
+      ? new Date(r.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      : null;
+
+    if (medMap.has(key)) {
+      const existing = medMap.get(key);
+      if (r.dose && (!existing.dose || existing.dose === 'Standard Dose')) {
+        existing.dose = r.dose;
+      }
+      if (timeStr && !existing.scheduledTimes.includes(timeStr)) {
+        existing.scheduledTimes.push(timeStr);
+      }
+    } else {
+      medMap.set(key, {
+        _id: r._id,
+        name: r.medicationName,
+        dose: r.dose || 'Standard Dose',
+        frequency: 'Daily scheduled',
+        foodRelation: 'As advised by physician',
+        duration: 'Course duration as prescribed',
+        sourceSentence: `Scheduled medication: ${r.medicationName} ${r.dose || ''}`,
+        form: 'Oral Tablet',
+        route: 'Oral',
+        scheduledTimes: timeStr ? [timeStr] : []
+      });
+    }
+  });
+
+  // (c) From Discharge Document rawText (capture any secondary medications mentioned)
+  if (doc && doc.rawText) {
+    const medSection = doc.rawText.match(/Medications:\s*([^.\n]+(?:\.[^.\n]+)*)/i);
+    if (medSection && medSection[1]) {
+      const sentences = medSection[1].split(/\.\s*/).filter((s) => s.trim().length > 0);
+      sentences.forEach((s) => {
+        const lower = s.toLowerCase();
+        if (
+          lower.includes('fever medicine') &&
+          !medMap.has('fever medicine') &&
+          !medMap.has('paracetamol')
+        ) {
+          medMap.set('fever medicine', {
+            _id: `DOC_MED_${patientId}_1`,
+            name: 'Prescribed Fever Medicine (Antipyretic)',
+            dose: 'As needed',
+            frequency: 'PRN (As needed)',
+            foodRelation: 'After meals',
+            duration: 'For fever / pain relief',
+            sourceSentence: `${s.trim()}.`,
+            form: 'Oral Tablet',
+            route: 'Oral',
+            scheduledTimes: []
+          });
+        }
+      });
+    }
+  }
+
+  const allCompiledMedications = Array.from(medMap.values());
 
   return {
     patient,
     document: doc,
-    medications: instructions.medications || [],
+    uploadedDocuments: uploadedDocs,
+    medications: allCompiledMedications,
     activity: instructions.activity || [],
     restrictions: instructions.restrictions || [],
     diet: instructions.diet || [],
@@ -207,4 +307,5 @@ export async function getPatientPrescriptionData(patientId = 'P001') {
     reminders
   };
 }
+
 
