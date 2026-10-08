@@ -113,45 +113,8 @@ export default function PatientDashboard() {
   };
 
   return (
-    <PageContainer
-      title="Patient Recovery Dashboard"
-      subtitle="Personalized post-discharge recovery monitoring and verified clinical guidelines."
-      actions={
-        <div className="flex flex-wrap items-center gap-2.5">
-          <StatusBadge status="completed" label={patient.recoveryDay} />
-          
-          <button
-            onClick={() => navigate('/patient/prescription')}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#CC785C] hover:bg-[#B6664C] text-white rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Prescription (PDF)</span>
-          </button>
-
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-rose-50 border border-[#E8E2D7] hover:border-rose-200 rounded-xl text-xs font-bold text-rose-700 shadow-2xs transition-all cursor-pointer"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span>Log Out</span>
-          </button>
-        </div>
-      }
-    >
-      {/* Safety Wording Banner */}
-      <div className="p-3 bg-[#CC785C]/10 border border-[#CC785C]/25 rounded-xl flex items-center justify-between text-xs text-[#1C1917]">
-        <div className="flex items-center gap-2 font-medium">
-          <Sparkles className="w-4 h-4 text-[#CC785C] flex-shrink-0" />
-          <span>
-            <strong className="text-[#CC785C]">AI-generated — verify before acting.</strong> Clinical summaries and instructions are extracted from original discharge documentation.
-          </span>
-        </div>
-        <span className="text-[10px] uppercase font-bold text-[#CC785C] bg-white px-2 py-0.5 rounded border border-[#CC785C]/20 hidden sm:inline">
-          VERIFIED DATASET
-        </span>
-      </div>
-
-      {/* Patient Information Card */}
+    <PageContainer>
+      {/* Patient Information Card (Top Element) */}
       <Card className="bg-gradient-to-r from-white via-[#FAF8F5] to-[#F4F0E8]/40 border-[#E8E2D7]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
@@ -168,6 +131,7 @@ export default function PatientDashboard() {
                   {patient.gender}, {patient.age} yrs
                 </span>
               </div>
+
 
               <div className="mt-2 text-xs text-[#78716C] space-y-1">
                 <p className="font-semibold text-[#1C1917]">
@@ -199,116 +163,6 @@ export default function PatientDashboard() {
           </div>
         </div>
       </Card>
-
-      {/* Today's Overview Grid */}
-      <div>
-        <h3 className="text-lg font-bold text-[#1C1917] font-serif mb-4 flex items-center gap-2">
-          <Activity className="w-5 h-5 text-[#CC785C]" />
-          Today's Care Overview
-        </h3>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Medications Card */}
-          <Card variant="stat" className="hover:border-[#CC785C]/40">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#78716C]">Medications</span>
-              <div className="p-2 bg-[#CC785C]/10 text-[#CC785C] rounded-lg">
-                <Pill className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <span className="text-2xl font-extrabold text-[#1C1917] font-serif">
-                {overview.medications.completed} / {overview.medications.total}
-              </span>
-              <p className="text-xs text-[#78716C] mt-1">Dosages completed today</p>
-            </div>
-            {overview.medications.next && (
-              <div className="mt-3 pt-2 border-t border-[#F4F0E8] text-[11px] text-[#78716C]">
-                <strong>Next:</strong> {overview.medications.next.name} ({overview.medications.next.dosage || '500mg'})
-              </div>
-            )}
-          </Card>
-
-          {/* Today's Tasks Card */}
-          <Card variant="stat" className="hover:border-[#0D9488]/40">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#78716C]">Today's Tasks</span>
-              <div className="p-2 bg-[#0D9488]/10 text-[#0D9488] rounded-lg">
-                <CheckSquare className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <span className="text-2xl font-extrabold text-[#1C1917] font-serif">
-                {overview.tasks.completed} / {overview.tasks.total}
-              </span>
-              <p className="text-xs text-[#78716C] mt-1">
-                {overview.tasks.pending} pending care tasks
-              </p>
-            </div>
-            <div className="mt-3 pt-2 border-t border-[#F4F0E8] text-[11px] text-[#78716C]">
-              <strong>Status:</strong> {overview.tasks.pending > 0 ? 'Action required' : 'All tasks completed'}
-            </div>
-          </Card>
-
-          {/* Care Insights Card */}
-          <Card variant="stat" className="hover:border-[#CC785C]/40">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#78716C]">Care Insights</span>
-              <div className="p-2 bg-[#CC785C]/10 text-[#CC785C] rounded-lg">
-                <Sparkles className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <span className="text-2xl font-extrabold text-[#1C1917] font-serif">
-                Active
-              </span>
-              <p className="text-xs text-[#78716C] mt-1">Personalized guidance</p>
-            </div>
-            <div className="mt-3 pt-2 border-t border-[#F4F0E8] text-[11px] text-[#78716C]">
-              <strong>Focus:</strong> Grounded telemetry
-            </div>
-          </Card>
-
-          {/* Follow-up Card */}
-          <Card variant="stat" className="hover:border-[#059669]/40">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#78716C]">Follow-up</span>
-              <div className="p-2 bg-[#059669]/10 text-[#059669] rounded-lg">
-                <Calendar className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <span className="text-sm font-extrabold text-[#1C1917] font-serif truncate block">
-                {overview.followUp ? overview.followUp.name : 'Orthopedic Clinic'}
-              </span>
-              <p className="text-xs text-[#78716C] mt-1">
-                {overview.followUp ? overview.followUp.timing : 'In 1 week'}
-              </p>
-            </div>
-            <div className="mt-3 pt-2 border-t border-[#F4F0E8] text-[11px] text-[#78716C]">
-              <strong>Location:</strong> Outpatient Clinic
-            </div>
-          </Card>
-        </div>
-      </div>
-
-      {/* Important Instruction Callout */}
-      {overview.importantInstruction && (
-        <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-          <div className="space-y-1 text-xs">
-            <p className="font-bold text-amber-900">
-              Important Care Notice — {overview.importantInstruction.name || 'Restriction Alert'}
-            </p>
-            <p className="text-amber-800 leading-relaxed">
-              "{overview.importantInstruction.sourceSentence || overview.importantInstruction.description}"
-            </p>
-            <p className="text-[10px] text-amber-700 italic">
-              AI-generated from discharge summary — verify with care team before acting.
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Grouped Discharge Instructions Section */}
       <div className="space-y-6 pt-2">
