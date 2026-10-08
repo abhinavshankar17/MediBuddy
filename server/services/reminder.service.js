@@ -157,9 +157,11 @@ const reminderService = {
 
     // Check for duplicate confirmation / already completed reminder
     if (reminder.status === 'taken' || reminder.responseType === 'taken') {
-      throw {
-        statusCode: 409,
-        message: `Reminder '${reminderId}' has already been completed and confirmed as taken`
+      const confirmationStatus = computeConfirmationStatus(reminder);
+      return {
+        ...reminder,
+        confirmationStatus,
+        isConfirmed: true
       };
     }
 
@@ -181,6 +183,34 @@ const reminderService = {
       };
       eventType = 'medication_taken';
       eventPayload.responseTime = now;
+
+      // Mark any pending unread notifications as read immediately so alerts clear
+      try {
+        const notifs = await dataStore.getNotifications({ reminderId });
+        for (const notif of notifs) {
+          if (!notif.read) {
+            await dataStore.markNotificationAsRead(notif._id);
+          }
+        }
+      } catch (err) {}
+
+      // Synchronize with data/mock/medicationReminders.json file
+      try {
+        const fs = require('fs');
+        const path = require('path');
+        const mockFilePath = path.resolve(__dirname, '../../data/mock/medicationReminders.json');
+        if (fs.existsSync(mockFilePath)) {
+          const raw = fs.readFileSync(mockFilePath, 'utf-8');
+          const mockData = JSON.parse(raw);
+          const target = mockData.find(item => item._id === reminderId);
+          if (target) {
+            target.status = 'taken';
+            target.responseType = 'taken';
+            target.respondedAt = now;
+            fs.writeFileSync(mockFilePath, JSON.stringify(mockData, null, 2), 'utf-8');
+          }
+        }
+      } catch (err) {}
     } else if (response === 'not_taken') {
       updatedFields = {
         status: 'missed',

@@ -19,6 +19,12 @@ const MedicationReminderSchema = new mongoose.Schema({
     enum: ['taken', 'not_taken', 'dismissed', 'no_response', null],
     default: null
   },
+  notificationState: {
+    initialReminderSent: { type: Boolean, default: false },
+    followUpNotificationSent: { type: Boolean, default: false },
+    simulatedCallNotificationSent: { type: Boolean, default: false },
+    caregiverNotificationSent: { type: Boolean, default: false }
+  },
   createdAt: { type: String, default: () => new Date().toISOString() }
 }, {
   timestamps: true,

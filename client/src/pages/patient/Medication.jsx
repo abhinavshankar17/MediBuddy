@@ -67,6 +67,9 @@ export default function Medication() {
               : r
           )
         );
+
+        // Notify Header and other UI components to immediately clear any unconfirmed alerts
+        window.dispatchEvent(new CustomEvent('medication-taken', { detail: { reminderId } }));
       } else {
         throw new Error('API confirmation failed.');
       }

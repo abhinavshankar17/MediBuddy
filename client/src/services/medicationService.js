@@ -41,7 +41,7 @@ export async function getMedicationReminders(patientId = 'P001') {
       if (Array.isArray(list) && list.length > 0) {
         return list.map((reminder) => {
           const stored = storedStatuses[reminder._id];
-          const isTaken = reminder.status === 'taken' || reminder.responseType === 'taken' || stored?.status === 'taken';
+          const isTaken = reminder.status === 'taken' || reminder.responseType === 'taken';
 
           return {
             _id: reminder._id,
@@ -56,8 +56,10 @@ export async function getMedicationReminders(patientId = 'P001') {
             duration: reminder.instructionDetails?.duration || 'Full course',
             status: isTaken ? 'taken' : (reminder.status || 'scheduled'),
             responseType: isTaken ? 'taken' : (reminder.responseType || 'no_response'),
-            respondedAt: reminder.respondedAt || stored?.respondedAt || null,
-            confirmedFormattedTime: stored?.confirmedFormattedTime || (reminder.respondedAt ? new Date(reminder.respondedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : null),
+            respondedAt: reminder.respondedAt || (isTaken ? stored?.respondedAt : null),
+            confirmedFormattedTime: reminder.respondedAt
+              ? new Date(reminder.respondedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+              : (isTaken ? (stored?.confirmedFormattedTime || 'Confirmed') : null),
             createdAt: reminder.createdAt
           };
         });
@@ -72,7 +74,7 @@ export async function getMedicationReminders(patientId = 'P001') {
   return patientReminders.map((reminder) => {
     const extracted = extractedItemsData.find((item) => item._id === reminder.extractedItemId) || {};
     const stored = storedStatuses[reminder._id];
-    const isTaken = reminder.status === 'taken' || reminder.responseType === 'taken' || stored?.status === 'taken';
+    const isTaken = reminder.status === 'taken' || reminder.responseType === 'taken';
 
     return {
       _id: reminder._id,
@@ -87,8 +89,10 @@ export async function getMedicationReminders(patientId = 'P001') {
       duration: extracted.duration || 'Full course',
       status: isTaken ? 'taken' : (reminder.status || 'scheduled'),
       responseType: isTaken ? 'taken' : (reminder.responseType || 'no_response'),
-      respondedAt: reminder.respondedAt || stored?.respondedAt || null,
-      confirmedFormattedTime: stored?.confirmedFormattedTime || null,
+      respondedAt: reminder.respondedAt || (isTaken ? stored?.respondedAt : null),
+      confirmedFormattedTime: reminder.respondedAt
+        ? new Date(reminder.respondedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        : (isTaken ? (stored?.confirmedFormattedTime || 'Confirmed') : null),
       createdAt: reminder.createdAt
     };
   });

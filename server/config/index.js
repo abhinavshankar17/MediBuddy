@@ -10,5 +10,7 @@ module.exports = {
   MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/medibuddy',
   JWT_SECRET: process.env.JWT_SECRET || 'carebridge_medibuddy_jwt_secret_dev_2026',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
-  CORS_ORIGIN: process.env.CORS_ORIGIN || '*'
+  CORS_ORIGIN: process.env.CORS_ORIGIN || '*',
+  MEDICATION_FOLLOWUP_NOTIFICATION_MINUTES: parseInt(process.env.MEDICATION_FOLLOWUP_NOTIFICATION_MINUTES, 10) || 10,
+  MEDICATION_SIMULATED_CALL_MINUTES: parseInt(process.env.MEDICATION_SIMULATED_CALL_MINUTES, 10) || 25
 };

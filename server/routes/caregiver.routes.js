@@ -30,4 +30,9 @@ router.post('/feedback/:feedbackId/review', caregiverController.reviewFeedback);
 router.post('/patients/:patientId/encouragement', caregiverController.sendEncouragement);
 router.post('/encouragement', caregiverController.sendEncouragement);
 
+// 6. Notifications
+const notificationController = require('../controllers/notification.controller');
+router.get('/notifications', notificationController.getNotifications);
+router.get('/patients/:patientId/notifications', notificationController.getNotifications);
+
 module.exports = router;

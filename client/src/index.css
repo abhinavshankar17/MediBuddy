@@ -76,6 +76,11 @@ h1, h2, h3, .font-serif {
   animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@keyframes toastProgress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
 /* Hide scrollbar for clean horizontal mobile swipes */
 .scrollbar-none::-webkit-scrollbar {
   display: none;

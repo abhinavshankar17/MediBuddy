@@ -2,15 +2,14 @@
   {
     "_id": "MR001",
     "patientId": "P001",
-    "extractedItemId": "EI001",
     "medicationName": "Paracetamol",
     "dose": "500 mg",
-    "scheduledAt": "2026-10-08T08:00:00+05:30",
-    "status": "scheduled",
+    "scheduledAt": "2026-10-09T02:30:00+05:30",
+    "status": "taken",
     "reminderSentAt": null,
-    "respondedAt": null,
-    "responseType": null,
-    "createdAt": "2026-10-08T07:55:00+05:30"
+    "respondedAt": "2026-10-08T21:19:51.851Z",
+    "responseType": "taken",
+    "createdAt": "2026-10-09T01:34:00+05:30"
   },
   {
     "_id": "MR002",
@@ -18,12 +17,12 @@
     "extractedItemId": "EI002",
     "medicationName": "Omeprazole",
     "dose": "20 mg",
-    "scheduledAt": "2026-10-08T07:30:00+05:30",
+    "scheduledAt": "2026-10-09T08:00:00+05:30",
     "status": "scheduled",
     "reminderSentAt": null,
     "respondedAt": null,
     "responseType": null,
-    "createdAt": "2026-10-08T07:25:00+05:30"
+    "createdAt": "2026-10-09T07:25:00+05:30"
   },
   {
     "_id": "MR003",
@@ -31,12 +30,12 @@
     "extractedItemId": "EI001",
     "medicationName": "Paracetamol",
     "dose": "500 mg",
-    "scheduledAt": "2026-10-08T20:00:00+05:30",
+    "scheduledAt": "2026-10-09T20:00:00+05:30",
     "status": "scheduled",
     "reminderSentAt": null,
     "respondedAt": null,
     "responseType": null,
-    "createdAt": "2026-10-08T19:55:00+05:30"
+    "createdAt": "2026-10-09T19:55:00+05:30"
   },
   {
     "_id": "MR004",

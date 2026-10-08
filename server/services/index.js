@@ -7,6 +7,7 @@ const { quizService, validateExactFiveQuestions } = require('./quiz.service');
 const insightService = require('./insight.service');
 const nurseService = require('./nurse.service');
 const escalationService = require('./escalation.service');
+const notificationService = require('./notification.service');
 const dataStore = require('./dataStore');
 
 module.exports = {
@@ -20,5 +21,6 @@ module.exports = {
   insightService,
   nurseService,
   escalationService,
+  notificationService,
   dataStore
 };
