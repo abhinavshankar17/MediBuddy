@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Medi Buddy – Post-Discharge Patient Care & Nurse Intelligence Portal" />
+    <title>Medi Buddy – Patient & Nurse Care Portal</title>
+    <!-- Tailwind CSS CDN for instant utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              claude: {
+                bg: '#FAF8F5',
+                card: '#FFFFFF',
+                sidebar: '#F4F0E8',
+                border: '#E8E2D7',
+                text: '#1C1917',
+                muted: '#78716C',
+                terracotta: '#CC785C',
+                terracottaHover: '#B86549',
+                teal: '#0D9488',
+                amber: '#D97706',
+                rose: '#E11D48',
+                emerald: '#059669'
+              }
+            },
+            fontFamily: {
+              serif: ['Playfair Display', 'serif'],
+              sans: ['Plus Jakarta Sans', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#FAF8F5] text-[#1C1917] font-sans antialiased selection:bg-[#CC785C]/20 selection:text-[#CC785C]">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
