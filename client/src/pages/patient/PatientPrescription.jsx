@@ -148,17 +148,18 @@ export default function PatientPrescription() {
   }
 
   const {
-    patient,
-    document,
+    patient = {},
+    document = {},
     uploadedDocuments = [],
     medications = [],
+    labTests = [],
     activity = [],
     restrictions = [],
     diet = [],
     woundCare = [],
     followUp = [],
     warningSigns = []
-  } = data;
+  } = data || {};
 
   const issueDate = document?.dischargeDate || patient?.dischargeDate || '2026-10-05';
   const doctor = document?.doctorName || patient?.assignedDoctor || 'Dr. Vivek Iyer';
@@ -175,7 +176,7 @@ export default function PatientPrescription() {
             <div className="flex items-center gap-1.5 bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl px-2.5 py-1 text-xs shadow-2xs">
               <span className="text-[#78716C] font-semibold text-[11px] hidden sm:inline">Patient:</span>
               <select
-                value={patient._id}
+                value={patient?._id || currentPatientId}
                 onChange={(e) => handlePatientChange(e.target.value)}
                 className="bg-transparent font-bold text-[#1C1917] focus:outline-none cursor-pointer text-xs"
               >
@@ -220,7 +221,7 @@ export default function PatientPrescription() {
               Digitally Authorized Prescription • {medications.length} Prescribed Medicine{medications.length === 1 ? '' : 's'}
             </h3>
             <p className="text-[11px] text-[#78716C]">
-              Authorized by <strong>{doctor}</strong> for <strong>{patient.name}</strong> ({patient._id}) on {issueDate}.
+              Authorized by <strong>{doctor}</strong> for <strong>{patient?.name || 'Patient'}</strong> ({patient?._id || 'P001'}) on {issueDate}.
             </p>
           </div>
         </div>
@@ -301,15 +302,15 @@ export default function PatientPrescription() {
             <div className="p-4 bg-[#FAF8F5] border border-[#E8E2D7] rounded-2xl grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div>
                 <span className="text-[10px] uppercase font-bold text-[#78716C] block">Patient Name</span>
-                <span className="font-bold text-[#1C1917] text-sm font-serif">{patient.name}</span>
+                <span className="font-bold text-[#1C1917] text-sm font-serif">{patient?.name || 'Patient'}</span>
               </div>
               <div>
                 <span className="text-[10px] uppercase font-bold text-[#78716C] block">Patient ID / MRN</span>
-                <span className="font-bold text-[#CC785C] font-mono">{patient._id} ({patient.syntheticId || 'CB-P001'})</span>
+                <span className="font-bold text-[#CC785C] font-mono">{patient?._id || 'P001'} ({patient?.syntheticId || 'CB-P001'})</span>
               </div>
               <div>
                 <span className="text-[10px] uppercase font-bold text-[#78716C] block">Age / Gender</span>
-                <span className="font-bold text-[#1C1917]">{patient.age} Yrs • {patient.gender}</span>
+                <span className="font-bold text-[#1C1917]">{patient?.age || 'N/A'} Yrs • {patient?.gender || 'N/A'}</span>
               </div>
               <div>
                 <span className="text-[10px] uppercase font-bold text-[#78716C] block">Date of Issue</span>
@@ -318,7 +319,7 @@ export default function PatientPrescription() {
 
               <div className="col-span-2 pt-2 border-t border-[#E8E2D7]/60">
                 <span className="text-[10px] uppercase font-bold text-[#78716C] block">Clinical Diagnosis / Procedure</span>
-                <span className="font-bold text-[#1C1917]">{patient.condition} — {patient.procedure}</span>
+                <span className="font-bold text-[#1C1917]">{patient?.condition || 'Recovery'} — {patient?.procedure || 'Care Protocol'}</span>
               </div>
               <div className="col-span-2 pt-2 border-t border-[#E8E2D7]/60">
                 <span className="text-[10px] uppercase font-bold text-[#78716C] block">Attending Consultant</span>
