@@ -249,6 +249,24 @@ const dataStore = {
   },
 
   /**
+   * Get all medication reminders across all patients
+   */
+  async getReminders() {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const docs = await MedicationReminder.find({}).lean();
+        if (docs && docs.length > 0) return docs;
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { medicationReminders } = getCache();
+    return medicationReminders || [];
+  },
+
+  /**
    * Get a reminder by ID, with optional patientId validation
    * @param {string} reminderId 
    * @param {string} [patientId] 
@@ -430,6 +448,24 @@ const dataStore = {
 
     const { quizSessions } = getCache();
     return quizSessions.filter(s => s.patientId === patientId);
+  },
+
+  /**
+   * Get all quiz sessions across all patients
+   */
+  async getQuizSessions() {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const docs = await QuizSession.find({}).lean();
+        if (docs && docs.length > 0) return docs;
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { quizSessions } = getCache();
+    return quizSessions || [];
   },
 
   /**

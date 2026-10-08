@@ -94,6 +94,42 @@ const nurseService = {
   },
 
   /**
+   * Retrieve aggregate cohort overview for nurse dashboard cards
+   */
+  async getCohortOverview() {
+    const patients = await dataStore.listPatients();
+    const reminders = await dataStore.getReminders();
+    const quizSessions = await dataStore.getQuizSessions();
+    const escalations = await dataStore.listEscalations();
+
+    const totalPatients = patients.length;
+    const activeEscalations = escalations.filter(e => e.status !== 'RESOLVED').length;
+
+    let confirmedMeds = 0;
+    reminders.forEach(r => {
+      if (r.status === 'taken' || r.responseType === 'taken') confirmedMeds++;
+    });
+    const medAdherenceRate = Math.round((confirmedMeds / Math.max(1, reminders.length)) * 100);
+
+    let totalScore = 0;
+    let completedQuizzes = 0;
+    quizSessions.forEach(qs => {
+      if (typeof qs.score === 'number') {
+        totalScore += qs.score;
+        completedQuizzes++;
+      }
+    });
+    const avgQuizScore = Math.round(totalScore / Math.max(1, completedQuizzes));
+
+    return {
+      totalPatients,
+      activeEscalations,
+      medAdherenceRate,
+      avgQuizScore
+    };
+  },
+
+  /**
    * Retrieve detailed nurse dashboard view for a single patient
    * @param {string} patientId 
    */

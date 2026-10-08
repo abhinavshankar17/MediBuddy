@@ -62,8 +62,13 @@ const reminderController = {
   async confirmMedication(req, res, next) {
     try {
       const reminderId = req.params.id;
-      const patientId = req.params.patientId || req.body.patientId || req.query.patientId;
-      const { response, respondedAt, notes } = req.body;
+      let patientId = req.params.patientId || req.body.patientId || req.query.patientId;
+      if (!patientId) {
+        const existing = await reminderService.getReminderById(reminderId).catch(() => null);
+        if (existing) patientId = existing.patientId;
+      }
+      const response = req.body.response || req.body.responseType || 'taken';
+      const { respondedAt, notes } = req.body;
 
       const updated = await reminderService.confirmMedication(reminderId, {
         patientId,

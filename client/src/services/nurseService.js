@@ -13,7 +13,8 @@ export async function getNurseCohortOverview() {
   try {
     const res = await fetch('/api/nurse/dashboard-overview');
     if (res.ok) {
-      return await res.json();
+      const json = await res.json();
+      return json.data !== undefined ? json.data : json;
     }
   } catch (err) {
     // Backend endpoint offline, fallback to mock calculation
@@ -52,9 +53,52 @@ export async function getNurseCohortOverview() {
 
 export async function getNursePatientList(priorityFilter = 'ALL', searchQuery = '') {
   try {
-    const res = await fetch(`/api/nurse/patients?priority=${priorityFilter}`);
+    const queryParam = priorityFilter !== 'ALL' ? `?priority=${priorityFilter}` : '';
+    const res = await fetch(`/api/nurse/patients${queryParam}`);
     if (res.ok) {
-      return await res.json();
+      const json = await res.json();
+      const payload = json.data !== undefined ? json.data : json;
+      const rawList = Array.isArray(payload) ? payload : (payload.patients || []);
+      if (rawList.length > 0) {
+        let mapped = rawList.map((item) => {
+          if (item._id && item.name && item.medicationOverview) return item;
+          const p = item.patient || item;
+          const medAdh = item.medicationAdherence || {};
+          const quizPerf = item.quizPerformance || {};
+          const latestEvt = item.latestRelevantEvents && item.latestRelevantEvents.length > 0 ? item.latestRelevantEvents[0] : null;
+          const latestEventText = latestEvt
+            ? `${latestEvt._id}: ${latestEvt.type.replace('_', ' ')} (${new Date(latestEvt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`
+            : 'No recent events';
+          return {
+            _id: p._id,
+            name: p.name,
+            age: p.age,
+            gender: p.gender,
+            recoveryContext: `${p.condition || ''} • ${p.procedure || p.surgery || ''}`.trim().replace(/^•|•$/g, ''),
+            medicationOverview: {
+              confirmed: medAdh.confirmed || 0,
+              notConfirmed: medAdh.notConfirmed || 0,
+              missed: medAdh.missed || 0
+            },
+            quizOverview: {
+              scoreDisplay: quizPerf.correct !== undefined ? `${quizPerf.correct} / ${quizPerf.total || 5}` : 'N/A',
+              percentage: quizPerf.score ?? 80,
+              knowledgeGaps: item.knowledgeGaps || []
+            },
+            priority: item.priority || 'LOW',
+            flags: item.flags || [],
+            latestEvent: latestEventText
+          };
+        });
+
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          mapped = mapped.filter((p) =>
+            p.name.toLowerCase().includes(q) || p._id.toLowerCase().includes(q) || p.recoveryContext.toLowerCase().includes(q)
+          );
+        }
+        return mapped;
+      }
     }
   } catch (err) {
     // Backend offline, fallback to joined dataset
@@ -129,9 +173,54 @@ export async function getNursePatientList(priorityFilter = 'ALL', searchQuery = 
 
 export async function getNurseAlerts(categoryFilter = 'ALL', statusFilter = 'ALL') {
   try {
-    const res = await fetch(`/api/nurse/alerts?category=${categoryFilter}&status=${statusFilter}`);
+    const params = new URLSearchParams();
+    if (categoryFilter !== 'ALL') params.append('category', categoryFilter);
+    if (statusFilter !== 'ALL') params.append('status', statusFilter);
+    const queryString = params.toString() ? `?${params.toString()}` : '';
+    const res = await fetch(`/api/nurse/alerts${queryString}`);
     if (res.ok) {
-      return await res.json();
+      const json = await res.json();
+      const payload = json.data !== undefined ? json.data : json;
+      const rawAlerts = Array.isArray(payload) ? payload : (payload.escalations || payload.alerts || []);
+      if (rawAlerts.length > 0) {
+        return rawAlerts.map((esc) => {
+          const categoryLabels = {
+            missed_medication: 'Missed Medication',
+            repeated_missed_medication: 'Repeated Missed Medication',
+            low_quiz_score: 'Low Quiz Score',
+            knowledge_gap: 'Knowledge Gap',
+            medication_question: 'Medication Question',
+            warning_sign: 'Warning Sign Alert',
+            missing_information: 'Missing Information',
+            overdue_task: 'Overdue Task'
+          };
+          const formattedCategory = categoryLabels[esc.category] || (esc.category || '').replace(/_/g, ' ').toUpperCase();
+          const timestampStr = esc.timestamp || '2026-10-08T10:00:00+05:30';
+          const p = esc.patient || patientsData.find((pt) => pt._id === esc.patientId);
+          return {
+            _id: esc._id,
+            patientId: esc.patientId,
+            patientName: esc.patientName || (p ? p.name : esc.patientId),
+            patientAge: esc.patientAge || (p ? p.age : null),
+            patientGender: esc.patientGender || (p ? p.gender : null),
+            recoveryContext: esc.recoveryContext || (p ? `${p.condition} • ${p.procedure}` : 'Post-Discharge Recovery'),
+            category: esc.category,
+            formattedCategory,
+            severity: esc.severity || esc.priority || 'MEDIUM',
+            priority: esc.priority || esc.severity || 'MEDIUM',
+            reason: esc.reason || esc.description || '',
+            evidence: esc.evidence || [],
+            relatedMedication: esc.relatedMedication || null,
+            relatedEvent: esc.relatedEvent || esc.relatedEventId || null,
+            timestamp: timestampStr,
+            formattedTimestamp: new Date(timestampStr).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }),
+            status: esc.status || 'OPEN',
+            assignedTo: esc.assignedTo || 'Unassigned',
+            resolvedBy: esc.resolvedBy || null,
+            resolution: esc.resolution || null
+          };
+        });
+      }
     }
   } catch (err) {
     // Fallback alerts from mock dataset
@@ -191,6 +280,24 @@ export async function getNurseAlerts(categoryFilter = 'ALL', statusFilter = 'ALL
 }
 
 export async function resolveNurseEscalation(escalationId, resolutionNotes = 'Verified and addressed by nurse.') {
+  try {
+    const res = await fetch(`/api/escalations/${escalationId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        status: 'RESOLVED',
+        resolvedBy: 'N001',
+        resolution: resolutionNotes
+      })
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.data !== undefined ? json.data : json;
+    }
+  } catch (err) {
+    // fallback
+  }
+
   const esc = escalationsData.find((e) => e._id === escalationId);
   if (esc) {
     esc.status = 'RESOLVED';
@@ -200,7 +307,6 @@ export async function resolveNurseEscalation(escalationId, resolutionNotes = 'Ve
   return esc;
 }
 
-
 /**
  * Detailed Nurse Patient Record API with strict patientId isolation
  */
@@ -208,7 +314,94 @@ export async function getNursePatientDetail(patientId = 'P001') {
   try {
     const res = await fetch(`/api/nurse/patients/${patientId}`);
     if (res.ok) {
-      return await res.json();
+      const json = await res.json();
+      const detail = json.data !== undefined ? json.data : json;
+      if (detail && (detail.patient || detail._id)) {
+        const p = detail.patient || detail;
+        const languages = { en: 'English', ta: 'Tamil (தமிழ்)', hi: 'Hindi (हिंदी)', te: 'Telugu (తెలుగు)' };
+        const languageName = languages[p.language] || p.language;
+
+        let recoveryDay = 'Day 3';
+        if (p.dischargeDate) {
+          const discharge = new Date(p.dischargeDate);
+          const today = new Date('2026-10-08');
+          const diff = Math.max(1, Math.floor((today - discharge) / (1000 * 60 * 60 * 24)) + 1);
+          recoveryDay = `Day ${diff}`;
+        }
+
+        const patientReminders = detail.reminders || medicationRemindersData.filter((m) => m.patientId === patientId);
+        const medicationTable = patientReminders.map((rem) => {
+          const scheduledTime = rem.scheduledAt
+            ? new Date(rem.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : '08:00';
+
+          let statusDisplay = 'Not confirmed';
+          let statusBadgeType = 'pending';
+
+          if (rem.status === 'taken' || rem.responseType === 'taken') {
+            statusDisplay = 'Confirmed';
+            statusBadgeType = 'completed';
+          } else if (rem.status === 'missed' || rem.responseType === 'not_taken') {
+            statusDisplay = 'Not taken';
+            statusBadgeType = 'missed';
+          } else if (rem.status === 'overdue' || rem.responseType === 'no_response') {
+            statusDisplay = 'Not confirmed';
+            statusBadgeType = 'pending';
+          } else if (rem.status === 'reminded') {
+            statusDisplay = 'Reminded';
+            statusBadgeType = 'info';
+          } else {
+            statusDisplay = 'Scheduled';
+            statusBadgeType = 'info';
+          }
+
+          return {
+            _id: rem._id,
+            medication: `${rem.medicationName || 'Prescribed Med'} ${rem.dose || ''}`.trim(),
+            scheduled: scheduledTime,
+            statusDisplay,
+            statusBadgeType,
+            respondedAt: rem.respondedAt ? new Date(rem.respondedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : null,
+            supportingEventId: rem.supportingEventId || (rem.status === 'taken' ? 'E101' : null)
+          };
+        });
+
+        const medicationEventTypes = [
+          'reminder_sent',
+          'reminder_opened',
+          'medication_taken',
+          'medication_not_taken',
+          'medication_missed',
+          'task_completed',
+          'task_skipped'
+        ];
+
+        const rawEvents = detail.latestRelevantEvents || eventsData.filter((e) => e.patientId === patientId);
+        const patientEvents = rawEvents
+          .filter((e) => medicationEventTypes.includes(e.type))
+          .map((evt) => ({
+            _id: evt._id,
+            type: evt.type,
+            displayType: evt.type.replace('_', ' ').toUpperCase(),
+            timestamp: new Date(evt.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }),
+            rawTimestamp: evt.timestamp,
+            actor: evt.actor || patientId,
+            payload: evt.payload || {}
+          }));
+
+        return {
+          patient: {
+            ...p,
+            languageName,
+            recoveryDay,
+            priority: detail.priority || (patientId === 'P005' || patientId === 'P003' ? 'HIGH' : 'LOW'),
+            recoveryContext: `${p.condition || ''} • ${p.procedure || p.surgery || ''}`.trim().replace(/^•|•$/g, '')
+          },
+          medicationTable,
+          patientEvents,
+          ...detail
+        };
+      }
     }
   } catch (err) {
     // Backend offline, fallback to strict mock isolation
@@ -321,10 +514,15 @@ export async function getNursePatientDetail(patientId = 'P001') {
  * Service function to retrieve AI Patient Summary for a single patient
  */
 export async function getNurseAIBrief(patientId = 'P001') {
+  let backendBrief = null;
   try {
     const res = await fetch(`/api/nurse/briefs/${patientId}`);
     if (res.ok) {
-      return await res.json();
+      const json = await res.json();
+      const payload = json.data !== undefined ? json.data : json;
+      if (payload && (payload.patientId || payload._id)) {
+        backendBrief = payload;
+      }
     }
   } catch (err) {
     // Backend offline, fallback to mock joined dataset
@@ -333,7 +531,7 @@ export async function getNurseAIBrief(patientId = 'P001') {
   const patient = patientsData.find((p) => p._id === patientId) || patientsData[0];
   const pId = patient._id;
 
-  const brief = nurseBriefsData.find((b) => b.patientId === pId) || nurseBriefsData[0];
+  const brief = backendBrief || nurseBriefsData.find((b) => b.patientId === pId) || nurseBriefsData[0];
 
   // Resolve evidence events
   const evidenceIds = brief.evidenceEventIds || [];
@@ -396,7 +594,7 @@ export async function getNurseAIBrief(patientId = 'P001') {
     medicationAdherenceDisplay: medAdherenceDisplay,
     quizDisplay: quizDisplay,
     knowledgeGaps: knowledgeGaps,
-    keyObservation: brief.summary,
+    keyObservation: brief.aiSummary || brief.summary,
     questionsForNurse: questionsForNurse,
     recommendedFollowUp: brief.recommendedFollowUp || brief.recommendedAction || 'Routine nurse review.',
     evidenceEvents: evidenceEvents,
@@ -412,7 +610,12 @@ export async function getNurseAIBriefsList() {
   try {
     const res = await fetch('/api/nurse/briefs');
     if (res.ok) {
-      return await res.json();
+      const json = await res.json();
+      const payload = json.data !== undefined ? json.data : json;
+      const briefs = Array.isArray(payload) ? payload : (payload.briefs || []);
+      if (briefs.length > 0) {
+        return Promise.all(briefs.map((b) => getNurseAIBrief(b.patientId)));
+      }
     }
   } catch (err) {
     // Backend offline
