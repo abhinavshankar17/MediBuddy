@@ -37,6 +37,9 @@ const notificationService = {
     const simulatedCallThresholdMinutes = options.simulatedCallMinutes !== undefined
       ? options.simulatedCallMinutes
       : (config.MEDICATION_SIMULATED_CALL_MINUTES || 25);
+    const caregiverThresholdMinutes = options.caregiverMinutes !== undefined
+      ? options.caregiverMinutes
+      : (config.MEDICATION_CAREGIVER_NOTIFICATION_MINUTES || (simulatedCallThresholdMinutes + 5));
 
     const generatedNotifications = [];
     const generatedEvents = [];
@@ -128,15 +131,14 @@ const notificationService = {
         stateModified = true;
       }
 
-      // STEP 2: +25 MINUTE SIMULATED CALL & CAREGIVER NOTIFICATION
+      // STEP 2: +25 MINUTE SIMULATED CALL (Patient)
       if (
         elapsedMinutes >= simulatedCallThresholdMinutes &&
         !notificationState.simulatedCallNotificationSent
       ) {
         const callTimeStr = formatTime(now.toISOString());
-        const scheduledTimeStr = formatTime(reminder.scheduledAt);
 
-        // (a) Patient Call Notification
+        // (a) Patient Call Notification & Audit Event
         const patientCallNotifId = `NOTIF_CALL_${reminder._id}`;
         const existingPatientCall = await dataStore.getNotificationById(patientCallNotifId);
 
@@ -185,22 +187,47 @@ const notificationService = {
           generatedNotifications.push(patientCallNotif);
         }
 
-        // (b) Caregiver Notification (Find designated caregiver)
-        const patient = await dataStore.getPatient(reminder.patientId);
-        let caregiverId = patient?.caregiverId;
+        notificationState.simulatedCallNotificationSent = true;
+        stateModified = true;
+      }
 
-        if (!caregiverId) {
-          const allUsers = await dataStore.getUsersByRole('caregiver');
-          const matched = allUsers.find(u => Array.isArray(u.patientIds) && u.patientIds.includes(reminder.patientId));
-          if (matched) caregiverId = matched._id;
+      // STEP 3: 5 MINUTES AFTER CALL (+30 MINUTE) CAREGIVER NOTIFICATION
+      // User rule: "after the phone call also , if the medicine is not marked as taken , then send notification to the caregiver after 5 minutes and sync them accordingly"
+      if (
+        elapsedMinutes >= caregiverThresholdMinutes &&
+        !notificationState.caregiverNotificationSent
+      ) {
+        const scheduledTimeStr = formatTime(reminder.scheduledAt);
+        const callTimeStr = formatTime(new Date(scheduledDate.getTime() + simulatedCallThresholdMinutes * 60 * 1000).toISOString());
+
+        // Find designated caregiver(s) linked to this patient
+        const patient = await dataStore.getPatient(reminder.patientId);
+        let caregiverIds = [];
+
+        if (patient?.caregiverId) {
+          caregiverIds.push(patient.caregiverId);
         }
 
-        if (caregiverId && !notificationState.caregiverNotificationSent) {
-          const cgNotifId = `NOTIF_CG_${reminder._id}`;
+        const allCaregivers = await dataStore.getUsersByRole('caregiver');
+        for (const cg of allCaregivers) {
+          if (Array.isArray(cg.patientIds) && cg.patientIds.includes(reminder.patientId)) {
+            if (!caregiverIds.includes(cg._id)) {
+              caregiverIds.push(cg._id);
+            }
+          }
+        }
+
+        if (caregiverIds.length === 0) {
+          caregiverIds.push('U101'); // Standard demo caregiver fallback
+        }
+
+        const patientName = patient?.name || 'Loved One';
+
+        for (const caregiverId of caregiverIds) {
+          const cgNotifId = `NOTIF_CG_${reminder._id}_${caregiverId}`;
           const existingCgNotif = await dataStore.getNotificationById(cgNotifId);
 
           if (!existingCgNotif) {
-            const patientName = patient?.name || 'Patient';
             const cgNotif = await dataStore.addNotification({
               _id: cgNotifId,
               recipientId: caregiverId,
@@ -209,7 +236,7 @@ const notificationService = {
               reminderId: reminder._id,
               type: 'caregiver_medication_notification',
               title: '🚨 Medication Reminder',
-              message: `${patientName} has not confirmed the scheduled medication.\n\nMedication: ${reminder.medicationName} ${reminder.dose || ''}\nScheduled: ${scheduledTimeStr}\n\nA simulated call attempt was made at: ${callTimeStr}\nResult: Not answered.\n\nDemo notification — no real call was placed.`.trim(),
+              message: `${patientName} has not confirmed the scheduled medication.\n\nMedication: ${reminder.medicationName} ${reminder.dose || ''}\nScheduled: ${scheduledTimeStr}\n\nA simulated call attempt was made at ${callTimeStr} (Not answered).\n5 minutes have elapsed since the call attempt with no confirmation.\n\nDemo notification — please check in with ${patientName}.`.trim(),
               metadata: {
                 demo: true,
                 result: 'no_answer',
@@ -217,37 +244,37 @@ const notificationService = {
                 medicationName: reminder.medicationName,
                 dose: reminder.dose,
                 scheduledAt: reminder.scheduledAt,
-                callTime: callTimeStr
+                callTime: callTimeStr,
+                elapsedMinutesSinceCall: Math.floor(elapsedMinutes - simulatedCallThresholdMinutes)
               },
               read: false,
               createdAt: now.toISOString()
             });
             generatedNotifications.push(cgNotif);
-
-            // Caregiver notification event
-            const cgEvent = await dataStore.addEvent({
-              _id: `EV_CG_NOTIF_${reminder._id}_${Date.now()}`,
-              patientId: reminder.patientId,
-              type: 'caregiver_notification',
-              reminderId: reminder._id,
-              payload: {
-                caregiverId,
-                patientId: reminder.patientId,
-                patientName,
-                medicationName: reminder.medicationName,
-                dose: reminder.dose,
-                demo: true
-              },
-              timestamp: now.toISOString(),
-              actor: 'system'
-            });
-            generatedEvents.push(cgEvent);
           }
-
-          notificationState.caregiverNotificationSent = true;
         }
 
-        notificationState.simulatedCallNotificationSent = true;
+        // Caregiver notification timeline event
+        const cgEvent = await dataStore.addEvent({
+          _id: `EV_CG_NOTIF_${reminder._id}_${Date.now()}`,
+          patientId: reminder.patientId,
+          type: 'caregiver_notification',
+          reminderId: reminder._id,
+          payload: {
+            caregiverIds,
+            patientId: reminder.patientId,
+            patientName,
+            medicationName: reminder.medicationName,
+            dose: reminder.dose,
+            elapsedMinutes: Math.floor(elapsedMinutes),
+            demo: true
+          },
+          timestamp: now.toISOString(),
+          actor: 'system'
+        });
+        generatedEvents.push(cgEvent);
+
+        notificationState.caregiverNotificationSent = true;
         stateModified = true;
       }
 

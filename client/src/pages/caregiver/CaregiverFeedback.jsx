@@ -177,27 +177,6 @@ export default function CaregiverFeedback() {
       subtitle={`Review symptom updates, daily feelings, and notes sent by ${activePatientObj.name}`}
       actions={
         <div className="flex items-center gap-2">
-          {/* Live Real-Time Connection Indicator */}
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-[11px] font-bold shadow-2xs"
-            title={isLiveConnected ? 'Connected to live patient feedback stream' : 'Auto-polling patient updates'}
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="hidden sm:inline">Live Sync</span>
-            <span className="text-[10px] text-emerald-700 font-semibold">
-              {isRefreshing ? 'Syncing...' : 'Active'}
-            </span>
-          </div>
-
-          <button
-            onClick={() => refreshNow()}
-            disabled={isRefreshing}
-            className="p-1.5 rounded-xl border border-[#E8E2D7] bg-white hover:bg-[#FAF8F5] text-[#78716C] hover:text-[#1C1917] transition-all shadow-2xs cursor-pointer disabled:opacity-60"
-            title="Refresh patient feedback"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#CC785C]' : ''}`} />
-          </button>
-
           {linkedPatients.length > 1 && (
             <div className="flex items-center bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl px-2.5 py-1.5 shadow-2xs">
               <User className="w-3.5 h-3.5 text-[#78716C] mr-1.5" />

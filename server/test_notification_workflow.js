@@ -116,12 +116,13 @@ async function runTests() {
     assert.ok(!lowerMessage.includes('medication failure'), 'Must NOT say medication failure');
   })();
 
-  // TEST 3: Medication due -> No swipe -> +25 minutes
-  await test('Test 3: Medication due -> No swipe at +25m -> Simulated call event + Patient call notif + Caregiver notif', async () => {
+  // TEST 3: Medication due -> No swipe -> +25m (call) -> +30m (caregiver notif 5m after call)
+  await test('Test 3: Medication due -> No swipe at +25m -> Simulated call -> +30m (5m after call) -> Caregiver notif', async () => {
     const scheduledTime = '2026-10-08T10:00:00.000Z';
-    const checkTime = '2026-10-08T10:25:01.000Z'; // +25m
+    const checkTime25 = '2026-10-08T10:25:01.000Z'; // +25m
+    const checkTime30 = '2026-10-08T10:30:01.000Z'; // +30m (5m after call)
     const reminderId = `TEST_REMINDER_T3_${Date.now()}`;
-    const patientId = 'P001'; // P001 caregiver is U101 (Meena Krishnan)
+    const patientId = 'P001'; // P001 caregiver is U101 (Priya Krishnan)
 
     await dataStore.addReminder({
       _id: reminderId,
@@ -133,25 +134,33 @@ async function runTests() {
       notificationState: {}
     });
 
-    // Process at +25 min
+    // Step A: Process at +25 min -> Call attempt should occur, but caregiver not yet
     await notificationService.processMedicationReminderNotifications({
-      currentTime: checkTime,
+      currentTime: checkTime25,
       patientId
     });
 
-    const notifs = await dataStore.getNotifications({ reminderId });
-    // Should have follow-up (+10m), patient call (+25m), and caregiver (+25m)
+    let notifs = await dataStore.getNotifications({ reminderId });
     const patientFollowUp = notifs.find(n => n.type === 'medication_followup');
     const patientCall = notifs.find(n => n.type === 'simulated_call');
-    const caregiverNotif = notifs.find(n => n.type === 'caregiver_medication_notification');
+    let caregiverNotif = notifs.find(n => n.type === 'caregiver_medication_notification');
 
     assert.ok(patientFollowUp, 'Must have patient followup notification');
     assert.ok(patientCall, 'Must have patient simulated call notification');
-    assert.ok(caregiverNotif, 'Must have caregiver notification');
+    assert.strictEqual(caregiverNotif, undefined, 'Caregiver notification should NOT be sent at +25m (only 5m after call at +30m)');
 
+    // Step B: Process at +30 min (5m after call) -> Caregiver notification must now be sent
+    await notificationService.processMedicationReminderNotifications({
+      currentTime: checkTime30,
+      patientId
+    });
+
+    notifs = await dataStore.getNotifications({ reminderId });
+    caregiverNotif = notifs.find(n => n.type === 'caregiver_medication_notification');
+    assert.ok(caregiverNotif, 'Must have caregiver notification at +30m (5m after phone call)');
     assert.strictEqual(caregiverNotif.recipientId, 'U101', 'Caregiver recipient must be U101');
     assert.ok(patientCall.message.includes('Simulated call — not answered'), 'Patient call must mention Simulated call — not answered');
-    assert.ok(caregiverNotif.message.includes('Demo notification — no real call was placed'), 'Caregiver notif must clarify demo');
+    assert.ok(caregiverNotif.message.includes('Demo notification — please check in with'), 'Caregiver notif must clarify demo');
 
     // Verify simulated call event in event log
     const allEvents = await dataStore.getEvents(patientId);
@@ -210,7 +219,7 @@ async function runTests() {
   })();
 
   // TEST 5: Patient swipes AFTER caregiver notification (+30m) -> history preserved
-  await test('Test 5: Patient swipes at +30m after caregiver notification -> Status updated to taken & history preserved', async () => {
+  await test('Test 5: Patient swipes at +35m after caregiver notification -> Status updated to taken & history preserved', async () => {
     const scheduledTime = '2026-10-08T10:00:00.000Z';
     const reminderId = `TEST_REMINDER_T5_${Date.now()}`;
     const patientId = 'P001';
@@ -225,25 +234,25 @@ async function runTests() {
       notificationState: {}
     });
 
-    // Run at +25m to trigger all notifications
+    // Run at +30m to trigger all 3 notifications (followup, call, caregiver)
     await notificationService.processMedicationReminderNotifications({
-      currentTime: '2026-10-08T10:25:01.000Z',
+      currentTime: '2026-10-08T10:30:01.000Z',
       patientId
     });
 
     const notifsBeforeSwipe = await dataStore.getNotifications({ reminderId });
     assert.strictEqual(notifsBeforeSwipe.length, 3, 'Must have 3 notifications before swipe');
 
-    // Patient swipes at +30m
+    // Patient swipes at +35m
     await reminderService.confirmMedication(reminderId, {
       patientId,
       response: 'taken',
-      respondedAt: '2026-10-08T10:30:00.000Z'
+      respondedAt: '2026-10-08T10:35:00.000Z'
     });
 
-    // Run worker again at +35m
+    // Run worker again at +40m
     await notificationService.processMedicationReminderNotifications({
-      currentTime: '2026-10-08T10:35:00.000Z',
+      currentTime: '2026-10-08T10:40:00.000Z',
       patientId
     });
 

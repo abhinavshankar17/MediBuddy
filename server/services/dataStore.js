@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 const { loadMockJson } = require('../seed/seed');
 const { getDBStatus } = require('../config/db');
-const { Patient, Document, ExtractedItem, Task, MedicationReminder, Event, QuizSession, QuizQuestion, QuizAnswer, PatientInsight, NurseBrief, Escalation } = require('../models');
+const { Patient, Document, ExtractedItem, Task, MedicationReminder, Event, QuizSession, QuizQuestion, QuizAnswer, PatientInsight, NurseBrief, Escalation, Notification } = require('../models');
 
 // In-memory cache loaded from authoritative data/mock/
 let memoryCache = {
@@ -47,6 +47,7 @@ const getCache = () => {
     memoryCache.dayColors = loadMockJson('dayColors.json') || [];
     memoryCache.checkIns = loadMockJson('checkIns.json') || [];
     memoryCache.users = loadMockJson('users.json') || [];
+    memoryCache.notifications = loadMockJson('notifications.json') || [];
     memoryCache.encouragements = [];
   }
   return memoryCache;
@@ -56,6 +57,29 @@ const getCache = () => {
  * DataStore providing unified access with MongoDB support and in-memory mock fallback
  */
 const dataStore = {
+  eventEmitter: new EventEmitter(),
+
+  /**
+   * Emit real-time patient update event
+   */
+  emitPatientUpdate(patientId, data = {}) {
+    try {
+      if (this.eventEmitter) {
+        this.eventEmitter.emit(`patient:${patientId}`, { patientId, ...data, timestamp: new Date().toISOString() });
+        this.eventEmitter.emit('patient:update', { patientId, ...data, timestamp: new Date().toISOString() });
+      }
+    } catch (e) {}
+  },
+
+  /**
+   * Subscribe to real-time patient updates
+   */
+  onPatientUpdate(patientId, callback) {
+    if (!this.eventEmitter) this.eventEmitter = new EventEmitter();
+    this.eventEmitter.on(`patient:${patientId}`, callback);
+    return () => this.eventEmitter.off(`patient:${patientId}`, callback);
+  },
+
   /**
    * Update cache collection in memory
    * @param {string} key
@@ -1294,6 +1318,238 @@ const dataStore = {
   async getEncouragementsByPatient(patientId) {
     const { encouragements } = getCache();
     return encouragements.filter(e => e.patientId === patientId);
+  },
+
+  /**
+   * Get events alias
+   */
+  async getEvents(patientId, options = {}) {
+    return this.getEventsByPatient(patientId, options);
+  },
+
+  /**
+   * Get notifications with comprehensive filtering
+   * @param {Object} filter
+   */
+  async getNotifications(filter = {}) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const query = {};
+        if (filter.recipientId) query.recipientId = filter.recipientId;
+        if (filter.recipientRole) query.recipientRole = filter.recipientRole;
+        if (filter.patientId) query.patientId = filter.patientId;
+        if (filter.reminderId) query.reminderId = filter.reminderId;
+        if (filter.type) query.type = filter.type;
+        if (filter.read !== undefined) query.read = filter.read;
+        const docs = await Notification.find(query).sort({ createdAt: -1 }).lean();
+        if (docs && docs.length > 0) return docs;
+      } catch (err) {}
+    }
+
+    const { notifications } = getCache();
+    let result = [...(notifications || [])];
+    if (filter.recipientId) result = result.filter(n => n.recipientId === filter.recipientId);
+    if (filter.recipientRole) result = result.filter(n => n.recipientRole === filter.recipientRole);
+    if (filter.patientId) result = result.filter(n => n.patientId === filter.patientId);
+    if (filter.reminderId) result = result.filter(n => n.reminderId === filter.reminderId);
+    if (filter.type) result = result.filter(n => n.type === filter.type);
+    if (filter.read !== undefined) result = result.filter(n => n.read === filter.read);
+
+    return result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  },
+
+  /**
+   * Get notification by ID
+   * @param {string} notificationId
+   */
+  async getNotificationById(notificationId) {
+    if (!notificationId) return null;
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const doc = await Notification.findById(notificationId).lean();
+        if (doc) return doc;
+      } catch (err) {}
+    }
+    const { notifications } = getCache();
+    return (notifications || []).find(n => n._id === notificationId) || null;
+  },
+
+  /**
+   * Add a notification
+   * @param {Object} notificationData
+   */
+  async addNotification(notificationData) {
+    if (!notificationData._id) {
+      notificationData._id = `NOTIF_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    }
+    if (!notificationData.createdAt) {
+      notificationData.createdAt = new Date().toISOString();
+    }
+
+    let saved = notificationData;
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const notif = new Notification(notificationData);
+        await notif.save();
+        saved = notif.toObject();
+      } catch (err) {}
+    }
+
+    const { notifications } = getCache();
+    if (!notifications.some(n => n._id === notificationData._id)) {
+      notifications.unshift(notificationData);
+    }
+
+    // Emit live update for real-time dashboard sync
+    dataStore.emitPatientUpdate(notificationData.patientId, {
+      type: 'notification_created',
+      notification: saved
+    });
+
+    return saved;
+  },
+
+  /**
+   * Update notification by ID
+   * @param {string} notificationId
+   * @param {Object} updates
+   */
+  async updateNotification(notificationId, updates) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const updated = await Notification.findByIdAndUpdate(notificationId, updates, { new: true }).lean();
+        if (updated) {
+          dataStore.emitPatientUpdate(updated.patientId, { type: 'notification_updated', notification: updated });
+          return updated;
+        }
+      } catch (err) {}
+    }
+
+    const { notifications } = getCache();
+    const idx = (notifications || []).findIndex(n => n._id === notificationId);
+    if (idx !== -1) {
+      notifications[idx] = { ...notifications[idx], ...updates };
+      dataStore.emitPatientUpdate(notifications[idx].patientId, { type: 'notification_updated', notification: notifications[idx] });
+      return notifications[idx];
+    }
+    return null;
+  },
+
+  /**
+   * Mark notification as read
+   * @param {string} notificationId
+   */
+  async markNotificationAsRead(notificationId) {
+    return this.updateNotification(notificationId, { read: true });
+  },
+
+  /**
+   * Mark all notifications as read for a recipient/patient
+   * @param {Object} filter
+   */
+  async markAllNotificationsAsRead(filter = {}) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const query = {};
+        if (filter.recipientId) query.recipientId = filter.recipientId;
+        if (filter.patientId) query.patientId = filter.patientId;
+        if (filter.recipientRole) query.recipientRole = filter.recipientRole;
+        await Notification.updateMany(query, { $set: { read: true } });
+      } catch (err) {}
+    }
+
+    const { notifications } = getCache();
+    (notifications || []).forEach(n => {
+      if (filter.recipientId && n.recipientId !== filter.recipientId) return;
+      if (filter.patientId && n.patientId !== filter.patientId) return;
+      if (filter.recipientRole && n.recipientRole !== filter.recipientRole) return;
+      n.read = true;
+    });
+
+    if (filter.patientId) {
+      dataStore.emitPatientUpdate(filter.patientId, { type: 'notifications_marked_read', filter });
+    }
+    return true;
+  },
+
+  /**
+   * Delete a notification by ID
+   * @param {string} notificationId
+   */
+  async deleteNotification(notificationId) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        await Notification.findByIdAndDelete(notificationId);
+      } catch (err) {}
+    }
+
+    const { notifications } = getCache();
+    const idx = (notifications || []).findIndex(n => n._id === notificationId);
+    if (idx !== -1) {
+      notifications.splice(idx, 1);
+      return true;
+    }
+    return false;
+  },
+
+  /**
+   * Clear all notifications matching filter
+   * @param {Object} filter
+   */
+  async clearNotifications(filter = {}) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const query = {};
+        if (filter.recipientId) query.recipientId = filter.recipientId;
+        if (filter.patientId) query.patientId = filter.patientId;
+        if (filter.recipientRole) query.recipientRole = filter.recipientRole;
+        await Notification.deleteMany(query);
+      } catch (err) {}
+    }
+
+    const cache = getCache();
+    cache.notifications = (cache.notifications || []).filter(n => {
+      if (filter.recipientId && n.recipientId === filter.recipientId) return false;
+      if (filter.patientId && n.patientId === filter.patientId) return false;
+      if (filter.recipientRole && n.recipientRole === filter.recipientRole) return false;
+      return true;
+    });
+    return true;
+  },
+
+  /**
+   * Delete all notifications associated with a reminder ID
+   * @param {string} reminderId
+   */
+  async deleteNotificationsByReminderId(reminderId) {
+    if (!reminderId) return;
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        await Notification.deleteMany({
+          $or: [
+            { reminderId: reminderId },
+            { _id: `NOTIF_FOLLOWUP_${reminderId}` },
+            { _id: `NOTIF_CALL_${reminderId}` },
+            { _id: `NOTIF_CG_${reminderId}` }
+          ]
+        });
+      } catch (err) {}
+    }
+
+    const cache = getCache();
+    cache.notifications = (cache.notifications || []).filter(n => {
+      if (n.reminderId === reminderId) return false;
+      if (n._id === `NOTIF_FOLLOWUP_${reminderId}` || n._id === `NOTIF_CALL_${reminderId}` || n._id === `NOTIF_CG_${reminderId}`) return false;
+      return true;
+    });
   }
 };
 

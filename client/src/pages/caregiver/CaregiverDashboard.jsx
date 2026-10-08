@@ -180,28 +180,6 @@ export default function CaregiverDashboard() {
       subtitle={`Dedicated family care oversight for your ${patient.relationship.toLowerCase()} recovering from ${patient.condition}.`}
       actions={
         <div className="flex flex-wrap items-center gap-2.5">
-          {/* Live Real-Time Connection Indicator */}
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-[11px] font-bold shadow-2xs"
-            title={isLiveConnected ? 'Direct real-time event stream connected to patient' : 'Automatic polling sync active'}
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="hidden sm:inline">Live Sync</span>
-            <span className="text-[10px] text-emerald-700 font-semibold">
-              {isRefreshing ? 'Syncing...' : 'Active'}
-            </span>
-          </div>
-
-          {/* Quick Manual Refresh Button */}
-          <button
-            onClick={() => refreshNow()}
-            disabled={isRefreshing}
-            className="p-1.5 rounded-xl border border-[#E8E2D7] bg-white hover:bg-[#FAF8F5] text-[#78716C] hover:text-[#1C1917] transition-all shadow-2xs cursor-pointer disabled:opacity-60"
-            title="Sync latest patient data now"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#CC785C]' : ''}`} />
-          </button>
-
           {/* Patient Switcher if multiple linked */}
           {linkedPatients.length > 1 && (
             <div className="flex items-center gap-1.5 bg-white border border-[#E8E2D7] rounded-xl px-3 py-1.5 shadow-2xs">
@@ -232,6 +210,35 @@ export default function CaregiverDashboard() {
       }
     >
       <div className="space-y-6">
+        {/* Active Caregiver Medication & Phone Call Alerts */}
+        {report.activeAlerts && report.activeAlerts.length > 0 && (
+          <div className="space-y-3 animate-fade-in">
+            {report.activeAlerts.map((alert) => (
+              <div
+                key={alert._id}
+                className="p-4 rounded-2xl bg-amber-50/90 border-2 border-amber-300 shadow-sm flex flex-col sm:flex-row sm:items-start justify-between gap-3 text-amber-950"
+              >
+                <div className="flex items-start gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
+                    <PhoneCall className="w-5 h-5 animate-bounce" />
+                  </div>
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-extrabold text-sm text-amber-950 font-serif">{alert.title}</span>
+                      <span className="text-[10px] font-bold bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        Call Not Answered • 5m elapsed
+                      </span>
+                    </div>
+                    <p className="text-xs text-amber-900 whitespace-pre-line leading-relaxed font-medium">
+                      {alert.message}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* 1. Loved One Hero Banner */}
         <Card className="bg-gradient-to-r from-white via-[#FAF8F5] to-[#F4F0E8]/50 border-[#E8E2D7]">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">

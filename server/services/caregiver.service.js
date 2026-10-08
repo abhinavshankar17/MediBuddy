@@ -204,6 +204,10 @@ const caregiverService = {
     // 8. Caregiver Encouragements Sent
     const encouragements = await dataStore.getEncouragementsByPatient(patientId);
 
+    // 8b. Active Medication & Caregiver Alerts
+    const allCgNotifs = await dataStore.getNotifications({ recipientRole: 'caregiver', patientId });
+    const activeAlerts = allCgNotifs.filter((n) => !n.read);
+
     // 9. Plain-language Empathetic AI Family Summary
     const relation = FAMILY_RELATIONSHIPS[patientId] || 'Your loved one';
     const condition = patient.condition || 'surgery recovery';
@@ -231,6 +235,7 @@ const caregiverService = {
     ];
 
     return {
+      activeAlerts,
       patient: {
         _id: patient._id,
         name: patient.name,
