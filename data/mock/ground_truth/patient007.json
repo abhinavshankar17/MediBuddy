@@ -1,0 +1,37 @@
+{
+  "patientId": "P007",
+  "documentId": "D007",
+  "expectedItems": [
+    {
+      "type": "medication",
+      "name": "Prescribed pain medicine",
+      "frequency": "as directed",
+      "foodRelation": "after meals",
+      "sourceSentence": "Take the prescribed pain medicine after meals as directed."
+    },
+    {
+      "type": "diet",
+      "name": "Low-fat diet",
+      "duration": "first week",
+      "sourceSentence": "Follow a low-fat diet for the first week and eat smaller meals."
+    },
+    {
+      "type": "activity",
+      "name": "Gentle walking",
+      "frequency": "daily",
+      "sourceSentence": "Walk gently every day and avoid strenuous activity for 2 weeks."
+    },
+    {
+      "type": "follow_up",
+      "name": "Surgical clinic",
+      "timing": "after 1 week",
+      "sourceSentence": "Surgical clinic after 1 week."
+    },
+    {
+      "type": "warning_sign",
+      "name": "Worsening abdominal pain",
+      "sourceSentence": "Contact the hospital for fever, worsening abdominal pain, yellowing of the eyes, or persistent vomiting."
+    }
+  ],
+  "expectedEscalations": []
+}

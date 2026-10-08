@@ -1,0 +1,41 @@
+{
+  "patientId": "P003",
+  "documentId": "D003",
+  "expectedItems": [
+    {
+      "type": "medication",
+      "name": "Amoxicillin",
+      "dose": "500 mg",
+      "frequency": "three times daily",
+      "foodRelation": "after meals",
+      "duration": "7 days",
+      "sourceSentence": "Take Amoxicillin 500 mg three times daily after meals for 7 days."
+    },
+    {
+      "type": "activity",
+      "name": "Rest",
+      "frequency": "adequate",
+      "sourceSentence": "Rest adequately and walk gently as tolerated."
+    },
+    {
+      "type": "hydration",
+      "name": "Fluid intake",
+      "frequency": "throughout the day",
+      "sourceSentence": "Drink adequate fluids throughout the day."
+    },
+    {
+      "type": "follow_up",
+      "name": "Physician review",
+      "timing": "after 3 days",
+      "sourceSentence": "Review with the physician after 3 days."
+    },
+    {
+      "type": "warning_sign",
+      "name": "Worsening breathlessness",
+      "sourceSentence": "Contact the hospital for worsening breathlessness, persistent high fever, confusion, or blue lips."
+    }
+  ],
+  "expectedEscalations": [
+    "warning_sign"
+  ]
+}

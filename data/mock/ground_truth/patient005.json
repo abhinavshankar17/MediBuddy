@@ -1,0 +1,39 @@
+{
+  "patientId": "P005",
+  "documentId": "D005",
+  "expectedItems": [
+    {
+      "type": "medication",
+      "name": "Metformin",
+      "dose": "500 mg",
+      "frequency": "twice daily",
+      "foodRelation": "with meals",
+      "sourceSentence": "Take Metformin 500 mg twice daily with meals."
+    },
+    {
+      "type": "diet",
+      "name": "Diabetic meal plan",
+      "sourceSentence": "Follow the diabetic meal plan and avoid skipping meals."
+    },
+    {
+      "type": "monitoring",
+      "name": "Blood glucose",
+      "sourceSentence": "Check blood glucose according to the clinic plan and record the readings."
+    },
+    {
+      "type": "follow_up",
+      "name": "Diabetes clinic",
+      "timing": "after 1 week",
+      "sourceSentence": "Diabetes clinic after 1 week."
+    },
+    {
+      "type": "restriction",
+      "name": "Dose changes",
+      "status": "do not change without clinician advice",
+      "sourceSentence": "The dose is not to be changed without clinician advice."
+    }
+  ],
+  "expectedEscalations": [
+    "missed_medication"
+  ]
+}

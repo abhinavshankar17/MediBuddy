@@ -1,0 +1,90 @@
+[
+  {
+    "_id": "D001",
+    "patientId": "P001",
+    "documentType": "discharge_summary",
+    "hospitalName": "CareBridge Demo Hospital",
+    "doctorName": "Dr. Vivek Iyer",
+    "admissionDate": "2026-10-01",
+    "dischargeDate": "2026-10-05",
+    "rawText": "DISCHARGE SUMMARY\nPatient: Meena Krishnan\nDiagnosis: Osteoarthritis of the right knee.\nProcedure: Right total knee replacement.\nMedications: Take Paracetamol 500 mg twice daily after meals for 5 days. Take Omeprazole 20 mg once daily before breakfast for 5 days.\nActivity: Walk with the assistance of a walker. Perform the prescribed knee exercises twice daily.\nWound Care: Keep the surgical wound clean and dry. Do not soak the wound.\nDiet: Continue a normal balanced vegetarian diet and drink adequate fluids.\nFollow-up: Visit the orthopedic clinic after 1 week.\nWarning signs: Contact the hospital immediately if you develop fever, severe swelling, increasing pain, or unusual discharge from the wound.",
+    "uploadedAt": "2026-10-08T09:01:00Z"
+  },
+  {
+    "_id": "D002",
+    "patientId": "P002",
+    "documentType": "discharge_summary",
+    "hospitalName": "CareBridge Demo Hospital",
+    "doctorName": "Dr. Neha Rao",
+    "admissionDate": "2026-09-22",
+    "dischargeDate": "2026-09-29",
+    "rawText": "DISCHARGE SUMMARY\nPatient: Ravi Kumar\nDiagnosis: Recovery after cardiac bypass surgery.\nMedications: Take Aspirin 75 mg once daily after breakfast. Take Atorvastatin 40 mg once daily at bedtime.\nActivity: Avoid heavy lifting. Walk for 10 minutes twice daily and increase gradually as tolerated.\nDiet: Follow a low-sodium diet and avoid adding extra salt.\nFollow-up: Cardiology review after 7 days.\nWarning signs: Seek urgent medical attention for severe chest pain, severe breathlessness, or fainting.",
+    "uploadedAt": "2026-10-08T09:02:00Z"
+  },
+  {
+    "_id": "D003",
+    "patientId": "P003",
+    "documentType": "discharge_summary",
+    "hospitalName": "CareBridge Demo Hospital",
+    "doctorName": "Dr. Asha Raman",
+    "admissionDate": "2026-10-02",
+    "dischargeDate": "2026-10-07",
+    "rawText": "DISCHARGE SUMMARY\nPatient: Lakshmi Devi\nDiagnosis: Community-acquired pneumonia.\nMedications: Take Amoxicillin 500 mg three times daily after meals for 7 days. Take the prescribed fever medicine as needed.\nActivity: Rest adequately and walk gently as tolerated.\nHydration: Drink adequate fluids throughout the day.\nFollow-up: Review with the physician after 3 days.\nWarning signs: Contact the hospital for worsening breathlessness, persistent high fever, confusion, or blue lips.",
+    "uploadedAt": "2026-10-08T09:03:00Z"
+  },
+  {
+    "_id": "D004",
+    "patientId": "P004",
+    "documentType": "discharge_summary",
+    "hospitalName": "CareBridge Demo Hospital",
+    "doctorName": "Dr. Vivek Iyer",
+    "admissionDate": "2026-09-15",
+    "dischargeDate": "2026-09-20",
+    "rawText": "DISCHARGE SUMMARY\nPatient: Arjun Menon\nDiagnosis: Left ankle fracture after fixation.\nMedications: Take Paracetamol 500 mg as directed for pain.\nActivity: Use crutches and do not put full weight on the injured ankle until reviewed.\nExercise: Perform the ankle and toe exercises twice daily as demonstrated by physiotherapy.\nFollow-up: Orthopedic review after 2 weeks.\nWarning signs: Seek help for severe swelling, numbness, blue discoloration, or uncontrolled pain.",
+    "uploadedAt": "2026-10-08T09:04:00Z"
+  },
+  {
+    "_id": "D005",
+    "patientId": "P005",
+    "documentType": "discharge_summary",
+    "hospitalName": "CareBridge Demo Hospital",
+    "doctorName": "Dr. Neha Rao",
+    "admissionDate": "2026-10-03",
+    "dischargeDate": "2026-10-06",
+    "rawText": "DISCHARGE SUMMARY\nPatient: Sita Rao\nDiagnosis: Diabetes follow-up.\nMedications: Take Metformin 500 mg twice daily with meals.\nDiet: Follow the diabetic meal plan and avoid skipping meals.\nMonitoring: Check blood glucose according to the clinic plan and record the readings.\nFollow-up: Diabetes clinic after 1 week.\nWarning signs: Seek medical help for severe weakness, confusion, or loss of consciousness.\nNote: The dose is not to be changed without clinician advice.",
+    "uploadedAt": "2026-10-08T09:05:00Z"
+  },
+  {
+    "_id": "D006",
+    "patientId": "P006",
+    "documentType": "discharge_summary",
+    "hospitalName": "CareBridge Demo Hospital",
+    "doctorName": "Dr. Asha Raman",
+    "admissionDate": "2026-10-04",
+    "dischargeDate": "2026-10-06",
+    "rawText": "DISCHARGE SUMMARY\nPatient: Vikram Shah\nDiagnosis: Recovery after laparoscopic appendectomy.\nMedications: Take Paracetamol 500 mg twice daily after food for 3 days.\nWound Care: Keep the incision clean and dry. Do not soak the wound.\nActivity: Avoid strenuous exercise for 2 weeks.\nFollow-up: Surgical review after 1 week.\nWarning signs: Contact the hospital for fever, increasing abdominal pain, persistent vomiting, or wound discharge.",
+    "uploadedAt": "2026-10-08T09:06:00Z"
+  },
+  {
+    "_id": "D007",
+    "patientId": "P007",
+    "documentType": "discharge_summary",
+    "hospitalName": "CareBridge Demo Hospital",
+    "doctorName": "Dr. Vivek Iyer",
+    "admissionDate": "2026-10-01",
+    "dischargeDate": "2026-10-05",
+    "rawText": "DISCHARGE SUMMARY\nPatient: Anitha Joseph\nDiagnosis: Recovery after laparoscopic gallbladder surgery.\nMedications: Take the prescribed pain medicine after meals as directed.\nDiet: Follow a low-fat diet for the first week and eat smaller meals.\nActivity: Walk gently every day and avoid strenuous activity for 2 weeks.\nFollow-up: Surgical clinic after 1 week.\nWarning signs: Contact the hospital for fever, worsening abdominal pain, yellowing of the eyes, or persistent vomiting.",
+    "uploadedAt": "2026-10-08T09:07:00Z"
+  },
+  {
+    "_id": "D008",
+    "patientId": "P008",
+    "documentType": "discharge_summary",
+    "hospitalName": "CareBridge Demo Hospital",
+    "doctorName": "Dr. Neha Rao",
+    "admissionDate": "2026-09-25",
+    "dischargeDate": "2026-10-01",
+    "rawText": "DISCHARGE SUMMARY\nPatient: Karthik Srinivasan\nDiagnosis: Recovery after ACL reconstruction.\nMedications: Take Paracetamol 500 mg twice daily after meals for 5 days.\nActivity: Use the knee brace and crutches as instructed. Do not drive until cleared.\nExercise: Complete the prescribed physiotherapy exercises twice daily.\nFollow-up: Orthopedic review after 1 week.\nWarning signs: Seek help for severe calf swelling, sudden shortness of breath, or increasing knee pain.",
+    "uploadedAt": "2026-10-08T09:08:00Z"
+  }
+]

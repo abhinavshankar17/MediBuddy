@@ -1,0 +1,1542 @@
+[
+  {
+    "_id": "E001",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T001",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-07T09:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E002",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T002",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-06T10:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E003",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T003",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-05T11:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E004",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T004",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 4,
+      "mobilityLevel": 5
+    },
+    "timestamp": "2026-10-04T12:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E005",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T005",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-08T13:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E006",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T006",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-07T14:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E007",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T007",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-06T15:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E008",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T008",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-05T16:15:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E009",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T009",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-04T17:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E010",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T010",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-08T08:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E011",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T011",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-07T09:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E012",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T012",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 8,
+      "mobilityLevel": 3
+    },
+    "timestamp": "2026-10-06T10:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E013",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T013",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-05T11:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E014",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T014",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-04T12:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E015",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T015",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-08T13:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E016",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T016",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-07T14:15:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E017",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T017",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-06T15:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E018",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T018",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-05T16:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E019",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T019",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-04T17:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E020",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T020",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 6,
+      "mobilityLevel": 1
+    },
+    "timestamp": "2026-10-08T08:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E021",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T021",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-07T09:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E022",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T022",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-06T10:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E023",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T023",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-05T11:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E024",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T024",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-04T12:15:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E025",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T025",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-08T13:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E026",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T026",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-07T14:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E027",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T027",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-06T15:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E028",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T028",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 4,
+      "mobilityLevel": 4
+    },
+    "timestamp": "2026-10-05T16:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E029",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T029",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-04T17:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E030",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T030",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-08T08:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E031",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T031",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-07T09:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E032",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T032",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-06T10:15:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E033",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T033",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-05T11:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E034",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T034",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-04T12:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E035",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T035",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-08T13:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E036",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T036",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 8,
+      "mobilityLevel": 2
+    },
+    "timestamp": "2026-10-07T14:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E037",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T037",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-06T15:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E038",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T038",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-05T16:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E039",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T039",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-04T17:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E040",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T001",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-08T08:15:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E041",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T002",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-07T09:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E042",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T003",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-06T10:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E043",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T004",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-05T11:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E044",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T005",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 6,
+      "mobilityLevel": 5
+    },
+    "timestamp": "2026-10-04T12:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E045",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T006",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-08T13:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E046",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T007",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-07T14:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E047",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T008",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-06T15:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E048",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T009",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-05T16:15:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E049",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T010",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-04T17:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E050",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T011",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-08T08:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E051",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T012",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-07T09:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E052",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T013",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 4,
+      "mobilityLevel": 3
+    },
+    "timestamp": "2026-10-06T10:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E053",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T014",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-05T11:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E054",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T015",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-04T12:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E055",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T016",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-08T13:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E056",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T017",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-07T14:15:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E057",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T018",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-06T15:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E058",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T019",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-05T16:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E059",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T020",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-04T17:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E060",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T021",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 8,
+      "mobilityLevel": 1
+    },
+    "timestamp": "2026-10-08T08:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E061",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T022",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-07T09:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E062",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T023",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-06T10:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E063",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T024",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-05T11:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E064",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T025",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-04T12:15:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E065",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T026",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-08T13:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E066",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T027",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-07T14:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E067",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T028",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-06T15:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E068",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T029",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 6,
+      "mobilityLevel": 4
+    },
+    "timestamp": "2026-10-05T16:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E069",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T030",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-04T17:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E070",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T031",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-08T08:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E071",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T032",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-07T09:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E072",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T033",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-06T10:15:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E073",
+    "patientId": "P001",
+    "type": "task_completed",
+    "taskId": "T034",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-05T11:15:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E074",
+    "patientId": "P002",
+    "type": "task_skipped",
+    "taskId": "T035",
+    "payload": {
+      "reason": "Feeling tired"
+    },
+    "timestamp": "2026-10-04T12:15:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E075",
+    "patientId": "P003",
+    "type": "task_snoozed",
+    "taskId": "T036",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-08T13:15:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E076",
+    "patientId": "P004",
+    "type": "check_in",
+    "taskId": "T037",
+    "payload": {
+      "painLevel": 5,
+      "energyLevel": 4,
+      "mobilityLevel": 2
+    },
+    "timestamp": "2026-10-07T14:15:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E077",
+    "patientId": "P005",
+    "type": "teach_back",
+    "taskId": "T038",
+    "payload": {
+      "question": "When should you take your medicine?",
+      "answer": "After breakfast",
+      "correct": true
+    },
+    "timestamp": "2026-10-06T15:15:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E078",
+    "patientId": "P006",
+    "type": "question_asked",
+    "taskId": "T039",
+    "payload": {
+      "question": "Can I change the timing of my medicine?"
+    },
+    "timestamp": "2026-10-05T16:15:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E079",
+    "patientId": "P007",
+    "type": "reminder_opened",
+    "taskId": "T001",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-04T17:15:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E080",
+    "patientId": "P008",
+    "type": "medication_acknowledged",
+    "taskId": "T002",
+    "payload": {
+      "source": "patient_app"
+    },
+    "timestamp": "2026-10-08T08:15:00+05:30",
+    "actor": "P008"
+  },
+
+  {
+    "_id": "E101",
+    "patientId": "P001",
+    "type": "reminder_sent",
+    "reminderId": "MR001",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E102",
+    "patientId": "P001",
+    "type": "reminder_opened",
+    "reminderId": "MR001",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg"
+    },
+    "timestamp": "2026-10-08T08:03:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E103",
+    "patientId": "P001",
+    "type": "medication_taken",
+    "reminderId": "MR001",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:00:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T08:07:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:07:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E104",
+    "patientId": "P001",
+    "type": "reminder_sent",
+    "reminderId": "MR002",
+    "payload": {
+      "medicationName": "Omeprazole",
+      "dose": "20 mg",
+      "scheduledAt": "2026-10-08T07:30:00+05:30"
+    },
+    "timestamp": "2026-10-08T07:30:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E105",
+    "patientId": "P001",
+    "type": "medication_taken",
+    "reminderId": "MR002",
+    "payload": {
+      "medicationName": "Omeprazole",
+      "dose": "20 mg",
+      "scheduledAt": "2026-10-08T07:30:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T07:35:00+05:30"
+    },
+    "timestamp": "2026-10-08T07:35:00+05:30",
+    "actor": "P001"
+  },
+  {
+    "_id": "E106",
+    "patientId": "P001",
+    "type": "reminder_sent",
+    "reminderId": "MR003",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T20:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E107",
+    "patientId": "P001",
+    "type": "medication_not_taken",
+    "reminderId": "MR003",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:00:00+05:30",
+      "responseType": "no_response",
+      "note": "not confirmed"
+    },
+    "timestamp": "2026-10-08T22:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E108",
+    "patientId": "P002",
+    "type": "reminder_sent",
+    "reminderId": "MR004",
+    "payload": {
+      "medicationName": "Aspirin",
+      "dose": "75 mg",
+      "scheduledAt": "2026-10-08T07:30:00+05:30"
+    },
+    "timestamp": "2026-10-08T07:30:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E109",
+    "patientId": "P002",
+    "type": "medication_taken",
+    "reminderId": "MR004",
+    "payload": {
+      "medicationName": "Aspirin",
+      "dose": "75 mg",
+      "scheduledAt": "2026-10-08T07:30:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T07:38:00+05:30"
+    },
+    "timestamp": "2026-10-08T07:38:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E110",
+    "patientId": "P002",
+    "type": "reminder_sent",
+    "reminderId": "MR005",
+    "payload": {
+      "medicationName": "Atorvastatin",
+      "dose": "40 mg",
+      "scheduledAt": "2026-10-08T22:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T22:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E111",
+    "patientId": "P002",
+    "type": "medication_taken",
+    "reminderId": "MR005",
+    "payload": {
+      "medicationName": "Atorvastatin",
+      "dose": "40 mg",
+      "scheduledAt": "2026-10-08T22:00:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T22:05:00+05:30"
+    },
+    "timestamp": "2026-10-08T22:05:00+05:30",
+    "actor": "P002"
+  },
+  {
+    "_id": "E112",
+    "patientId": "P003",
+    "type": "reminder_sent",
+    "reminderId": "MR006",
+    "payload": {
+      "medicationName": "Amoxicillin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:15:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:15:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E113",
+    "patientId": "P003",
+    "type": "reminder_opened",
+    "reminderId": "MR006",
+    "payload": {
+      "medicationName": "Amoxicillin",
+      "dose": "500 mg"
+    },
+    "timestamp": "2026-10-08T08:18:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E114",
+    "patientId": "P003",
+    "type": "medication_taken",
+    "reminderId": "MR006",
+    "payload": {
+      "medicationName": "Amoxicillin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:15:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T08:22:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:22:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E115",
+    "patientId": "P003",
+    "type": "reminder_sent",
+    "reminderId": "MR007",
+    "payload": {
+      "medicationName": "Amoxicillin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T13:15:00+05:30"
+    },
+    "timestamp": "2026-10-08T13:15:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E116",
+    "patientId": "P003",
+    "type": "medication_missed",
+    "reminderId": "MR007",
+    "payload": {
+      "medicationName": "Amoxicillin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T13:15:00+05:30",
+      "responseType": "no_response",
+      "note": "not confirmed"
+    },
+    "timestamp": "2026-10-08T15:15:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E117",
+    "patientId": "P003",
+    "type": "reminder_sent",
+    "reminderId": "MR008",
+    "payload": {
+      "medicationName": "Amoxicillin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:15:00+05:30"
+    },
+    "timestamp": "2026-10-08T20:15:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E118",
+    "patientId": "P003",
+    "type": "medication_taken",
+    "reminderId": "MR008",
+    "payload": {
+      "medicationName": "Amoxicillin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:15:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T20:20:00+05:30"
+    },
+    "timestamp": "2026-10-08T20:20:00+05:30",
+    "actor": "P003"
+  },
+  {
+    "_id": "E119",
+    "patientId": "P004",
+    "type": "reminder_sent",
+    "reminderId": "MR009",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:30:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:30:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E120",
+    "patientId": "P004",
+    "type": "reminder_opened",
+    "reminderId": "MR009",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg"
+    },
+    "timestamp": "2026-10-08T08:35:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E121",
+    "patientId": "P004",
+    "type": "medication_taken",
+    "reminderId": "MR009",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:30:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T08:40:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:40:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E122",
+    "patientId": "P004",
+    "type": "reminder_sent",
+    "reminderId": "MR010",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:30:00+05:30"
+    },
+    "timestamp": "2026-10-08T20:30:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E123",
+    "patientId": "P004",
+    "type": "medication_not_taken",
+    "reminderId": "MR010",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:30:00+05:30",
+      "responseType": "dismissed"
+    },
+    "timestamp": "2026-10-08T20:32:00+05:30",
+    "actor": "P004"
+  },
+  {
+    "_id": "E124",
+    "patientId": "P005",
+    "type": "reminder_sent",
+    "reminderId": "MR011",
+    "payload": {
+      "medicationName": "Metformin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T07:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T07:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E125",
+    "patientId": "P005",
+    "type": "medication_missed",
+    "reminderId": "MR011",
+    "payload": {
+      "medicationName": "Metformin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T07:00:00+05:30",
+      "responseType": "no_response",
+      "note": "not confirmed"
+    },
+    "timestamp": "2026-10-08T09:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E126",
+    "patientId": "P005",
+    "type": "reminder_sent",
+    "reminderId": "MR012",
+    "payload": {
+      "medicationName": "Metformin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T19:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T19:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E127",
+    "patientId": "P005",
+    "type": "reminder_opened",
+    "reminderId": "MR012",
+    "payload": {
+      "medicationName": "Metformin",
+      "dose": "500 mg"
+    },
+    "timestamp": "2026-10-08T19:05:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E128",
+    "patientId": "P005",
+    "type": "medication_taken",
+    "reminderId": "MR012",
+    "payload": {
+      "medicationName": "Metformin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T19:00:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T19:10:00+05:30"
+    },
+    "timestamp": "2026-10-08T19:10:00+05:30",
+    "actor": "P005"
+  },
+  {
+    "_id": "E129",
+    "patientId": "P006",
+    "type": "reminder_sent",
+    "reminderId": "MR013",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E130",
+    "patientId": "P006",
+    "type": "medication_taken",
+    "reminderId": "MR013",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:00:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T08:04:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:04:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E131",
+    "patientId": "P006",
+    "type": "reminder_sent",
+    "reminderId": "MR014",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T20:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E132",
+    "patientId": "P006",
+    "type": "medication_taken",
+    "reminderId": "MR014",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:00:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T20:06:00+05:30"
+    },
+    "timestamp": "2026-10-08T20:06:00+05:30",
+    "actor": "P006"
+  },
+  {
+    "_id": "E133",
+    "patientId": "P007",
+    "type": "reminder_sent",
+    "reminderId": "MR015",
+    "payload": {
+      "medicationName": "Prescribed pain medicine",
+      "dose": "as directed",
+      "scheduledAt": "2026-10-08T08:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E134",
+    "patientId": "P007",
+    "type": "medication_taken",
+    "reminderId": "MR015",
+    "payload": {
+      "medicationName": "Prescribed pain medicine",
+      "dose": "as directed",
+      "scheduledAt": "2026-10-08T08:00:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T08:12:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:12:00+05:30",
+    "actor": "P007"
+  },
+  {
+    "_id": "E135",
+    "patientId": "P007",
+    "type": "reminder_sent",
+    "reminderId": "MR016",
+    "payload": {
+      "medicationName": "Prescribed pain medicine",
+      "dose": "as directed",
+      "scheduledAt": "2026-10-08T19:30:00+05:30"
+    },
+    "timestamp": "2026-10-08T19:30:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E136",
+    "patientId": "P007",
+    "type": "medication_not_taken",
+    "reminderId": "MR016",
+    "payload": {
+      "medicationName": "Prescribed pain medicine",
+      "dose": "as directed",
+      "scheduledAt": "2026-10-08T19:30:00+05:30",
+      "responseType": "no_response",
+      "note": "not confirmed"
+    },
+    "timestamp": "2026-10-08T21:30:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E137",
+    "patientId": "P008",
+    "type": "reminder_sent",
+    "reminderId": "MR017",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E138",
+    "patientId": "P008",
+    "type": "reminder_opened",
+    "reminderId": "MR017",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg"
+    },
+    "timestamp": "2026-10-08T08:05:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E139",
+    "patientId": "P008",
+    "type": "medication_taken",
+    "reminderId": "MR017",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T08:00:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T08:09:00+05:30"
+    },
+    "timestamp": "2026-10-08T08:09:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E140",
+    "patientId": "P008",
+    "type": "reminder_sent",
+    "reminderId": "MR018",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:00:00+05:30"
+    },
+    "timestamp": "2026-10-08T20:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E141",
+    "patientId": "P008",
+    "type": "medication_taken",
+    "reminderId": "MR018",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-08T20:00:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-08T20:05:00+05:30"
+    },
+    "timestamp": "2026-10-08T20:05:00+05:30",
+    "actor": "P008"
+  },
+  {
+    "_id": "E142",
+    "patientId": "P005",
+    "type": "reminder_sent",
+    "reminderId": "MR023",
+    "payload": {
+      "medicationName": "Metformin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-09T07:00:00+05:30"
+    },
+    "timestamp": "2026-10-09T07:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E143",
+    "patientId": "P005",
+    "type": "medication_missed",
+    "reminderId": "MR023",
+    "payload": {
+      "medicationName": "Metformin",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-09T07:00:00+05:30",
+      "responseType": "no_response",
+      "note": "not confirmed"
+    },
+    "timestamp": "2026-10-09T09:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E144",
+    "patientId": "P001",
+    "type": "reminder_sent",
+    "reminderId": "MR019",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-09T08:00:00+05:30"
+    },
+    "timestamp": "2026-10-09T08:00:00+05:30",
+    "actor": "system"
+  },
+  {
+    "_id": "E145",
+    "patientId": "P001",
+    "type": "medication_taken",
+    "reminderId": "MR019",
+    "payload": {
+      "medicationName": "Paracetamol",
+      "dose": "500 mg",
+      "scheduledAt": "2026-10-09T08:00:00+05:30",
+      "responseType": "taken",
+      "responseTime": "2026-10-09T08:06:00+05:30"
+    },
+    "timestamp": "2026-10-09T08:06:00+05:30",
+    "actor": "P001"
+  }
+]

@@ -1,0 +1,177 @@
+[
+  {
+    "_id": "PI001",
+    "patientId": "P001",
+    "quizSessionId": "QS001",
+    "score": 80,
+    "strengths": [
+      "Medication timing",
+      "Exercise frequency",
+      "Follow-up scheduling"
+    ],
+    "weaknesses": [
+      "Mobility aid awareness"
+    ],
+    "missedInstructions": [
+      "Walk with the assistance of a walker."
+    ],
+    "aiSummary": "Patient understands medication timing, exercise schedule, and follow-up dates well. However, the patient may not fully recognise the importance of using a walker for mobility. Evening Paracetamol dose was not confirmed. Recommend a brief reinforcement of walker-assisted walking during the next check-in.",
+    "priority": "MEDIUM",
+    "evidenceEventIds": [
+      "E101",
+      "E102",
+      "E105"
+    ],
+    "generatedAt": "2026-10-08T13:10:00+05:30"
+  },
+  {
+    "_id": "PI002",
+    "patientId": "P002",
+    "quizSessionId": "QS002",
+    "score": 100,
+    "strengths": [
+      "Medication timing",
+      "Activity restrictions",
+      "Exercise frequency",
+      "Follow-up scheduling"
+    ],
+    "weaknesses": [],
+    "missedInstructions": [],
+    "aiSummary": "Patient demonstrates excellent understanding of all discharge instructions. All medications were confirmed as taken. No knowledge gaps identified. Continue routine monitoring.",
+    "priority": "LOW",
+    "evidenceEventIds": [
+      "E108",
+      "E110"
+    ],
+    "generatedAt": "2026-10-08T14:10:00+05:30"
+  },
+  {
+    "_id": "PI003",
+    "patientId": "P003",
+    "quizSessionId": "QS003",
+    "score": 60,
+    "strengths": [
+      "Medication frequency",
+      "Medication timing"
+    ],
+    "weaknesses": [
+      "Medication duration",
+      "Warning sign recognition"
+    ],
+    "missedInstructions": [
+      "Take Amoxicillin 500 mg three times daily after meals for 7 days.",
+      "Contact the hospital for worsening breathlessness, persistent high fever, confusion, or blue lips."
+    ],
+    "aiSummary": "Patient knows how often and when to take Amoxicillin but is unsure about the total duration. The patient could not correctly identify worsening breathlessness as a warning sign requiring hospital contact. Afternoon Amoxicillin dose was missed. Recommend reinforcement of antibiotic duration and warning sign education.",
+    "priority": "HIGH",
+    "evidenceEventIds": [
+      "E114",
+      "E116",
+      "E118"
+    ],
+    "generatedAt": "2026-10-08T11:12:00+05:30"
+  },
+  {
+    "_id": "PI004",
+    "patientId": "P004",
+    "quizSessionId": "QS004",
+    "score": 80,
+    "strengths": [
+      "Mobility aid usage",
+      "Exercise frequency",
+      "Follow-up scheduling",
+      "Warning sign recognition"
+    ],
+    "weaknesses": [
+      "Weight-bearing restrictions"
+    ],
+    "missedInstructions": [
+      "Use crutches and do not put full weight on the injured ankle until reviewed."
+    ],
+    "aiSummary": "Patient understands most instructions well but incorrectly believes full weight bearing is acceptable if it feels fine. Evening Paracetamol was dismissed. Reinforce the weight-bearing restriction to prevent re-injury.",
+    "priority": "MEDIUM",
+    "evidenceEventIds": [
+      "E121",
+      "E123"
+    ],
+    "generatedAt": "2026-10-08T15:08:00+05:30"
+  },
+  {
+    "_id": "PI005",
+    "patientId": "P005",
+    "quizSessionId": "QS005",
+    "score": 40,
+    "strengths": [
+      "Medication frequency",
+      "Dietary plan"
+    ],
+    "weaknesses": [
+      "Medication timing",
+      "Dose-change restrictions",
+      "Follow-up scheduling"
+    ],
+    "missedInstructions": [
+      "Take Metformin 500 mg twice daily with meals.",
+      "The dose is not to be changed without clinician advice.",
+      "Diabetes clinic after 1 week."
+    ],
+    "aiSummary": "Patient scored poorly on the recovery quiz. The patient does not understand when to take Metformin relative to meals, believes the dose can be changed independently, and was unsure of the follow-up date. Morning Metformin was missed on both days. This is a high-priority case requiring immediate nurse intervention and medication education.",
+    "priority": "HIGH",
+    "evidenceEventIds": [
+      "E126",
+      "E128",
+      "E130"
+    ],
+    "generatedAt": "2026-10-08T10:12:00+05:30"
+  },
+  {
+    "_id": "PI006",
+    "patientId": "P006",
+    "quizSessionId": "QS006",
+    "score": 80,
+    "strengths": [
+      "Medication timing",
+      "Exercise restrictions",
+      "Follow-up scheduling",
+      "Warning sign recognition"
+    ],
+    "weaknesses": [
+      "Wound care"
+    ],
+    "missedInstructions": [
+      "Keep the incision clean and dry. Do not soak the wound."
+    ],
+    "aiSummary": "Patient understands medication, exercise restrictions, and follow-up well. However, the patient incorrectly believes soaking the incision in warm water is appropriate wound care. All medications were confirmed as taken. Reinforce wound-care instructions to prevent infection.",
+    "priority": "MEDIUM",
+    "evidenceEventIds": [
+      "E132",
+      "E134"
+    ],
+    "generatedAt": "2026-10-08T12:10:00+05:30"
+  },
+  {
+    "_id": "PI007",
+    "patientId": "P008",
+    "quizSessionId": "QS008",
+    "score": 80,
+    "strengths": [
+      "Medication timing",
+      "Driving restrictions",
+      "Exercise frequency",
+      "Follow-up scheduling"
+    ],
+    "weaknesses": [
+      "Mobility aid identification"
+    ],
+    "missedInstructions": [
+      "Use the knee brace and crutches as instructed."
+    ],
+    "aiSummary": "Patient understands most discharge instructions well. However, the patient could not correctly identify the knee brace and crutches as the required mobility aids. All medications were confirmed as taken. Brief reinforcement of mobility aid instructions is recommended.",
+    "priority": "LOW",
+    "evidenceEventIds": [
+      "E140",
+      "E142"
+    ],
+    "generatedAt": "2026-10-08T14:40:00+05:30"
+  }
+]

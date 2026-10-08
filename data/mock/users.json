@@ -1,0 +1,220 @@
+[
+  {
+    "_id": "P001",
+    "name": "Meena Krishnan",
+    "email": "patient1@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO_HASH_NOT_A_REAL_PASSWORD",
+    "role": "patient",
+    "patientId": "P001",
+    "language": "ta",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "P002",
+    "name": "Ravi Kumar",
+    "email": "patient2@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO_HASH_NOT_A_REAL_PASSWORD",
+    "role": "patient",
+    "patientId": "P002",
+    "language": "en",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "P003",
+    "name": "Lakshmi Devi",
+    "email": "patient3@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO_HASH_NOT_A_REAL_PASSWORD",
+    "role": "patient",
+    "patientId": "P003",
+    "language": "ta",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "P004",
+    "name": "Arjun Menon",
+    "email": "patient4@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO_HASH_NOT_A_REAL_PASSWORD",
+    "role": "patient",
+    "patientId": "P004",
+    "language": "en",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "P005",
+    "name": "Sita Rao",
+    "email": "patient5@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO_HASH_NOT_A_REAL_PASSWORD",
+    "role": "patient",
+    "patientId": "P005",
+    "language": "ta",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "P006",
+    "name": "Vikram Shah",
+    "email": "patient6@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO_HASH_NOT_A_REAL_PASSWORD",
+    "role": "patient",
+    "patientId": "P006",
+    "language": "en",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "P007",
+    "name": "Anitha Joseph",
+    "email": "patient7@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO_HASH_NOT_A_REAL_PASSWORD",
+    "role": "patient",
+    "patientId": "P007",
+    "language": "en",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "P008",
+    "name": "Karthik Srinivasan",
+    "email": "patient8@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO_HASH_NOT_A_REAL_PASSWORD",
+    "role": "patient",
+    "patientId": "P008",
+    "language": "ta",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "U101",
+    "name": "Priya Krishnan",
+    "email": "caregiver1@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO",
+    "role": "caregiver",
+    "patientIds": [
+      "P001",
+      "P006"
+    ],
+    "language": "ta",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "U102",
+    "name": "Suresh Kumar",
+    "email": "caregiver2@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO",
+    "role": "caregiver",
+    "patientIds": [
+      "P002",
+      "P007"
+    ],
+    "language": "en",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "U103",
+    "name": "Divya Srinivasan",
+    "email": "caregiver3@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO",
+    "role": "caregiver",
+    "patientIds": [
+      "P003",
+      "P008"
+    ],
+    "language": "ta",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "U104",
+    "name": "Rahul Menon",
+    "email": "caregiver4@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO",
+    "role": "caregiver",
+    "patientIds": [
+      "P004"
+    ],
+    "language": "en",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "U105",
+    "name": "Naveen Rao",
+    "email": "caregiver5@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO",
+    "role": "caregiver",
+    "patientIds": [
+      "P005"
+    ],
+    "language": "ta",
+    "notificationPreferences": {
+      "reminders": true,
+      "alerts": true
+    }
+  },
+  {
+    "_id": "N001",
+    "name": "Nurse Priyanka",
+    "email": "nurse1@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO",
+    "role": "nurse",
+    "department": "Post-operative Care",
+    "assignedPatients": [
+      "P001",
+      "P004",
+      "P006",
+      "P008"
+    ]
+  },
+  {
+    "_id": "N002",
+    "name": "Nurse Daniel",
+    "email": "nurse2@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO",
+    "role": "nurse",
+    "department": "Medical Recovery",
+    "assignedPatients": [
+      "P002",
+      "P003",
+      "P005",
+      "P007"
+    ]
+  },
+  {
+    "_id": "C001",
+    "name": "Dr. Asha Raman",
+    "email": "doctor@carebridge.demo",
+    "passwordHash": "$2b$10$DEMO",
+    "role": "clinician",
+    "specialization": "Post-operative Medicine"
+  }
+]

@@ -1,0 +1,712 @@
+[
+  {
+    "_id": "PR001",
+    "name": "Dr. Synthetic Provider 1",
+    "specialty": "Orthopedics",
+    "hospital": "CareBridge Partner Hospital 1",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "address": "101 Demo Medical Road, Chennai",
+    "phone": "+91-9000000001",
+    "email": "provider1@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "orthopedics",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR002",
+    "name": "Dr. Synthetic Provider 2",
+    "specialty": "Cardiology",
+    "hospital": "CareBridge Partner Hospital 2",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "address": "102 Demo Medical Road, Coimbatore",
+    "phone": "+91-9000000002",
+    "email": "provider2@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "cardiology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR003",
+    "name": "Dr. Synthetic Provider 3",
+    "specialty": "Pulmonology",
+    "hospital": "CareBridge Partner Hospital 3",
+    "city": "Madurai",
+    "state": "Tamil Nadu",
+    "address": "103 Demo Medical Road, Madurai",
+    "phone": "+91-9000000003",
+    "email": "provider3@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "pulmonology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR004",
+    "name": "Dr. Synthetic Provider 4",
+    "specialty": "General Surgery",
+    "hospital": "CareBridge Partner Hospital 4",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "address": "104 Demo Medical Road, Bengaluru",
+    "phone": "+91-9000000004",
+    "email": "provider4@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "general surgery",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR005",
+    "name": "Dr. Synthetic Provider 5",
+    "specialty": "Diabetology",
+    "hospital": "CareBridge Partner Hospital 5",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "address": "105 Demo Medical Road, Chennai",
+    "phone": "+91-9000000005",
+    "email": "provider5@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "diabetology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR006",
+    "name": "Dr. Synthetic Provider 6",
+    "specialty": "Physiotherapy",
+    "hospital": "CareBridge Partner Hospital 1",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "address": "106 Demo Medical Road, Coimbatore",
+    "phone": "+91-9000000006",
+    "email": "provider6@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "physiotherapy",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR007",
+    "name": "Dr. Synthetic Provider 7",
+    "specialty": "Nutrition",
+    "hospital": "CareBridge Partner Hospital 2",
+    "city": "Madurai",
+    "state": "Tamil Nadu",
+    "address": "107 Demo Medical Road, Madurai",
+    "phone": "+91-9000000007",
+    "email": "provider7@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "nutrition",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR008",
+    "name": "Dr. Synthetic Provider 8",
+    "specialty": "Orthopedics",
+    "hospital": "CareBridge Partner Hospital 3",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "address": "108 Demo Medical Road, Bengaluru",
+    "phone": "+91-9000000008",
+    "email": "provider8@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "orthopedics",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR009",
+    "name": "Dr. Synthetic Provider 9",
+    "specialty": "Cardiology",
+    "hospital": "CareBridge Partner Hospital 4",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "address": "109 Demo Medical Road, Chennai",
+    "phone": "+91-9000000009",
+    "email": "provider9@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "cardiology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR010",
+    "name": "Dr. Synthetic Provider 10",
+    "specialty": "Pulmonology",
+    "hospital": "CareBridge Partner Hospital 5",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "address": "110 Demo Medical Road, Coimbatore",
+    "phone": "+91-9000000010",
+    "email": "provider10@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "pulmonology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR011",
+    "name": "Dr. Synthetic Provider 11",
+    "specialty": "General Surgery",
+    "hospital": "CareBridge Partner Hospital 1",
+    "city": "Madurai",
+    "state": "Tamil Nadu",
+    "address": "111 Demo Medical Road, Madurai",
+    "phone": "+91-9000000011",
+    "email": "provider11@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "general surgery",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR012",
+    "name": "Dr. Synthetic Provider 12",
+    "specialty": "Diabetology",
+    "hospital": "CareBridge Partner Hospital 2",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "address": "112 Demo Medical Road, Bengaluru",
+    "phone": "+91-9000000012",
+    "email": "provider12@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "diabetology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR013",
+    "name": "Dr. Synthetic Provider 13",
+    "specialty": "Physiotherapy",
+    "hospital": "CareBridge Partner Hospital 3",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "address": "113 Demo Medical Road, Chennai",
+    "phone": "+91-9000000013",
+    "email": "provider13@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "physiotherapy",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR014",
+    "name": "Dr. Synthetic Provider 14",
+    "specialty": "Nutrition",
+    "hospital": "CareBridge Partner Hospital 4",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "address": "114 Demo Medical Road, Coimbatore",
+    "phone": "+91-9000000014",
+    "email": "provider14@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "nutrition",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR015",
+    "name": "Dr. Synthetic Provider 15",
+    "specialty": "Orthopedics",
+    "hospital": "CareBridge Partner Hospital 5",
+    "city": "Madurai",
+    "state": "Tamil Nadu",
+    "address": "115 Demo Medical Road, Madurai",
+    "phone": "+91-9000000015",
+    "email": "provider15@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "orthopedics",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR016",
+    "name": "Dr. Synthetic Provider 16",
+    "specialty": "Cardiology",
+    "hospital": "CareBridge Partner Hospital 1",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "address": "116 Demo Medical Road, Bengaluru",
+    "phone": "+91-9000000016",
+    "email": "provider16@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "cardiology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR017",
+    "name": "Dr. Synthetic Provider 17",
+    "specialty": "Pulmonology",
+    "hospital": "CareBridge Partner Hospital 2",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "address": "117 Demo Medical Road, Chennai",
+    "phone": "+91-9000000017",
+    "email": "provider17@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "pulmonology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR018",
+    "name": "Dr. Synthetic Provider 18",
+    "specialty": "General Surgery",
+    "hospital": "CareBridge Partner Hospital 3",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "address": "118 Demo Medical Road, Coimbatore",
+    "phone": "+91-9000000018",
+    "email": "provider18@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "general surgery",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR019",
+    "name": "Dr. Synthetic Provider 19",
+    "specialty": "Diabetology",
+    "hospital": "CareBridge Partner Hospital 4",
+    "city": "Madurai",
+    "state": "Tamil Nadu",
+    "address": "119 Demo Medical Road, Madurai",
+    "phone": "+91-9000000019",
+    "email": "provider19@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "diabetology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR020",
+    "name": "Dr. Synthetic Provider 20",
+    "specialty": "Physiotherapy",
+    "hospital": "CareBridge Partner Hospital 5",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "address": "120 Demo Medical Road, Bengaluru",
+    "phone": "+91-9000000020",
+    "email": "provider20@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "physiotherapy",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR021",
+    "name": "Dr. Synthetic Provider 21",
+    "specialty": "Nutrition",
+    "hospital": "CareBridge Partner Hospital 1",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "address": "121 Demo Medical Road, Chennai",
+    "phone": "+91-9000000021",
+    "email": "provider21@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "nutrition",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR022",
+    "name": "Dr. Synthetic Provider 22",
+    "specialty": "Orthopedics",
+    "hospital": "CareBridge Partner Hospital 2",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "address": "122 Demo Medical Road, Coimbatore",
+    "phone": "+91-9000000022",
+    "email": "provider22@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "orthopedics",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR023",
+    "name": "Dr. Synthetic Provider 23",
+    "specialty": "Cardiology",
+    "hospital": "CareBridge Partner Hospital 3",
+    "city": "Madurai",
+    "state": "Tamil Nadu",
+    "address": "123 Demo Medical Road, Madurai",
+    "phone": "+91-9000000023",
+    "email": "provider23@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "cardiology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR024",
+    "name": "Dr. Synthetic Provider 24",
+    "specialty": "Pulmonology",
+    "hospital": "CareBridge Partner Hospital 4",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "address": "124 Demo Medical Road, Bengaluru",
+    "phone": "+91-9000000024",
+    "email": "provider24@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "pulmonology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR025",
+    "name": "Dr. Synthetic Provider 25",
+    "specialty": "General Surgery",
+    "hospital": "CareBridge Partner Hospital 5",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "address": "125 Demo Medical Road, Chennai",
+    "phone": "+91-9000000025",
+    "email": "provider25@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "general surgery",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR026",
+    "name": "Dr. Synthetic Provider 26",
+    "specialty": "Diabetology",
+    "hospital": "CareBridge Partner Hospital 1",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "address": "126 Demo Medical Road, Coimbatore",
+    "phone": "+91-9000000026",
+    "email": "provider26@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "diabetology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR027",
+    "name": "Dr. Synthetic Provider 27",
+    "specialty": "Physiotherapy",
+    "hospital": "CareBridge Partner Hospital 2",
+    "city": "Madurai",
+    "state": "Tamil Nadu",
+    "address": "127 Demo Medical Road, Madurai",
+    "phone": "+91-9000000027",
+    "email": "provider27@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "physiotherapy",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR028",
+    "name": "Dr. Synthetic Provider 28",
+    "specialty": "Nutrition",
+    "hospital": "CareBridge Partner Hospital 3",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "address": "128 Demo Medical Road, Bengaluru",
+    "phone": "+91-9000000028",
+    "email": "provider28@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "nutrition",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  },
+  {
+    "_id": "PR029",
+    "name": "Dr. Synthetic Provider 29",
+    "specialty": "Orthopedics",
+    "hospital": "CareBridge Partner Hospital 4",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "address": "129 Demo Medical Road, Chennai",
+    "phone": "+91-9000000029",
+    "email": "provider29@carebridge.demo",
+    "languages": [
+      "English",
+      "Tamil"
+    ],
+    "conditions": [
+      "orthopedics",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Mon",
+      "Wed",
+      "Fri"
+    ]
+  },
+  {
+    "_id": "PR030",
+    "name": "Dr. Synthetic Provider 30",
+    "specialty": "Cardiology",
+    "hospital": "CareBridge Partner Hospital 5",
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "address": "130 Demo Medical Road, Coimbatore",
+    "phone": "+91-9000000030",
+    "email": "provider30@carebridge.demo",
+    "languages": [
+      "English"
+    ],
+    "conditions": [
+      "cardiology",
+      "post-discharge recovery"
+    ],
+    "availability": [
+      "Tue",
+      "Thu",
+      "Sat"
+    ]
+  }
+]

@@ -1,0 +1,76 @@
+[
+  {
+    "_id": "ESC001",
+    "patientId": "P003",
+    "itemId": "EI011",
+    "reason": "Patient reported increased breathing difficulty / warning sign context",
+    "category": "warning_sign",
+    "severity": "HIGH",
+    "trigger": "check_in",
+    "evidence": [
+      "increased breathlessness",
+      "pain level 7"
+    ],
+    "status": "OPEN",
+    "assignedTo": "N002"
+  },
+  {
+    "_id": "ESC002",
+    "patientId": "P005",
+    "itemId": "EI021",
+    "reason": "Medication adherence issue and dose-sensitive condition",
+    "category": "missed_medication",
+    "severity": "HIGH",
+    "trigger": "check_in",
+    "evidence": [
+      "missed medication"
+    ],
+    "status": "IN_REVIEW",
+    "assignedTo": "N002"
+  },
+  {
+    "_id": "ESC003",
+    "patientId": "P002",
+    "itemId": "EI041",
+    "reason": "Medication instruction missing dose and source verification failed",
+    "category": "missing_information",
+    "severity": "MEDIUM",
+    "trigger": "extraction",
+    "evidence": [
+      "low confidence",
+      "missing dose"
+    ],
+    "status": "OPEN",
+    "assignedTo": "N002"
+  },
+  {
+    "_id": "ESC004",
+    "patientId": "P001",
+    "itemId": "EI005",
+    "reason": "Follow-up is approaching and patient has an overdue task",
+    "category": "overdue_task",
+    "severity": "MEDIUM",
+    "trigger": "scheduler",
+    "evidence": [
+      "overdue task"
+    ],
+    "status": "RESOLVED",
+    "assignedTo": "N001",
+    "resolvedBy": "N001",
+    "resolution": "Nurse contacted caregiver."
+  },
+  {
+    "_id": "ESC005",
+    "patientId": "P008",
+    "itemId": "EI036",
+    "reason": "Patient asked a medication/treatment timing question",
+    "category": "medication_question",
+    "severity": "HIGH",
+    "trigger": "question_box",
+    "evidence": [
+      "Can I change the timing of my medicine?"
+    ],
+    "status": "OPEN",
+    "assignedTo": "N001"
+  }
+]

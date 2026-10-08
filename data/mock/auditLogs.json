@@ -1,0 +1,430 @@
+[
+  {
+    "_id": "AL001",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "AI_EXTRACTION_CREATED",
+    "entityType": "patient",
+    "entityId": "P001",
+    "before": null,
+    "after": {
+      "action": "AI_EXTRACTION_CREATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL002",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "SOURCE_VERIFIED",
+    "entityType": "patient",
+    "entityId": "P002",
+    "before": null,
+    "after": {
+      "action": "SOURCE_VERIFIED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL003",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "NURSE_APPROVED",
+    "entityType": "patient",
+    "entityId": "P003",
+    "before": null,
+    "after": {
+      "action": "NURSE_APPROVED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL004",
+    "actorId": "P004",
+    "actorRole": "patient",
+    "action": "TASK_COMPLETED",
+    "entityType": "task",
+    "entityId": "T004",
+    "before": null,
+    "after": {
+      "status": "completed"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL005",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "ESCALATION_CREATED",
+    "entityType": "escalation",
+    "entityId": "P005",
+    "before": null,
+    "after": {
+      "action": "ESCALATION_CREATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL006",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "NURSE_EDITED",
+    "entityType": "patient",
+    "entityId": "P006",
+    "before": {
+      "status": "pending"
+    },
+    "after": {
+      "action": "NURSE_EDITED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL007",
+    "actorId": "P007",
+    "actorRole": "patient",
+    "action": "TEACH_BACK_RECORDED",
+    "entityType": "patient",
+    "entityId": "P007",
+    "before": null,
+    "after": {
+      "action": "TEACH_BACK_RECORDED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL008",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "BRIEF_GENERATED",
+    "entityType": "patient",
+    "entityId": "P008",
+    "before": null,
+    "after": {
+      "action": "BRIEF_GENERATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL009",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "AI_EXTRACTION_CREATED",
+    "entityType": "patient",
+    "entityId": "P001",
+    "before": null,
+    "after": {
+      "action": "AI_EXTRACTION_CREATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL010",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "SOURCE_VERIFIED",
+    "entityType": "patient",
+    "entityId": "P002",
+    "before": null,
+    "after": {
+      "action": "SOURCE_VERIFIED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL011",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "NURSE_APPROVED",
+    "entityType": "patient",
+    "entityId": "P003",
+    "before": null,
+    "after": {
+      "action": "NURSE_APPROVED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL012",
+    "actorId": "P004",
+    "actorRole": "patient",
+    "action": "TASK_COMPLETED",
+    "entityType": "task",
+    "entityId": "T012",
+    "before": null,
+    "after": {
+      "status": "completed"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL013",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "ESCALATION_CREATED",
+    "entityType": "escalation",
+    "entityId": "P005",
+    "before": null,
+    "after": {
+      "action": "ESCALATION_CREATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL014",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "NURSE_EDITED",
+    "entityType": "patient",
+    "entityId": "P006",
+    "before": {
+      "status": "pending"
+    },
+    "after": {
+      "action": "NURSE_EDITED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL015",
+    "actorId": "P007",
+    "actorRole": "patient",
+    "action": "TEACH_BACK_RECORDED",
+    "entityType": "patient",
+    "entityId": "P007",
+    "before": null,
+    "after": {
+      "action": "TEACH_BACK_RECORDED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL016",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "BRIEF_GENERATED",
+    "entityType": "patient",
+    "entityId": "P008",
+    "before": null,
+    "after": {
+      "action": "BRIEF_GENERATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL017",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "AI_EXTRACTION_CREATED",
+    "entityType": "patient",
+    "entityId": "P001",
+    "before": null,
+    "after": {
+      "action": "AI_EXTRACTION_CREATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL018",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "SOURCE_VERIFIED",
+    "entityType": "patient",
+    "entityId": "P002",
+    "before": null,
+    "after": {
+      "action": "SOURCE_VERIFIED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL019",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "NURSE_APPROVED",
+    "entityType": "patient",
+    "entityId": "P003",
+    "before": null,
+    "after": {
+      "action": "NURSE_APPROVED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL020",
+    "actorId": "P004",
+    "actorRole": "patient",
+    "action": "TASK_COMPLETED",
+    "entityType": "task",
+    "entityId": "T020",
+    "before": null,
+    "after": {
+      "status": "completed"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL021",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "ESCALATION_CREATED",
+    "entityType": "escalation",
+    "entityId": "P005",
+    "before": null,
+    "after": {
+      "action": "ESCALATION_CREATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL022",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "NURSE_EDITED",
+    "entityType": "patient",
+    "entityId": "P006",
+    "before": {
+      "status": "pending"
+    },
+    "after": {
+      "action": "NURSE_EDITED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL023",
+    "actorId": "P007",
+    "actorRole": "patient",
+    "action": "TEACH_BACK_RECORDED",
+    "entityType": "patient",
+    "entityId": "P007",
+    "before": null,
+    "after": {
+      "action": "TEACH_BACK_RECORDED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL024",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "BRIEF_GENERATED",
+    "entityType": "patient",
+    "entityId": "P008",
+    "before": null,
+    "after": {
+      "action": "BRIEF_GENERATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL025",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "AI_EXTRACTION_CREATED",
+    "entityType": "patient",
+    "entityId": "P001",
+    "before": null,
+    "after": {
+      "action": "AI_EXTRACTION_CREATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL026",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "SOURCE_VERIFIED",
+    "entityType": "patient",
+    "entityId": "P002",
+    "before": null,
+    "after": {
+      "action": "SOURCE_VERIFIED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL027",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "NURSE_APPROVED",
+    "entityType": "patient",
+    "entityId": "P003",
+    "before": null,
+    "after": {
+      "action": "NURSE_APPROVED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL028",
+    "actorId": "P004",
+    "actorRole": "patient",
+    "action": "TASK_COMPLETED",
+    "entityType": "task",
+    "entityId": "T028",
+    "before": null,
+    "after": {
+      "status": "completed"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL029",
+    "actorId": "N001",
+    "actorRole": "nurse",
+    "action": "ESCALATION_CREATED",
+    "entityType": "escalation",
+    "entityId": "P005",
+    "before": null,
+    "after": {
+      "action": "ESCALATION_CREATED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  },
+  {
+    "_id": "AL030",
+    "actorId": "N002",
+    "actorRole": "nurse",
+    "action": "NURSE_EDITED",
+    "entityType": "patient",
+    "entityId": "P006",
+    "before": {
+      "status": "pending"
+    },
+    "after": {
+      "action": "NURSE_EDITED"
+    },
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "reason": "Synthetic demo audit event"
+  }
+]

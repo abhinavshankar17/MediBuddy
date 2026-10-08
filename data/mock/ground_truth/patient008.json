@@ -1,0 +1,41 @@
+{
+  "patientId": "P008",
+  "documentId": "D008",
+  "expectedItems": [
+    {
+      "type": "medication",
+      "name": "Paracetamol",
+      "dose": "500 mg",
+      "frequency": "twice daily",
+      "foodRelation": "after meals",
+      "duration": "5 days",
+      "sourceSentence": "Take Paracetamol 500 mg twice daily after meals for 5 days."
+    },
+    {
+      "type": "activity",
+      "name": "Knee brace and crutches",
+      "sourceSentence": "Use the knee brace and crutches as instructed."
+    },
+    {
+      "type": "restriction",
+      "name": "Driving",
+      "status": "do not drive until cleared",
+      "sourceSentence": "Do not drive until cleared."
+    },
+    {
+      "type": "exercise",
+      "name": "Physiotherapy exercises",
+      "frequency": "twice daily",
+      "sourceSentence": "Complete the prescribed physiotherapy exercises twice daily."
+    },
+    {
+      "type": "follow_up",
+      "name": "Orthopedic review",
+      "timing": "after 1 week",
+      "sourceSentence": "Follow-up: Orthopedic review after 1 week."
+    }
+  ],
+  "expectedEscalations": [
+    "medication_question"
+  ]
+}

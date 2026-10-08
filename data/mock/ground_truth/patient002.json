@@ -1,0 +1,43 @@
+{
+  "patientId": "P002",
+  "documentId": "D002",
+  "expectedItems": [
+    {
+      "type": "medication",
+      "name": "Aspirin",
+      "dose": "75 mg",
+      "frequency": "once daily",
+      "foodRelation": "after breakfast",
+      "sourceSentence": "Take Aspirin 75 mg once daily after breakfast."
+    },
+    {
+      "type": "medication",
+      "name": "Atorvastatin",
+      "dose": "40 mg",
+      "frequency": "once daily",
+      "foodRelation": "bedtime",
+      "sourceSentence": "Take Atorvastatin 40 mg once daily at bedtime."
+    },
+    {
+      "type": "restriction",
+      "name": "Heavy lifting",
+      "status": "avoid",
+      "sourceSentence": "Avoid heavy lifting."
+    },
+    {
+      "type": "activity",
+      "name": "Walking",
+      "frequency": "twice daily",
+      "sourceSentence": "Walk for 10 minutes twice daily and increase gradually as tolerated."
+    },
+    {
+      "type": "follow_up",
+      "name": "Cardiology review",
+      "timing": "after 7 days",
+      "sourceSentence": "Cardiology review after 7 days."
+    }
+  ],
+  "expectedEscalations": [
+    "missing_information"
+  ]
+}

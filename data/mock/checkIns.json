@@ -1,0 +1,126 @@
+[
+  {
+    "_id": "CI001",
+    "patientId": "P001",
+    "date": "2026-10-02",
+    "painLevel": 3,
+    "energyLevel": 7,
+    "mobilityLevel": 4,
+    "symptoms": [],
+    "medicationAdherence": "good",
+    "appetite": "normal",
+    "sleepQuality": "good",
+    "freeText": "Synthetic demonstration check-in.",
+    "escalationTriggered": false
+  },
+  {
+    "_id": "CI002",
+    "patientId": "P002",
+    "date": "2026-10-03",
+    "painLevel": 4,
+    "energyLevel": 6,
+    "mobilityLevel": 4,
+    "symptoms": [
+      "mild fatigue"
+    ],
+    "medicationAdherence": "good",
+    "appetite": "normal",
+    "sleepQuality": "good",
+    "freeText": "Synthetic demonstration check-in.",
+    "escalationTriggered": false
+  },
+  {
+    "_id": "CI003",
+    "patientId": "P003",
+    "date": "2026-10-04",
+    "painLevel": 7,
+    "energyLevel": 3,
+    "mobilityLevel": 3,
+    "symptoms": [
+      "increased swelling"
+    ],
+    "medicationAdherence": "missed",
+    "appetite": "normal",
+    "sleepQuality": "poor",
+    "freeText": "Synthetic demonstration check-in.",
+    "escalationTriggered": true
+  },
+  {
+    "_id": "CI004",
+    "patientId": "P004",
+    "date": "2026-10-05",
+    "painLevel": 5,
+    "energyLevel": 5,
+    "mobilityLevel": 2,
+    "symptoms": [
+      "ankle stiffness"
+    ],
+    "medicationAdherence": "good",
+    "appetite": "normal",
+    "sleepQuality": "fair",
+    "freeText": "Synthetic demonstration check-in.",
+    "escalationTriggered": false
+  },
+  {
+    "_id": "CI005",
+    "patientId": "P005",
+    "date": "2026-10-06",
+    "painLevel": 6,
+    "energyLevel": 4,
+    "mobilityLevel": 4,
+    "symptoms": [
+      "dizziness"
+    ],
+    "medicationAdherence": "missed",
+    "appetite": "normal",
+    "sleepQuality": "poor",
+    "freeText": "Synthetic demonstration check-in.",
+    "escalationTriggered": true
+  },
+  {
+    "_id": "CI006",
+    "patientId": "P006",
+    "date": "2026-10-07",
+    "painLevel": 2,
+    "energyLevel": 8,
+    "mobilityLevel": 4,
+    "symptoms": [],
+    "medicationAdherence": "good",
+    "appetite": "normal",
+    "sleepQuality": "good",
+    "freeText": "Synthetic demonstration check-in.",
+    "escalationTriggered": false
+  },
+  {
+    "_id": "CI007",
+    "patientId": "P007",
+    "date": "2026-10-08",
+    "painLevel": 4,
+    "energyLevel": 6,
+    "mobilityLevel": 4,
+    "symptoms": [
+      "mild nausea"
+    ],
+    "medicationAdherence": "good",
+    "appetite": "normal",
+    "sleepQuality": "fair",
+    "freeText": "Synthetic demonstration check-in.",
+    "escalationTriggered": false
+  },
+  {
+    "_id": "CI008",
+    "patientId": "P008",
+    "date": "2026-10-09",
+    "painLevel": 5,
+    "energyLevel": 5,
+    "mobilityLevel": 2,
+    "symptoms": [
+      "knee discomfort"
+    ],
+    "medicationAdherence": "partial",
+    "appetite": "normal",
+    "sleepQuality": "fair",
+    "freeText": "Synthetic demonstration check-in.",
+    "escalationTriggered": true
+  }
+]

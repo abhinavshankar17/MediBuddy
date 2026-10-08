@@ -1,0 +1,298 @@
+[
+  {
+    "_id": "AT001",
+    "patientId": "P001",
+    "documentId": "D001",
+    "steps": [
+      {
+        "name": "Document Parsing",
+        "status": "completed"
+      },
+      {
+        "name": "AI Extraction",
+        "status": "completed"
+      },
+      {
+        "name": "Zod Validation",
+        "status": "completed"
+      },
+      {
+        "name": "Source Verification",
+        "status": "completed"
+      },
+      {
+        "name": "Guardrail Check",
+        "status": "completed"
+      },
+      {
+        "name": "Schedule Generation",
+        "status": "completed"
+      },
+      {
+        "name": "Simplification / Translation",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-10-08T09:00:00+05:30",
+    "completedAt": "2026-10-08T09:01:20+05:30"
+  },
+  {
+    "_id": "AT002",
+    "patientId": "P002",
+    "documentId": "D002",
+    "steps": [
+      {
+        "name": "Document Parsing",
+        "status": "completed"
+      },
+      {
+        "name": "AI Extraction",
+        "status": "completed"
+      },
+      {
+        "name": "Zod Validation",
+        "status": "completed"
+      },
+      {
+        "name": "Source Verification",
+        "status": "warning"
+      },
+      {
+        "name": "Guardrail Check",
+        "status": "warning"
+      },
+      {
+        "name": "Schedule Generation",
+        "status": "completed"
+      },
+      {
+        "name": "Simplification / Translation",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-10-08T09:00:00+05:30",
+    "completedAt": "2026-10-08T09:01:20+05:30"
+  },
+  {
+    "_id": "AT003",
+    "patientId": "P003",
+    "documentId": "D003",
+    "steps": [
+      {
+        "name": "Document Parsing",
+        "status": "completed"
+      },
+      {
+        "name": "AI Extraction",
+        "status": "completed"
+      },
+      {
+        "name": "Zod Validation",
+        "status": "completed"
+      },
+      {
+        "name": "Source Verification",
+        "status": "completed"
+      },
+      {
+        "name": "Guardrail Check",
+        "status": "completed"
+      },
+      {
+        "name": "Schedule Generation",
+        "status": "completed"
+      },
+      {
+        "name": "Simplification / Translation",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-10-08T09:00:00+05:30",
+    "completedAt": "2026-10-08T09:01:20+05:30"
+  },
+  {
+    "_id": "AT004",
+    "patientId": "P004",
+    "documentId": "D004",
+    "steps": [
+      {
+        "name": "Document Parsing",
+        "status": "completed"
+      },
+      {
+        "name": "AI Extraction",
+        "status": "completed"
+      },
+      {
+        "name": "Zod Validation",
+        "status": "completed"
+      },
+      {
+        "name": "Source Verification",
+        "status": "completed"
+      },
+      {
+        "name": "Guardrail Check",
+        "status": "completed"
+      },
+      {
+        "name": "Schedule Generation",
+        "status": "completed"
+      },
+      {
+        "name": "Simplification / Translation",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-10-08T09:00:00+05:30",
+    "completedAt": "2026-10-08T09:01:20+05:30"
+  },
+  {
+    "_id": "AT005",
+    "patientId": "P005",
+    "documentId": "D005",
+    "steps": [
+      {
+        "name": "Document Parsing",
+        "status": "completed"
+      },
+      {
+        "name": "AI Extraction",
+        "status": "completed"
+      },
+      {
+        "name": "Zod Validation",
+        "status": "completed"
+      },
+      {
+        "name": "Source Verification",
+        "status": "completed"
+      },
+      {
+        "name": "Guardrail Check",
+        "status": "warning"
+      },
+      {
+        "name": "Schedule Generation",
+        "status": "completed"
+      },
+      {
+        "name": "Simplification / Translation",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-10-08T09:00:00+05:30",
+    "completedAt": "2026-10-08T09:01:20+05:30"
+  },
+  {
+    "_id": "AT006",
+    "patientId": "P006",
+    "documentId": "D006",
+    "steps": [
+      {
+        "name": "Document Parsing",
+        "status": "completed"
+      },
+      {
+        "name": "AI Extraction",
+        "status": "completed"
+      },
+      {
+        "name": "Zod Validation",
+        "status": "completed"
+      },
+      {
+        "name": "Source Verification",
+        "status": "completed"
+      },
+      {
+        "name": "Guardrail Check",
+        "status": "completed"
+      },
+      {
+        "name": "Schedule Generation",
+        "status": "completed"
+      },
+      {
+        "name": "Simplification / Translation",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-10-08T09:00:00+05:30",
+    "completedAt": "2026-10-08T09:01:20+05:30"
+  },
+  {
+    "_id": "AT007",
+    "patientId": "P007",
+    "documentId": "D007",
+    "steps": [
+      {
+        "name": "Document Parsing",
+        "status": "completed"
+      },
+      {
+        "name": "AI Extraction",
+        "status": "completed"
+      },
+      {
+        "name": "Zod Validation",
+        "status": "completed"
+      },
+      {
+        "name": "Source Verification",
+        "status": "completed"
+      },
+      {
+        "name": "Guardrail Check",
+        "status": "completed"
+      },
+      {
+        "name": "Schedule Generation",
+        "status": "completed"
+      },
+      {
+        "name": "Simplification / Translation",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-10-08T09:00:00+05:30",
+    "completedAt": "2026-10-08T09:01:20+05:30"
+  },
+  {
+    "_id": "AT008",
+    "patientId": "P008",
+    "documentId": "D008",
+    "steps": [
+      {
+        "name": "Document Parsing",
+        "status": "completed"
+      },
+      {
+        "name": "AI Extraction",
+        "status": "completed"
+      },
+      {
+        "name": "Zod Validation",
+        "status": "completed"
+      },
+      {
+        "name": "Source Verification",
+        "status": "completed"
+      },
+      {
+        "name": "Guardrail Check",
+        "status": "completed"
+      },
+      {
+        "name": "Schedule Generation",
+        "status": "completed"
+      },
+      {
+        "name": "Simplification / Translation",
+        "status": "completed"
+      }
+    ],
+    "startedAt": "2026-10-08T09:00:00+05:30",
+    "completedAt": "2026-10-08T09:01:20+05:30"
+  }
+]

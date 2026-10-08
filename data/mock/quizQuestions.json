@@ -1,0 +1,409 @@
+[
+  {
+    "_id": "QQ001",
+    "quizSessionId": "QS001",
+    "question": "When should you take Paracetamol?",
+    "options": ["Before breakfast", "After meals", "At bedtime", "Only when in pain"],
+    "correctAnswer": "After meals",
+    "sourceItemId": "EI001",
+    "sourceSentence": "Take Paracetamol 500 mg twice daily after meals for 5 days.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ002",
+    "quizSessionId": "QS001",
+    "question": "When should you take Omeprazole?",
+    "options": ["After lunch", "Before breakfast", "At bedtime", "After dinner"],
+    "correctAnswer": "Before breakfast",
+    "sourceItemId": "EI002",
+    "sourceSentence": "Take Omeprazole 20 mg once daily before breakfast for 5 days.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ003",
+    "quizSessionId": "QS001",
+    "question": "How many times a day should you perform knee exercises?",
+    "options": ["Once daily", "Twice daily", "Three times daily", "Only when you feel like it"],
+    "correctAnswer": "Twice daily",
+    "sourceItemId": "EI004",
+    "sourceSentence": "Perform the prescribed knee exercises twice daily.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ004",
+    "quizSessionId": "QS001",
+    "question": "What assistance should you use while walking?",
+    "options": ["No assistance needed", "A walker", "A wheelchair", "A cane"],
+    "correctAnswer": "A walker",
+    "sourceItemId": "EI003",
+    "sourceSentence": "Walk with the assistance of a walker.",
+    "difficulty": "medium"
+  },
+  {
+    "_id": "QQ005",
+    "quizSessionId": "QS001",
+    "question": "When should you visit the orthopedic clinic?",
+    "options": ["After 3 days", "After 1 week", "After 2 weeks", "After 1 month"],
+    "correctAnswer": "After 1 week",
+    "sourceItemId": "EI005",
+    "sourceSentence": "Visit the orthopedic clinic after 1 week.",
+    "difficulty": "easy"
+  },
+
+  {
+    "_id": "QQ006",
+    "quizSessionId": "QS002",
+    "question": "When should you take Aspirin?",
+    "options": ["Before breakfast", "After breakfast", "At bedtime", "Before lunch"],
+    "correctAnswer": "After breakfast",
+    "sourceItemId": "EI006",
+    "sourceSentence": "Take Aspirin 75 mg once daily after breakfast.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ007",
+    "quizSessionId": "QS002",
+    "question": "When should you take Atorvastatin?",
+    "options": ["After breakfast", "Before lunch", "At bedtime", "After dinner"],
+    "correctAnswer": "At bedtime",
+    "sourceItemId": "EI007",
+    "sourceSentence": "Take Atorvastatin 40 mg once daily at bedtime.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ008",
+    "quizSessionId": "QS002",
+    "question": "Which activity should you avoid?",
+    "options": ["Walking", "Heavy lifting", "Reading", "Light cooking"],
+    "correctAnswer": "Heavy lifting",
+    "sourceItemId": "EI008",
+    "sourceSentence": "Avoid heavy lifting.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ009",
+    "quizSessionId": "QS002",
+    "question": "How many times a day should you walk?",
+    "options": ["Once daily", "Twice daily", "Three times daily", "Only on weekends"],
+    "correctAnswer": "Twice daily",
+    "sourceItemId": "EI009",
+    "sourceSentence": "Walk for 10 minutes twice daily and increase gradually as tolerated.",
+    "difficulty": "medium"
+  },
+  {
+    "_id": "QQ010",
+    "quizSessionId": "QS002",
+    "question": "When should you attend the cardiology review?",
+    "options": ["After 3 days", "After 5 days", "After 7 days", "After 14 days"],
+    "correctAnswer": "After 7 days",
+    "sourceItemId": "EI010",
+    "sourceSentence": "Cardiology review after 7 days.",
+    "difficulty": "easy"
+  },
+
+  {
+    "_id": "QQ011",
+    "quizSessionId": "QS003",
+    "question": "How many times a day should you take Amoxicillin?",
+    "options": ["Once daily", "Twice daily", "Three times daily", "Four times daily"],
+    "correctAnswer": "Three times daily",
+    "sourceItemId": "EI011",
+    "sourceSentence": "Take Amoxicillin 500 mg three times daily after meals for 7 days.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ012",
+    "quizSessionId": "QS003",
+    "question": "When should you take Amoxicillin in relation to food?",
+    "options": ["Before meals", "After meals", "On an empty stomach", "At bedtime"],
+    "correctAnswer": "After meals",
+    "sourceItemId": "EI011",
+    "sourceSentence": "Take Amoxicillin 500 mg three times daily after meals for 7 days.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ013",
+    "quizSessionId": "QS003",
+    "question": "How long should you continue taking Amoxicillin?",
+    "options": ["3 days", "5 days", "7 days", "14 days"],
+    "correctAnswer": "7 days",
+    "sourceItemId": "EI011",
+    "sourceSentence": "Take Amoxicillin 500 mg three times daily after meals for 7 days.",
+    "difficulty": "medium"
+  },
+  {
+    "_id": "QQ014",
+    "quizSessionId": "QS003",
+    "question": "Which symptom requires contacting the hospital?",
+    "options": ["Mild headache", "Worsening breathlessness", "Feeling hungry", "Mild cough"],
+    "correctAnswer": "Worsening breathlessness",
+    "sourceItemId": "EI015",
+    "sourceSentence": "Contact the hospital for worsening breathlessness, persistent high fever, confusion, or blue lips.",
+    "difficulty": "medium"
+  },
+  {
+    "_id": "QQ015",
+    "quizSessionId": "QS003",
+    "question": "When should you see the physician for a review?",
+    "options": ["After 1 day", "After 3 days", "After 1 week", "After 2 weeks"],
+    "correctAnswer": "After 3 days",
+    "sourceItemId": "EI014",
+    "sourceSentence": "Review with the physician after 3 days.",
+    "difficulty": "easy"
+  },
+
+  {
+    "_id": "QQ016",
+    "quizSessionId": "QS004",
+    "question": "What should you use to assist movement and protect your ankle?",
+    "options": ["A walker", "Crutches", "A wheelchair", "Nothing"],
+    "correctAnswer": "Crutches",
+    "sourceItemId": "EI017",
+    "sourceSentence": "Use crutches and do not put full weight on the injured ankle until reviewed.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ017",
+    "quizSessionId": "QS004",
+    "question": "How many times a day should you perform ankle and toe exercises?",
+    "options": ["Once daily", "Twice daily", "Three times daily", "Once a week"],
+    "correctAnswer": "Twice daily",
+    "sourceItemId": "EI018",
+    "sourceSentence": "Perform the ankle and toe exercises twice daily as demonstrated by physiotherapy.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ018",
+    "quizSessionId": "QS004",
+    "question": "When should you attend the orthopedic review?",
+    "options": ["After 1 week", "After 2 weeks", "After 3 weeks", "After 1 month"],
+    "correctAnswer": "After 2 weeks",
+    "sourceItemId": "EI019",
+    "sourceSentence": "Follow-up: Orthopedic review after 2 weeks.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ019",
+    "quizSessionId": "QS004",
+    "question": "Which symptom requires seeking help immediately?",
+    "options": ["Mild bruising", "Severe swelling", "Slight stiffness", "Muscle soreness"],
+    "correctAnswer": "Severe swelling",
+    "sourceItemId": "EI020",
+    "sourceSentence": "Seek help for severe swelling, numbness, blue discoloration, or uncontrolled pain.",
+    "difficulty": "medium"
+  },
+  {
+    "_id": "QQ020",
+    "quizSessionId": "QS004",
+    "question": "Should you put full weight on the injured ankle before being reviewed?",
+    "options": ["Yes, if it feels fine", "No, not until reviewed", "Only while exercising", "Yes, after 3 days"],
+    "correctAnswer": "No, not until reviewed",
+    "sourceItemId": "EI017",
+    "sourceSentence": "Use crutches and do not put full weight on the injured ankle until reviewed.",
+    "difficulty": "medium"
+  },
+
+  {
+    "_id": "QQ021",
+    "quizSessionId": "QS005",
+    "question": "When should you take Metformin?",
+    "options": ["Before meals", "With meals", "At bedtime", "On an empty stomach"],
+    "correctAnswer": "With meals",
+    "sourceItemId": "EI042",
+    "sourceSentence": "Take Metformin 500 mg twice daily with meals.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ022",
+    "quizSessionId": "QS005",
+    "question": "How many times a day should you take Metformin?",
+    "options": ["Once daily", "Twice daily", "Three times daily", "Only when needed"],
+    "correctAnswer": "Twice daily",
+    "sourceItemId": "EI042",
+    "sourceSentence": "Take Metformin 500 mg twice daily with meals.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ023",
+    "quizSessionId": "QS005",
+    "question": "What dietary plan should you follow?",
+    "options": ["High-protein diet", "Diabetic meal plan", "Low-fat diet", "Regular diet"],
+    "correctAnswer": "Diabetic meal plan",
+    "sourceItemId": "EI022",
+    "sourceSentence": "Follow the diabetic meal plan and avoid skipping meals.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ024",
+    "quizSessionId": "QS005",
+    "question": "Can you change the Metformin dose on your own?",
+    "options": ["Yes, if feeling better", "Yes, after 3 days", "No, not without clinician advice", "Yes, halve it at bedtime"],
+    "correctAnswer": "No, not without clinician advice",
+    "sourceItemId": "EI025",
+    "sourceSentence": "The dose is not to be changed without clinician advice.",
+    "difficulty": "medium"
+  },
+  {
+    "_id": "QQ025",
+    "quizSessionId": "QS005",
+    "question": "When is your diabetes clinic follow-up?",
+    "options": ["After 3 days", "After 1 week", "After 2 weeks", "After 1 month"],
+    "correctAnswer": "After 1 week",
+    "sourceItemId": "EI024",
+    "sourceSentence": "Diabetes clinic after 1 week.",
+    "difficulty": "easy"
+  },
+
+  {
+    "_id": "QQ026",
+    "quizSessionId": "QS006",
+    "question": "When should you take Paracetamol?",
+    "options": ["Before food", "After food", "On an empty stomach", "At bedtime only"],
+    "correctAnswer": "After food",
+    "sourceItemId": "EI026",
+    "sourceSentence": "Take Paracetamol 500 mg twice daily after food for 3 days.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ027",
+    "quizSessionId": "QS006",
+    "question": "How should you care for the incision?",
+    "options": ["Soak it in warm water", "Keep it clean and dry", "Apply cream daily", "Leave it uncovered"],
+    "correctAnswer": "Keep it clean and dry",
+    "sourceItemId": "EI027",
+    "sourceSentence": "Keep the incision clean and dry. Do not soak the wound.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ028",
+    "quizSessionId": "QS006",
+    "question": "How long should you avoid strenuous exercise?",
+    "options": ["1 week", "2 weeks", "3 weeks", "1 month"],
+    "correctAnswer": "2 weeks",
+    "sourceItemId": "EI028",
+    "sourceSentence": "Avoid strenuous exercise for 2 weeks.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ029",
+    "quizSessionId": "QS006",
+    "question": "When should you attend the surgical review?",
+    "options": ["After 3 days", "After 1 week", "After 2 weeks", "After 1 month"],
+    "correctAnswer": "After 1 week",
+    "sourceItemId": "EI029",
+    "sourceSentence": "Follow-up: Surgical review after 1 week.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ030",
+    "quizSessionId": "QS006",
+    "question": "Which symptom requires contacting the hospital?",
+    "options": ["Mild soreness", "Fever", "Slight bruising", "Feeling tired"],
+    "correctAnswer": "Fever",
+    "sourceItemId": "EI030",
+    "sourceSentence": "Contact the hospital for fever, increasing abdominal pain, persistent vomiting, or wound discharge.",
+    "difficulty": "medium"
+  },
+
+  {
+    "_id": "QQ031",
+    "quizSessionId": "QS007",
+    "question": "When should you take the prescribed pain medicine?",
+    "options": ["Before meals", "After meals", "On an empty stomach", "Only at night"],
+    "correctAnswer": "After meals",
+    "sourceItemId": "EI031",
+    "sourceSentence": "Take the prescribed pain medicine after meals as directed.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ032",
+    "quizSessionId": "QS007",
+    "question": "What type of diet should you follow in the first week?",
+    "options": ["Regular diet", "Low-fat diet", "High-protein diet", "Liquid diet"],
+    "correctAnswer": "Low-fat diet",
+    "sourceItemId": "EI032",
+    "sourceSentence": "Follow a low-fat diet for the first week and eat smaller meals.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ033",
+    "quizSessionId": "QS007",
+    "question": "How often should you walk?",
+    "options": ["Only on weekends", "Every other day", "Every day", "Once a week"],
+    "correctAnswer": "Every day",
+    "sourceItemId": "EI033",
+    "sourceSentence": "Walk gently every day and avoid strenuous activity for 2 weeks.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ034",
+    "quizSessionId": "QS007",
+    "question": "When should you attend the surgical clinic?",
+    "options": ["After 3 days", "After 1 week", "After 2 weeks", "After 1 month"],
+    "correctAnswer": "After 1 week",
+    "sourceItemId": "EI034",
+    "sourceSentence": "Surgical clinic after 1 week.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ035",
+    "quizSessionId": "QS007",
+    "question": "Which symptom requires contacting the hospital?",
+    "options": ["Mild fatigue", "Worsening abdominal pain", "Slight nausea", "Feeling full after eating"],
+    "correctAnswer": "Worsening abdominal pain",
+    "sourceItemId": "EI035",
+    "sourceSentence": "Contact the hospital for fever, worsening abdominal pain, yellowing of the eyes, or persistent vomiting.",
+    "difficulty": "medium"
+  },
+
+  {
+    "_id": "QQ036",
+    "quizSessionId": "QS008",
+    "question": "When should you take Paracetamol?",
+    "options": ["Before meals", "After meals", "On an empty stomach", "Only at night"],
+    "correctAnswer": "After meals",
+    "sourceItemId": "EI036",
+    "sourceSentence": "Take Paracetamol 500 mg twice daily after meals for 5 days.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ037",
+    "quizSessionId": "QS008",
+    "question": "Are you allowed to drive during recovery?",
+    "options": ["Yes, anytime", "No, not until cleared", "Only short distances", "Yes, after 3 days"],
+    "correctAnswer": "No, not until cleared",
+    "sourceItemId": "EI038",
+    "sourceSentence": "Do not drive until cleared.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ038",
+    "quizSessionId": "QS008",
+    "question": "How many times a day should you do physiotherapy exercises?",
+    "options": ["Once daily", "Twice daily", "Three times daily", "Only when needed"],
+    "correctAnswer": "Twice daily",
+    "sourceItemId": "EI039",
+    "sourceSentence": "Complete the prescribed physiotherapy exercises twice daily.",
+    "difficulty": "easy"
+  },
+  {
+    "_id": "QQ039",
+    "quizSessionId": "QS008",
+    "question": "What mobility aids should you use?",
+    "options": ["Walking stick", "Knee brace and crutches", "Wheelchair", "No aids needed"],
+    "correctAnswer": "Knee brace and crutches",
+    "sourceItemId": "EI037",
+    "sourceSentence": "Use the knee brace and crutches as instructed.",
+    "difficulty": "medium"
+  },
+  {
+    "_id": "QQ040",
+    "quizSessionId": "QS008",
+    "question": "When should you attend the orthopedic review?",
+    "options": ["After 3 days", "After 1 week", "After 2 weeks", "After 1 month"],
+    "correctAnswer": "After 1 week",
+    "sourceItemId": "EI040",
+    "sourceSentence": "Follow-up: Orthopedic review after 1 week.",
+    "difficulty": "easy"
+  }
+]

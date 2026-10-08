@@ -1,0 +1,267 @@
+[
+  {
+    "_id": "DC001",
+    "patientId": "P001",
+    "date": "2026-10-05",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC002",
+    "patientId": "P001",
+    "date": "2026-10-06",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC003",
+    "patientId": "P001",
+    "date": "2026-10-07",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC004",
+    "patientId": "P002",
+    "date": "2026-09-29",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC005",
+    "patientId": "P002",
+    "date": "2026-09-30",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC006",
+    "patientId": "P002",
+    "date": "2026-10-01",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC007",
+    "patientId": "P003",
+    "date": "2026-10-07",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC008",
+    "patientId": "P003",
+    "date": "2026-10-08",
+    "color": "RED",
+    "score": 35,
+    "reasons": [
+      "Warning-sign check-in",
+      "Missed medication"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC009",
+    "patientId": "P003",
+    "date": "2026-10-09",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC010",
+    "patientId": "P004",
+    "date": "2026-09-20",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC011",
+    "patientId": "P004",
+    "date": "2026-09-21",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC012",
+    "patientId": "P004",
+    "date": "2026-09-22",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC013",
+    "patientId": "P005",
+    "date": "2026-10-06",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC014",
+    "patientId": "P005",
+    "date": "2026-10-07",
+    "color": "YELLOW",
+    "score": 58,
+    "reasons": [
+      "Missed medication"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC015",
+    "patientId": "P005",
+    "date": "2026-10-08",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC016",
+    "patientId": "P006",
+    "date": "2026-10-06",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC017",
+    "patientId": "P006",
+    "date": "2026-10-07",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC018",
+    "patientId": "P006",
+    "date": "2026-10-08",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC019",
+    "patientId": "P007",
+    "date": "2026-10-05",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC020",
+    "patientId": "P007",
+    "date": "2026-10-06",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC021",
+    "patientId": "P007",
+    "date": "2026-10-07",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC022",
+    "patientId": "P008",
+    "date": "2026-10-01",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC023",
+    "patientId": "P008",
+    "date": "2026-10-02",
+    "color": "GREEN",
+    "score": 85,
+    "reasons": [
+      "Tasks on track"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  },
+  {
+    "_id": "DC024",
+    "patientId": "P008",
+    "date": "2026-10-03",
+    "color": "YELLOW",
+    "score": 62,
+    "reasons": [
+      "Teach-back needs reinforcement"
+    ],
+    "sourceSentence": "Synthetic day status derived from task and check-in events."
+  }
+]

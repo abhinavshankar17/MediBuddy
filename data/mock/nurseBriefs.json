@@ -1,0 +1,370 @@
+[
+  {
+    "_id": "NB001",
+    "patientId": "P003",
+    "priority": "HIGH",
+    "summary": "Patient reported increased breathlessness and has a low-energy check-in. Review warning signs and contact patient promptly.",
+    "flags": [
+      "warning sign",
+      "high pain",
+      "possible escalation"
+    ],
+    "questions": [
+      "Confirm current breathing status.",
+      "Confirm whether prescribed medication was taken."
+    ],
+    "recommendedAction": "Nurse call within priority queue.",
+    "evidenceEventIds": [
+      "E003",
+      "E011"
+    ]
+  },
+  {
+    "_id": "NB002",
+    "patientId": "P005",
+    "priority": "HIGH",
+    "summary": "Patient missed medication and reported low energy. Dose should not be changed without clinician advice.",
+    "flags": [
+      "missed medication",
+      "diabetes follow-up"
+    ],
+    "questions": [
+      "Confirm reason for missed dose.",
+      "Review glucose log if available."
+    ],
+    "recommendedAction": "Nurse review.",
+    "evidenceEventIds": [
+      "E005",
+      "E013"
+    ]
+  },
+  {
+    "_id": "NB003",
+    "patientId": "P002",
+    "priority": "MEDIUM",
+    "summary": "Extraction identified an instruction with missing medication dose. The item requires verification before scheduling.",
+    "flags": [
+      "low confidence",
+      "missing dose"
+    ],
+    "questions": [
+      "Verify medication name and prescribed dose."
+    ],
+    "recommendedAction": "Review extraction.",
+    "evidenceEventIds": [
+      "E002"
+    ]
+  },
+  {
+    "_id": "NB004",
+    "patientId": "P001",
+    "priority": "MEDIUM",
+    "summary": "Recovery tasks are mostly on track, but one task is overdue and follow-up is approaching.",
+    "flags": [
+      "overdue task",
+      "follow-up"
+    ],
+    "questions": [
+      "Confirm whether overdue activity was completed."
+    ],
+    "recommendedAction": "Routine nurse follow-up.",
+    "evidenceEventIds": [
+      "E001",
+      "E009"
+    ]
+  },
+  {
+    "_id": "NB005",
+    "patientId": "P008",
+    "priority": "MEDIUM",
+    "summary": "Patient needs reinforcement around rehabilitation instructions and asked a treatment timing question.",
+    "flags": [
+      "patient question",
+      "teach-back"
+    ],
+    "questions": [
+      "Confirm understanding of exercise schedule."
+    ],
+    "recommendedAction": "Respond through nurse escalation workflow.",
+    "evidenceEventIds": [
+      "E008",
+      "E016"
+    ]
+  },
+  {
+    "_id": "NB006",
+    "patientId": "P001",
+    "priority": "MEDIUM",
+    "summary": "Patient confirmed 2 of 3 medications and scored 80% in today's recovery quiz. The patient may need reinforcement of walker-assisted walking instructions. Evening Paracetamol was not confirmed.",
+    "medicationAdherence": {
+      "total": 3,
+      "confirmed": 2,
+      "notConfirmed": 1,
+      "missed": 0
+    },
+    "quizPerformance": {
+      "score": 80,
+      "correct": 4,
+      "total": 5
+    },
+    "flags": [
+      "Medication not confirmed",
+      "Mobility aid knowledge gap"
+    ],
+    "knowledgeGaps": [
+      "Mobility aid usage"
+    ],
+    "questionsForNurse": [
+      "Confirm whether evening Paracetamol was taken.",
+      "Reinforce the importance of using a walker."
+    ],
+    "recommendedFollowUp": "Routine nurse review.",
+    "evidenceEventIds": [
+      "E101",
+      "E105",
+      "E107"
+    ],
+    "aiGenerated": true,
+    "generatedAt": "2026-10-08T13:10:00+05:30"
+  },
+  {
+    "_id": "NB007",
+    "patientId": "P002",
+    "priority": "LOW",
+    "summary": "Patient confirmed all medications and scored 100% in today's recovery quiz. No knowledge gaps identified. Continue routine monitoring.",
+    "medicationAdherence": {
+      "total": 2,
+      "confirmed": 2,
+      "notConfirmed": 0,
+      "missed": 0
+    },
+    "quizPerformance": {
+      "score": 100,
+      "correct": 5,
+      "total": 5
+    },
+    "flags": [],
+    "knowledgeGaps": [],
+    "questionsForNurse": [],
+    "recommendedFollowUp": "No immediate action needed.",
+    "evidenceEventIds": [
+      "E109",
+      "E111"
+    ],
+    "aiGenerated": true,
+    "generatedAt": "2026-10-08T14:10:00+05:30"
+  },
+  {
+    "_id": "NB008",
+    "patientId": "P003",
+    "priority": "HIGH",
+    "summary": "Patient missed the afternoon Amoxicillin dose and scored only 60% on the recovery quiz. The patient could not identify the correct antibiotic duration or recognise warning signs requiring hospital contact. Immediate nurse intervention recommended.",
+    "medicationAdherence": {
+      "total": 3,
+      "confirmed": 2,
+      "notConfirmed": 0,
+      "missed": 1
+    },
+    "quizPerformance": {
+      "score": 60,
+      "correct": 3,
+      "total": 5
+    },
+    "flags": [
+      "Missed medication",
+      "Medication duration knowledge gap",
+      "Warning sign knowledge gap"
+    ],
+    "knowledgeGaps": [
+      "Antibiotic duration",
+      "Warning sign recognition"
+    ],
+    "questionsForNurse": [
+      "Confirm reason for missed afternoon Amoxicillin.",
+      "Educate on the importance of completing the full 7-day course.",
+      "Reinforce warning signs: breathlessness, high fever, confusion, blue lips."
+    ],
+    "recommendedFollowUp": "Priority nurse call.",
+    "evidenceEventIds": [
+      "E114",
+      "E116",
+      "E118"
+    ],
+    "aiGenerated": true,
+    "generatedAt": "2026-10-08T11:12:00+05:30"
+  },
+  {
+    "_id": "NB009",
+    "patientId": "P004",
+    "priority": "MEDIUM",
+    "summary": "Patient confirmed morning Paracetamol but dismissed the evening reminder. Scored 80% on the recovery quiz. The patient incorrectly believes full weight bearing is acceptable. Reinforce weight-bearing restrictions.",
+    "medicationAdherence": {
+      "total": 2,
+      "confirmed": 1,
+      "notConfirmed": 0,
+      "missed": 0,
+      "dismissed": 1
+    },
+    "quizPerformance": {
+      "score": 80,
+      "correct": 4,
+      "total": 5
+    },
+    "flags": [
+      "Medication dismissed",
+      "Weight-bearing knowledge gap"
+    ],
+    "knowledgeGaps": [
+      "Weight-bearing restrictions"
+    ],
+    "questionsForNurse": [
+      "Confirm reason for dismissing evening Paracetamol.",
+      "Reinforce ankle weight-bearing restriction."
+    ],
+    "recommendedFollowUp": "Routine nurse review.",
+    "evidenceEventIds": [
+      "E121",
+      "E123"
+    ],
+    "aiGenerated": true,
+    "generatedAt": "2026-10-08T15:08:00+05:30"
+  },
+  {
+    "_id": "NB010",
+    "patientId": "P005",
+    "priority": "HIGH",
+    "summary": "Patient missed morning Metformin on two consecutive days and scored only 40% on the recovery quiz. The patient does not understand when to take Metformin relative to meals, believes the dose can be changed independently, and was unsure of the follow-up date. Immediate nurse intervention and medication education required.",
+    "medicationAdherence": {
+      "total": 2,
+      "confirmed": 1,
+      "notConfirmed": 0,
+      "missed": 1
+    },
+    "quizPerformance": {
+      "score": 40,
+      "correct": 2,
+      "total": 5
+    },
+    "flags": [
+      "Repeated missed medication",
+      "Low quiz score",
+      "Medication timing knowledge gap",
+      "Dose-change knowledge gap",
+      "Follow-up knowledge gap"
+    ],
+    "knowledgeGaps": [
+      "Medication timing",
+      "Dose-change restrictions",
+      "Follow-up scheduling"
+    ],
+    "questionsForNurse": [
+      "Confirm reason for repeated missed morning Metformin.",
+      "Educate: Metformin must be taken with meals.",
+      "Reinforce: dose must not be changed without clinician advice.",
+      "Remind patient of diabetes clinic in 1 week."
+    ],
+    "recommendedFollowUp": "Urgent nurse call and medication education session.",
+    "evidenceEventIds": [
+      "E125",
+      "E128",
+      "E143"
+    ],
+    "aiGenerated": true,
+    "generatedAt": "2026-10-08T10:12:00+05:30"
+  },
+  {
+    "_id": "NB011",
+    "patientId": "P006",
+    "priority": "MEDIUM",
+    "summary": "Patient confirmed all medications and scored 80% on the recovery quiz. However, the patient incorrectly believes soaking the incision is appropriate wound care. Reinforce wound-care instructions to prevent infection.",
+    "medicationAdherence": {
+      "total": 2,
+      "confirmed": 2,
+      "notConfirmed": 0,
+      "missed": 0
+    },
+    "quizPerformance": {
+      "score": 80,
+      "correct": 4,
+      "total": 5
+    },
+    "flags": [
+      "Wound-care knowledge gap"
+    ],
+    "knowledgeGaps": [
+      "Wound care"
+    ],
+    "questionsForNurse": [
+      "Reinforce wound-care instructions: keep incision clean and dry, do not soak."
+    ],
+    "recommendedFollowUp": "Routine nurse review.",
+    "evidenceEventIds": [
+      "E130",
+      "E132"
+    ],
+    "aiGenerated": true,
+    "generatedAt": "2026-10-08T12:10:00+05:30"
+  },
+  {
+    "_id": "NB012",
+    "patientId": "P007",
+    "priority": "MEDIUM",
+    "summary": "Patient confirmed morning pain medicine but the evening dose was not confirmed. Quiz session was started but not completed. Unable to generate full quiz insight. Follow up to confirm evening medication and encourage quiz completion.",
+    "medicationAdherence": {
+      "total": 2,
+      "confirmed": 1,
+      "notConfirmed": 1,
+      "missed": 0
+    },
+    "quizPerformance": null,
+    "flags": [
+      "Medication not confirmed",
+      "Quiz incomplete"
+    ],
+    "knowledgeGaps": [],
+    "questionsForNurse": [
+      "Confirm whether evening pain medicine was taken.",
+      "Encourage patient to complete the recovery quiz."
+    ],
+    "recommendedFollowUp": "Routine nurse review.",
+    "evidenceEventIds": [
+      "E134",
+      "E136"
+    ],
+    "aiGenerated": true,
+    "generatedAt": "2026-10-08T16:10:00+05:30"
+  },
+  {
+    "_id": "NB013",
+    "patientId": "P008",
+    "priority": "LOW",
+    "summary": "Patient confirmed all medications and scored 80% on the recovery quiz. The patient could not correctly identify the knee brace and crutches as required mobility aids. Brief reinforcement recommended during next check-in.",
+    "medicationAdherence": {
+      "total": 2,
+      "confirmed": 2,
+      "notConfirmed": 0,
+      "missed": 0
+    },
+    "quizPerformance": {
+      "score": 80,
+      "correct": 4,
+      "total": 5
+    },
+    "flags": [
+      "Mobility aid knowledge gap"
+    ],
+    "knowledgeGaps": [
+      "Mobility aid identification"
+    ],
+    "questionsForNurse": [
+      "Reinforce use of knee brace and crutches."
+    ],
+    "recommendedFollowUp": "No immediate action needed.",
+    "evidenceEventIds": [
+      "E139",
+      "E141"
+    ],
+    "aiGenerated": true,
+    "generatedAt": "2026-10-08T14:40:00+05:30"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "patientId": "P004",
+  "documentId": "D004",
+  "expectedItems": [
+    {
+      "type": "medication",
+      "name": "Paracetamol",
+      "dose": "500 mg",
+      "frequency": "as directed",
+      "sourceSentence": "Take Paracetamol 500 mg as directed for pain."
+    },
+    {
+      "type": "restriction",
+      "name": "Full weight bearing",
+      "status": "avoid",
+      "sourceSentence": "Use crutches and do not put full weight on the injured ankle until reviewed."
+    },
+    {
+      "type": "exercise",
+      "name": "Ankle and toe exercises",
+      "frequency": "twice daily",
+      "sourceSentence": "Perform the ankle and toe exercises twice daily as demonstrated by physiotherapy."
+    },
+    {
+      "type": "follow_up",
+      "name": "Orthopedic review",
+      "timing": "after 2 weeks",
+      "sourceSentence": "Follow-up: Orthopedic review after 2 weeks."
+    },
+    {
+      "type": "warning_sign",
+      "name": "Severe swelling",
+      "sourceSentence": "Seek help for severe swelling, numbness, blue discoloration, or uncontrolled pain."
+    }
+  ],
+  "expectedEscalations": []
+}

@@ -1,0 +1,43 @@
+{
+  "patientId": "P001",
+  "documentId": "D001",
+  "expectedItems": [
+    {
+      "type": "medication",
+      "name": "Paracetamol",
+      "dose": "500 mg",
+      "frequency": "twice daily",
+      "foodRelation": "after meals",
+      "duration": "5 days",
+      "sourceSentence": "Take Paracetamol 500 mg twice daily after meals for 5 days."
+    },
+    {
+      "type": "medication",
+      "name": "Omeprazole",
+      "dose": "20 mg",
+      "frequency": "once daily",
+      "foodRelation": "before breakfast",
+      "duration": "5 days",
+      "sourceSentence": "Take Omeprazole 20 mg once daily before breakfast for 5 days."
+    },
+    {
+      "type": "activity",
+      "name": "Walker-assisted walking",
+      "frequency": "as tolerated",
+      "sourceSentence": "Walk with the assistance of a walker."
+    },
+    {
+      "type": "exercise",
+      "name": "Knee exercises",
+      "frequency": "twice daily",
+      "sourceSentence": "Perform the prescribed knee exercises twice daily."
+    },
+    {
+      "type": "follow_up",
+      "name": "Orthopedic clinic",
+      "timing": "after 1 week",
+      "sourceSentence": "Visit the orthopedic clinic after 1 week."
+    }
+  ],
+  "expectedEscalations": []
+}

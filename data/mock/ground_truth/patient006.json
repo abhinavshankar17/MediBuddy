@@ -1,0 +1,39 @@
+{
+  "patientId": "P006",
+  "documentId": "D006",
+  "expectedItems": [
+    {
+      "type": "medication",
+      "name": "Paracetamol",
+      "dose": "500 mg",
+      "frequency": "twice daily",
+      "foodRelation": "after food",
+      "duration": "3 days",
+      "sourceSentence": "Take Paracetamol 500 mg twice daily after food for 3 days."
+    },
+    {
+      "type": "wound_care",
+      "name": "Incision care",
+      "sourceSentence": "Keep the incision clean and dry. Do not soak the wound."
+    },
+    {
+      "type": "restriction",
+      "name": "Strenuous exercise",
+      "duration": "2 weeks",
+      "status": "avoid",
+      "sourceSentence": "Avoid strenuous exercise for 2 weeks."
+    },
+    {
+      "type": "follow_up",
+      "name": "Surgical review",
+      "timing": "after 1 week",
+      "sourceSentence": "Follow-up: Surgical review after 1 week."
+    },
+    {
+      "type": "warning_sign",
+      "name": "Fever",
+      "sourceSentence": "Contact the hospital for fever, increasing abdominal pain, persistent vomiting, or wound discharge."
+    }
+  ],
+  "expectedEscalations": []
+}
