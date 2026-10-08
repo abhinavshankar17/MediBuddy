@@ -50,10 +50,12 @@ export default function PatientDashboard() {
     navigate('/login');
   };
 
-  const loadDashboardData = async (targetId = patientId) => {
+  const loadDashboardData = async (targetId = patientId, isSilent = false) => {
     try {
-      setLoading(true);
-      setError(null);
+      if (!isSilent) {
+        setLoading(true);
+        setError(null);
+      }
 
       const [pData, oData, prData, iData] = await Promise.all([
         getPatientById(targetId),
@@ -67,22 +69,26 @@ export default function PatientDashboard() {
       setProgress(prData);
       setInstructions(iData);
     } catch (err) {
-      console.error('Failed to load patient dashboard:', err);
-      setError('Could not load patient dashboard data. Please try again.');
+      if (!isSilent) {
+        console.error('Failed to load patient dashboard:', err);
+        setError('Could not load patient dashboard data. Please try again.');
+      }
     } finally {
-      setLoading(false);
+      if (!isSilent) {
+        setLoading(false);
+      }
     }
   };
 
   useRealtimeSync({
     patientId,
-    onUpdate: () => loadDashboardData(patientId),
-    pollingInterval: 3000,
+    onUpdate: (isSilent) => loadDashboardData(patientId, isSilent !== false),
+    pollingInterval: 4000,
     enabled: true
   });
 
   useEffect(() => {
-    loadDashboardData(patientId);
+    loadDashboardData(patientId, false);
   }, [patientId]);
 
   if (loading) {

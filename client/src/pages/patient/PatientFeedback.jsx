@@ -96,19 +96,8 @@ export default function PatientFeedback() {
   const [submittingFeedback, setSubmittingFeedback] = useState(false);
   const [loadingSlots, setLoadingSlots] = useState(false);
 
-  useEffect(() => {
-    loadHistory();
-  }, [patientId]);
-
-  useRealtimeSync({
-    patientId,
-    onUpdate: () => loadHistory(),
-    pollingInterval: 3000,
-    enabled: true
-  });
-
-  const loadHistory = async () => {
-    setHistoryLoading(true);
+  const loadHistory = async (isSilent = false) => {
+    if (!isSilent) setHistoryLoading(true);
     try {
       const [fb, apt] = await Promise.all([
         getPatientFeedbacks(patientId),
@@ -117,11 +106,22 @@ export default function PatientFeedback() {
       setPastFeedbacks(fb);
       setPastAppointments(apt);
     } catch (err) {
-      console.error('Failed to load history:', err);
+      if (!isSilent) console.error('Failed to load history:', err);
     } finally {
-      setHistoryLoading(false);
+      if (!isSilent) setHistoryLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadHistory(false);
+  }, [patientId]);
+
+  useRealtimeSync({
+    patientId,
+    onUpdate: (isSilent) => loadHistory(isSilent !== false),
+    pollingInterval: 4000,
+    enabled: true
+  });
 
   const [clearingHistory, setClearingHistory] = useState(false);
 

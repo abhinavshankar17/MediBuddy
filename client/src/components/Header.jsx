@@ -61,8 +61,14 @@ export default function Header() {
           filter.patientId = currentUser?.patientId || currentUser?._id || activePatientId || 'P001';
         }
 
-        const list = await getNotifications(filter);
-        setNotifications(list);
+        const list = (await getNotifications(filter)) || [];
+
+        setNotifications(prev => {
+          if (Array.isArray(prev) && prev.length === list.length && prev.every((item, idx) => list[idx] && item._id === list[idx]._id && item.read === list[idx].read)) {
+            return prev;
+          }
+          return list;
+        });
 
         // Check for new unread notifications that haven't been shown in toast
         const newUnread = list.find(n => !n.read && !seenNotifIdsRef.current.has(`${n._id}_${n.createdAt || ''}_${n.metadata?.scheduledAt || ''}`));

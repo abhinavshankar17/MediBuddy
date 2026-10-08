@@ -36,10 +36,12 @@ export default function PatientInsight() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const loadInsightData = async (targetId = patientId) => {
+  const loadInsightData = async (targetId = patientId, isSilent = false) => {
     try {
-      setLoading(true);
-      setError(null);
+      if (!isSilent) {
+        setLoading(true);
+        setError(null);
+      }
 
       const [pInsight, encs] = await Promise.all([
         getPatientInsight(targetId),
@@ -55,22 +57,26 @@ export default function PatientInsight() {
         setEvidenceEvents([]);
       }
     } catch (err) {
-      console.error('Failed to load patient insight:', err);
-      setError('Unable to load care insights. Please try again.');
+      if (!isSilent) {
+        console.error('Failed to load patient insight:', err);
+        setError('Unable to load care insights. Please try again.');
+      }
     } finally {
-      setLoading(false);
+      if (!isSilent) {
+        setLoading(false);
+      }
     }
   };
 
   useRealtimeSync({
     patientId,
-    onUpdate: () => loadInsightData(patientId),
-    pollingInterval: 3000,
+    onUpdate: (isSilent) => loadInsightData(patientId, isSilent !== false),
+    pollingInterval: 4000,
     enabled: true
   });
 
   useEffect(() => {
-    loadInsightData(patientId);
+    loadInsightData(patientId, false);
   }, [patientId]);
 
   if (loading) {
