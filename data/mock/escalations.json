@@ -11,6 +11,9 @@
       "increased breathlessness",
       "pain level 7"
     ],
+    "relatedMedication": "Amoxicillin 500 mg",
+    "relatedEvent": "E003",
+    "timestamp": "2026-10-08T09:15:00+05:30",
     "status": "OPEN",
     "assignedTo": "N002"
   },
@@ -21,10 +24,14 @@
     "reason": "Medication adherence issue and dose-sensitive condition",
     "category": "missed_medication",
     "severity": "HIGH",
-    "trigger": "check_in",
+    "trigger": "medication_reminder",
     "evidence": [
-      "missed medication"
+      "Missed Metformin morning dose (08:00)",
+      "Reminder response: no_response"
     ],
+    "relatedMedication": "Metformin 500 mg",
+    "relatedEvent": "E125",
+    "timestamp": "2026-10-08T10:15:00+05:30",
     "status": "IN_REVIEW",
     "assignedTo": "N002"
   },
@@ -37,9 +44,12 @@
     "severity": "MEDIUM",
     "trigger": "extraction",
     "evidence": [
-      "low confidence",
-      "missing dose"
+      "low confidence extraction",
+      "missing dosage in discharge summary"
     ],
+    "relatedMedication": "Aspirin 75 mg",
+    "relatedEvent": "E002",
+    "timestamp": "2026-10-08T07:45:00+05:30",
     "status": "OPEN",
     "assignedTo": "N002"
   },
@@ -52,12 +62,14 @@
     "severity": "MEDIUM",
     "trigger": "scheduler",
     "evidence": [
-      "overdue task"
+      "Overdue Task: Assisted Walker Walking check-in"
     ],
+    "relatedEvent": "E001",
+    "timestamp": "2026-10-07T18:00:00+05:30",
     "status": "RESOLVED",
     "assignedTo": "N001",
     "resolvedBy": "N001",
-    "resolution": "Nurse contacted caregiver."
+    "resolution": "Nurse contacted caregiver. Patient completed walk with walker."
   },
   {
     "_id": "ESC005",
@@ -65,11 +77,66 @@
     "itemId": "EI036",
     "reason": "Patient asked a medication/treatment timing question",
     "category": "medication_question",
-    "severity": "HIGH",
+    "severity": "MEDIUM",
     "trigger": "question_box",
     "evidence": [
       "Can I change the timing of my medicine?"
     ],
+    "relatedMedication": "Enoxaparin 40 mg",
+    "relatedEvent": "E006",
+    "timestamp": "2026-10-08T14:15:00+05:30",
+    "status": "OPEN",
+    "assignedTo": "N001"
+  },
+  {
+    "_id": "ESC006",
+    "patientId": "P005",
+    "itemId": "EI022",
+    "reason": "Patient missed morning Metformin on two consecutive days",
+    "category": "repeated_missed_medication",
+    "severity": "HIGH",
+    "trigger": "medication_tracker",
+    "evidence": [
+      "Consecutive missed doses: Oct 7 08:00 and Oct 8 08:00",
+      "Patient indicated unsure of meal timing"
+    ],
+    "relatedMedication": "Metformin 500 mg",
+    "relatedEvent": "E128",
+    "timestamp": "2026-10-08T10:30:00+05:30",
+    "status": "OPEN",
+    "assignedTo": "N002"
+  },
+  {
+    "_id": "ESC007",
+    "patientId": "P005",
+    "itemId": "EI023",
+    "reason": "Patient scored 40% (2/5) on Daily Recovery Quiz",
+    "category": "low_quiz_score",
+    "severity": "MEDIUM",
+    "trigger": "quiz_session",
+    "evidence": [
+      "Quiz Session QS005 completed with score 40%",
+      "Failed questions on meal timing and dosage independence"
+    ],
+    "relatedEvent": "QS005",
+    "timestamp": "2026-10-08T10:35:00+05:30",
+    "status": "OPEN",
+    "assignedTo": "N002"
+  },
+  {
+    "_id": "ESC008",
+    "patientId": "P006",
+    "itemId": "EI031",
+    "reason": "Patient identified knowledge gap regarding wound care soak restrictions",
+    "category": "knowledge_gap",
+    "severity": "LOW",
+    "trigger": "quiz_teach_back",
+    "evidence": [
+      "Selected: 'Soak incision in warm bath daily'",
+      "Expected instruction: 'Keep incision clean and dry, do not soak'"
+    ],
+    "relatedEvent": "E130",
+    "timestamp": "2026-10-08T12:10:00+05:30",
     "status": "OPEN",
     "assignedTo": "N001"
   }
