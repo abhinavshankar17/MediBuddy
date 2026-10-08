@@ -422,3 +422,153 @@ export async function getNurseAIBriefsList() {
   return await Promise.all(listPromises);
 }
 
+/**
+ * Service function for cohort-wide Medication Adherence analytics
+ */
+export async function getMedicationAdherenceCohort() {
+  let totalDosages = 0;
+  let totalConfirmed = 0;
+  let totalNotConfirmed = 0;
+  let totalMissed = 0;
+
+  const patientRows = patientsData.map((patient) => {
+    const pId = patient._id;
+    const reminders = medicationRemindersData.filter((m) => m.patientId === pId);
+
+    const medsList = reminders.map((r) => {
+      let statusDisplay = 'Not confirmed';
+      let badgeType = 'pending';
+
+      if (r.status === 'taken' || r.responseType === 'taken') {
+        statusDisplay = 'Confirmed';
+        badgeType = 'completed';
+      } else if (r.status === 'missed' || r.responseType === 'not_taken') {
+        statusDisplay = 'Missed';
+        badgeType = 'missed';
+      } else if (r.status === 'overdue' || r.responseType === 'no_response') {
+        statusDisplay = 'Not confirmed';
+        badgeType = 'pending';
+      } else {
+        statusDisplay = 'Scheduled';
+        badgeType = 'info';
+      }
+
+      return {
+        _id: r._id,
+        name: r.medicationName || 'Prescribed Med',
+        dose: r.dose || '',
+        scheduledAt: r.scheduledAt ? new Date(r.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '08:00',
+        statusDisplay,
+        badgeType
+      };
+    });
+
+    const confirmed = medsList.filter((m) => m.statusDisplay === 'Confirmed').length;
+    const missed = medsList.filter((m) => m.statusDisplay === 'Missed').length;
+    const notConfirmed = medsList.filter((m) => m.statusDisplay === 'Not confirmed' || m.statusDisplay === 'Scheduled').length;
+    const total = medsList.length;
+
+    totalDosages += total;
+    totalConfirmed += confirmed;
+    totalNotConfirmed += notConfirmed;
+    totalMissed += missed;
+
+    const rate = total > 0 ? Math.round((confirmed / total) * 100) : 100;
+
+    const insight = patientInsightsData.find((pi) => pi.patientId === pId);
+    const priority = insight ? insight.priority : (pId === 'P005' || pId === 'P003' ? 'HIGH' : 'LOW');
+
+    return {
+      patientId: pId,
+      patientName: patient.name,
+      patientAge: patient.age,
+      patientGender: patient.gender,
+      recoveryContext: `${patient.condition} • ${patient.procedure}`,
+      priority,
+      medications: medsList,
+      confirmedCount: confirmed,
+      notConfirmedCount: notConfirmed,
+      missedCount: missed,
+      totalCount: total,
+      adherenceRate: rate
+    };
+  });
+
+  const overallRate = totalDosages > 0 ? Math.round((totalConfirmed / totalDosages) * 100) : 85;
+
+  return {
+    summary: {
+      overallComplianceRate: overallRate,
+      totalDosages,
+      totalConfirmed,
+      totalNotConfirmed,
+      totalMissed
+    },
+    patientRows
+  };
+}
+
+/**
+ * Service function for cohort-wide Quiz analytics & Knowledge Gaps
+ */
+export async function getQuizAnalyticsCohort() {
+  const patientScores = patientsData.map((patient) => {
+    const pId = patient._id;
+    const session = quizSessionsData.find((qs) => qs.patientId === pId);
+    const insight = patientInsightsData.find((pi) => pi.patientId === pId);
+    const brief = nurseBriefsData.find((nb) => nb.patientId === pId);
+
+    const isCompleted = session && session.status === 'COMPLETED' && session.score !== null;
+    const score = isCompleted ? session.score : (brief?.quizPerformance?.score ?? 80);
+    const correctCount = Math.round((score / 100) * 5);
+
+    const strengths = insight ? insight.strengths : ['Follow-up awareness'];
+    const weaknesses = brief?.knowledgeGaps?.length ? brief.knowledgeGaps : (insight?.weaknesses || []);
+
+    const priority = brief ? brief.priority : (pId === 'P005' || pId === 'P003' ? 'HIGH' : 'LOW');
+
+    return {
+      patientId: pId,
+      patientName: patient.name,
+      patientAge: patient.age,
+      patientGender: patient.gender,
+      recoveryContext: `${patient.condition} • ${patient.procedure}`,
+      priority,
+      status: isCompleted ? 'COMPLETED' : 'INCOMPLETE',
+      score,
+      correctCount,
+      totalQuestions: 5,
+      strengths,
+      weaknesses,
+      completedAt: session?.completedAt ? new Date(session.completedAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Today, 10:30 AM'
+    };
+  });
+
+  const completedCount = patientScores.filter((p) => p.status === 'COMPLETED').length;
+  const totalCount = patientScores.length;
+  const avgScore = Math.round(patientScores.reduce((acc, curr) => acc + curr.score, 0) / Math.max(1, totalCount));
+
+  // Collect all unique knowledge gaps
+  const gapCounts = {};
+  patientScores.forEach((p) => {
+    p.weaknesses.forEach((w) => {
+      gapCounts[w] = (gapCounts[w] || 0) + 1;
+    });
+  });
+
+  const topGaps = Object.entries(gapCounts)
+    .map(([gap, count]) => ({ gap, count }))
+    .sort((a, b) => b.count - a.count);
+
+  return {
+    summary: {
+      completedCount,
+      totalCount,
+      avgScore,
+      topGaps
+    },
+    patientScores
+  };
+}
+
+
