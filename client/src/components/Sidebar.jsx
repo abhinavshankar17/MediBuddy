@@ -17,6 +17,7 @@ import {
   ShieldAlert,
   HeartPulse,
   LogOut,
+  MessageSquarePlus,
   X
 } from 'lucide-react';
 
@@ -45,7 +46,8 @@ export default function Sidebar() {
     { label: 'Prescription & Rx', path: '/patient/prescription', icon: FileCheck },
     { label: 'Medication Schedule', path: '/patient/medication', icon: Pill },
     { label: 'Care Insights', path: '/patient/insights', icon: Lightbulb },
-    { label: 'Discharge Plan', path: '/patient/discharge', icon: FileText }
+    { label: 'Discharge Plan', path: '/patient/discharge', icon: FileText },
+    { label: 'Feedback & Book', path: '/patient/feedback', icon: MessageSquarePlus }
   ];
 
 

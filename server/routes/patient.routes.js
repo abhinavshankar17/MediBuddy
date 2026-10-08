@@ -8,6 +8,7 @@ const quizController = require('../controllers/quiz.controller');
 const insightController = require('../controllers/insight.controller');
 const nurseController = require('../controllers/nurse.controller');
 const escalationController = require('../controllers/escalation.controller');
+const feedbackController = require('../controllers/feedback.controller');
 
 /**
  * Patient Routes (/api/patients)
@@ -81,5 +82,13 @@ router.post('/:id/nurse-ai-summary/generate', nurseController.generateAISummary)
 router.get('/:id/escalations', escalationController.getPatientEscalations);
 router.post('/:id/escalations', escalationController.createEscalation);
 router.post('/:id/escalations/evaluate', escalationController.evaluateEscalations);
+
+// Feature: Patient Condition Feedback & Appointment Booking
+router.get('/:id/feedback', feedbackController.getPatientFeedbacks);
+router.post('/:id/feedback', feedbackController.submitFeedback);
+router.delete('/:id/feedback', feedbackController.clearPatientFeedbacks);
+router.get('/:id/appointments/slots', feedbackController.getAvailableSlots);
+router.get('/:id/appointments', feedbackController.getPatientAppointments);
+router.post('/:id/appointments', feedbackController.bookAppointment);
 
 module.exports = router;

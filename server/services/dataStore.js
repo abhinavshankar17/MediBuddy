@@ -15,7 +15,10 @@ let memoryCache = {
   quizAnswers: null,
   patientInsights: null,
   nurseBriefs: null,
-  escalations: null
+  escalations: null,
+  providers: null,
+  feedbacks: null,
+  appointments: null
 };
 
 const getCache = () => {
@@ -32,6 +35,9 @@ const getCache = () => {
     memoryCache.patientInsights = loadMockJson('patientInsights.json') || [];
     memoryCache.nurseBriefs = loadMockJson('nurseBriefs.json') || [];
     memoryCache.escalations = loadMockJson('escalations.json') || [];
+    memoryCache.providers = loadMockJson('providers.json') || [];
+    memoryCache.feedbacks = loadMockJson('feedbacks.json') || [];
+    memoryCache.appointments = loadMockJson('appointments.json') || [];
   }
   return memoryCache;
 };
@@ -1053,6 +1059,101 @@ const dataStore = {
       return escalations[idx];
     }
     return null;
+  },
+
+  // ──────────────────────────────────────────────
+  // Providers
+  // ──────────────────────────────────────────────
+
+  /**
+   * Get all providers
+   */
+  async getProviders() {
+    const { providers } = getCache();
+    return providers;
+  },
+
+  // ──────────────────────────────────────────────
+  // Feedbacks
+  // ──────────────────────────────────────────────
+
+  /**
+   * Get feedbacks for a patient
+   * @param {string} patientId
+   */
+  async getFeedbacksByPatient(patientId) {
+    const { feedbacks } = getCache();
+    return feedbacks.filter(f => f.patientId === patientId);
+  },
+
+  /**
+   * Add a new feedback
+   * @param {Object} feedback
+   */
+  async addFeedback(feedback) {
+    const { feedbacks } = getCache();
+    feedbacks.push(feedback);
+    return feedback;
+  },
+
+  /**
+   * Clear feedbacks for a patient (or all)
+   * @param {string} patientId
+   */
+  async clearFeedbacksByPatient(patientId) {
+    const cache = getCache();
+    if (patientId) {
+      cache.feedbacks = cache.feedbacks.filter(f => f.patientId !== patientId);
+    } else {
+      cache.feedbacks = [];
+    }
+    return true;
+  },
+
+  // ──────────────────────────────────────────────
+  // Appointments
+  // ──────────────────────────────────────────────
+
+  /**
+   * Clear appointments for a patient (or all)
+   * @param {string} patientId
+   */
+  async clearAppointmentsByPatient(patientId) {
+    const cache = getCache();
+    if (patientId) {
+      cache.appointments = cache.appointments.filter(a => a.patientId !== patientId);
+    } else {
+      cache.appointments = [];
+    }
+    return true;
+  },
+
+  /**
+   * Get appointments for a patient
+   * @param {string} patientId
+   */
+  async getAppointmentsByPatient(patientId) {
+    const { appointments } = getCache();
+    return appointments.filter(a => a.patientId === patientId);
+  },
+
+  /**
+   * Get appointments for a specific date
+   * @param {string} date YYYY-MM-DD
+   */
+  async getAppointmentsByDate(date) {
+    const { appointments } = getCache();
+    return appointments.filter(a => a.date === date);
+  },
+
+  /**
+   * Add a new appointment
+   * @param {Object} appointment
+   */
+  async addAppointment(appointment) {
+    const { appointments } = getCache();
+    appointments.push(appointment);
+    return appointment;
   }
 };
 

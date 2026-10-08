@@ -14,6 +14,7 @@ import PatientPrescription from './pages/patient/PatientPrescription';
 import Medication from './pages/patient/Medication';
 import PatientInsight from './pages/patient/PatientInsight';
 import DischargeInstructions from './pages/patient/DischargeInstructions';
+import PatientFeedback from './pages/patient/PatientFeedback';
 
 // Nurse Pages
 import NurseDashboard from './pages/nurse/NurseDashboard';
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="medication" element={<Medication />} />
           <Route path="insights" element={<PatientInsight />} />
           <Route path="discharge" element={<DischargeInstructions />} />
+          <Route path="feedback" element={<PatientFeedback />} />
         </Route>
 
 
