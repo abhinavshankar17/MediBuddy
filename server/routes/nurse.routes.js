@@ -9,6 +9,8 @@ const escalationController = require('../controllers/escalation.controller');
 
 // Aggregate nurse dashboard overview (supports ?priority=..., ?caregiverId=..., ?search=...)
 router.get('/dashboard', nurseController.getDashboard);
+router.get('/dashboard-overview', nurseController.getCohortOverview);
+router.get('/alerts', escalationController.getEscalations);
 
 // Patient list monitoring view (alias to dashboard list)
 router.get('/patients', nurseController.getDashboard);

@@ -32,6 +32,19 @@ const nurseController = {
   },
 
   /**
+   * GET /api/nurse/dashboard-overview
+   * Retrieve aggregate cohort overview for nurse dashboard stats
+   */
+  async getCohortOverview(req, res, next) {
+    try {
+      const overview = await nurseService.getCohortOverview();
+      return successResponse(res, overview, 'Nurse cohort overview retrieved successfully');
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  /**
    * GET /api/nurse/dashboard/patient/:id
    * GET /api/nurse/dashboard/:id
    * GET /api/nurse/patients/:id

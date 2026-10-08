@@ -415,17 +415,26 @@ const quizService = {
       };
     }
 
+    // Format answers if passed as an object { [qId]: selectedAnswer }
+    let answerList = answers;
+    if (answers && !Array.isArray(answers) && typeof answers === 'object') {
+      answerList = Object.keys(answers).map(qId => ({
+        questionId: qId,
+        selectedAnswer: answers[qId]
+      }));
+    }
+
     // Incomplete quiz validation
-    if (!Array.isArray(answers) || answers.length < 5) {
+    if (!Array.isArray(answerList) || answerList.length < 5) {
       throw {
         statusCode: 400,
-        message: `Incomplete Quiz Error: Cannot calculate score for incomplete quiz. Expected exactly 5 answers, received ${answers ? answers.length : 0}.`
+        message: `Incomplete Quiz Error: Cannot calculate score for incomplete quiz. Expected exactly 5 answers, received ${answerList ? answerList.length : 0}.`
       };
     }
 
     // Check for duplicate answers in submission payload
     const seenQuestionIds = new Set();
-    for (const ans of answers) {
+    for (const ans of answerList) {
       if (seenQuestionIds.has(ans.questionId)) {
         throw {
           statusCode: 409,
@@ -444,7 +453,7 @@ const quizService = {
     const now = new Date().toISOString();
 
     for (const q of questions) {
-      const userAns = answers.find(a => a.questionId === q._id);
+      const userAns = answerList.find(a => a.questionId === q._id);
       if (!userAns) {
         throw {
           statusCode: 400,

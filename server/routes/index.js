@@ -26,6 +26,7 @@ router.use('/events', eventRoutes);
 router.use('/adherence', adherenceRoutes);
 router.use('/quiz', quizRoutes);
 router.use('/quizzes', quizRoutes);
+router.use('/quiz-sessions', quizRoutes);
 router.use('/insights', insightRoutes);
 router.use('/nurse', nurseRoutes);
 router.use('/escalations', escalationRoutes);

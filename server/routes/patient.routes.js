@@ -36,9 +36,12 @@ router.get('/:id/discharge-summary', patientController.getPatientDischargeSummar
 
 // Feature 3: Nested Medication Reminders for Patient
 router.get('/:patientId/reminders', reminderController.getReminders);
+router.get('/:patientId/medication-reminders', reminderController.getReminders);
 router.get('/:patientId/reminders/:id/status', reminderController.getReminderStatus);
 router.get('/:patientId/reminders/:id', reminderController.getReminderById);
+router.get('/:patientId/medication-reminders/:id', reminderController.getReminderById);
 router.post('/:patientId/reminders/:id/confirm', reminderController.confirmMedication);
+router.post('/:patientId/medication-reminders/:id/confirm', reminderController.confirmMedication);
 
 // Feature 4: Nested Medication Events & Adherence for Patient
 router.get('/:patientId/adherence', adherenceController.getAdherence);
@@ -48,9 +51,11 @@ router.post('/:patientId/events', eventController.trackEvent);
 
 // Feature 5: Nested Daily Quiz for Patient
 router.get('/:patientId/quiz/today', quizController.getTodayQuiz);
+router.get('/:patientId/quiz-session', quizController.getTodayQuiz);
 router.post('/:patientId/quiz/start', quizController.startQuiz);
 router.get('/:patientId/quiz/sessions/:id/questions', quizController.getQuizQuestions);
 router.post('/:patientId/quiz/sessions/:id/submit', quizController.submitQuiz);
+router.post('/:patientId/quiz-sessions/:id/submit', quizController.submitQuiz);
 
 // Feature 6: Nested Daily Quiz Answer & Educational Score
 router.post('/:patientId/quiz/sessions/:id/answer', quizController.recordAnswer);

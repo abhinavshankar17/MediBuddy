@@ -11,11 +11,32 @@ import quizSessionsData from '../../../data/mock/quizSessions.json';
  */
 
 export async function getAllPatients() {
+  try {
+    const res = await fetch('/api/patients');
+    if (res.ok) {
+      const json = await res.json();
+      const list = json.data !== undefined ? json.data : json;
+      if (Array.isArray(list) && list.length > 0) return list;
+    }
+  } catch (err) {
+    // offline fallback
+  }
   return patientsData;
 }
 
 export async function getPatientById(patientId = 'P001') {
-  const patient = patientsData.find((p) => p._id === patientId) || patientsData[0];
+  let backendPatient = null;
+  try {
+    const res = await fetch(`/api/patients/${patientId}`);
+    if (res.ok) {
+      const json = await res.json();
+      backendPatient = json.data !== undefined ? json.data : json;
+    }
+  } catch (err) {
+    // offline fallback
+  }
+
+  const patient = backendPatient || patientsData.find((p) => p._id === patientId) || patientsData[0];
   
   // Calculate recovery day
   let recoveryDayNumber = 3;
@@ -110,7 +131,25 @@ export async function getPatientRecoveryProgress(patientId = 'P001') {
 }
 
 export async function getPatientDischargeInstructions(patientId = 'P001') {
-  const patientItems = extractedItemsData.filter((item) => item.patientId === patientId);
+  let patientItems = null;
+  try {
+    const res = await fetch(`/api/patients/${patientId}/instructions`);
+    if (res.ok) {
+      const json = await res.json();
+      const payload = json.data !== undefined ? json.data : json;
+      if (Array.isArray(payload) && payload.length > 0) {
+        patientItems = payload;
+      } else if (payload && Array.isArray(payload.instructions) && payload.instructions.length > 0) {
+        patientItems = payload.instructions;
+      }
+    }
+  } catch (err) {
+    // offline fallback
+  }
+
+  if (!patientItems) {
+    patientItems = extractedItemsData.filter((item) => item.patientId === patientId);
+  }
 
   const grouped = {
     medications: patientItems.filter((i) => i.type === 'medication'),

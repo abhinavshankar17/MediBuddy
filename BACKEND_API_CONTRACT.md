@@ -1537,3 +1537,13 @@ RESPONSE:
     All summaries strictly feature the mandatory disclaimer: `"AI-generated — verify before acting."`.
 14. **Feature 10 Category Preservation & Expansion**: All pre-existing escalation categories (`warning_sign`, `missed_medication`, `missing_information`, `overdue_task`, `medication_question`) are strictly preserved alongside newer categories (`repeated_missed_medication`, `low_quiz_score`, `knowledge_gap`).
 15. **Feature 10 Escalation Grounding & Non-Clinical Severity**: Every escalation must be strictly traceable to actual patient records (events, reminders, quiz scores, knowledge gaps). Escalations must **NEVER** turn a missed medication into a diagnosis, nor invent arbitrary clinical emergency classifications (e.g., `EMERGENCY`, `CRITICAL CARE`, `CODE BLUE` are rejected with `400 Bad Request`). Only supported priorities (`LOW`, `MEDIUM`, `HIGH`) are permitted.
+16. **Frontend Integration & Compatibility Endpoints**:
+    - `client/vite.config.js`: Reverse proxy configured on port 3000 mapping `/api` to Express backend on `http://localhost:5000` with `changeOrigin: true`.
+    - `GET /api/nurse/dashboard-overview`: Cohort summary metrics for nurse dashboard stats cards (`totalPatients`, `activeEscalations`, `medAdherenceRate`, `avgQuizScore`).
+    - `GET /api/nurse/alerts`: Direct alias to escalation list filtered for clinical nurse dashboard view.
+    - `GET /api/patients/:patientId/medication-reminders`: Compatible alias to `/api/patients/:patientId/reminders`.
+    - `POST /api/patients/:patientId/medication-reminders/:id/confirm`: Compatible alias to `/api/reminders/:id/confirm`.
+    - `GET /api/patients/:patientId/quiz-session`: Direct alias returning today's daily quiz with exactly 5 questions.
+    - `POST /api/quiz-sessions/:id/submit`: Top-level mount supporting quiz answer evaluation and educational knowledge scoring.
+    - Envelope unwrapping: All frontend service adapters (`insightService`, `medicationService`, `nurseService`, `patientService`, `quizService`) seamlessly unpack `{ success: true, data: ... }` response payloads while preserving robust mock fallback when backend is offline.
+
