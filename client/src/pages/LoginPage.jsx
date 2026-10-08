@@ -68,42 +68,42 @@ export default function LoginPage() {
         </div>
 
         {/* Role Tab Switcher */}
-        <div className="flex justify-center">
-          <div className="flex bg-[#F4F0E8] p-1.5 rounded-2xl border border-[#E8E2D7] shadow-2xs">
+        <div className="flex justify-center w-full overflow-x-auto pb-1 scrollbar-none">
+          <div className="flex bg-[#F4F0E8] p-1.5 rounded-2xl border border-[#E8E2D7] shadow-2xs gap-1 max-w-full flex-shrink-0">
             <button
               onClick={() => setSelectedRole('patient')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 selectedRole === 'patient'
                   ? 'bg-[#CC785C] text-white shadow-xs'
                   : 'text-[#78716C] hover:text-[#1C1917]'
               }`}
             >
               <User className="w-4 h-4" />
-              <span>Patients (8 Accounts)</span>
+              <span>Patients (8)</span>
             </button>
 
             <button
               onClick={() => setSelectedRole('nurse')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 selectedRole === 'nurse'
                   ? 'bg-[#0D9488] text-white shadow-xs'
                   : 'text-[#78716C] hover:text-[#1C1917]'
               }`}
             >
               <UserCheck className="w-4 h-4" />
-              <span>Nurses & Doctors (3 Accounts)</span>
+              <span>Nurses & Doctors (3)</span>
             </button>
 
             <button
               onClick={() => setSelectedRole('caregiver')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 selectedRole === 'caregiver'
                   ? 'bg-[#D97706] text-white shadow-xs'
                   : 'text-[#78716C] hover:text-[#1C1917]'
               }`}
             >
               <HeartPulse className="w-4 h-4" />
-              <span>Caregivers (5 Accounts)</span>
+              <span>Caregivers (5)</span>
             </button>
           </div>
         </div>

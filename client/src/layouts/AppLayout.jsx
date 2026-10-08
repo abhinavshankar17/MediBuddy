@@ -8,11 +8,11 @@ export default function AppLayout() {
   const isAuthOrLandingPage = location.pathname === '/login' || location.pathname === '/';
 
   return (
-    <div className="app-container min-h-screen flex flex-col bg-slate-50 text-slate-900 bg-ambient font-sans">
+    <div className="app-container min-h-screen flex flex-col bg-[#FAF8F5] text-[#1C1917] font-sans antialiased selection:bg-[#CC785C]/20 selection:text-[#CC785C]">
       <Header />
-      <div className="flex flex-1">
+      <div className="flex flex-1 relative w-full overflow-hidden">
         {!isAuthOrLandingPage && <Sidebar />}
-        <main className="main-content flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="main-content flex-1 min-w-0 w-full overflow-y-auto max-h-[calc(100vh-4rem)]">
           <Outlet />
         </main>
       </div>
