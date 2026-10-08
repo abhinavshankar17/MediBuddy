@@ -30,7 +30,7 @@ export default function SwipeConfirmButton({
     const progress = Math.min(Math.max(diff / width, 0), 1);
     setDragProgress(progress);
 
-    if (progress >= 0.8) {
+    if (progress >= 0.75) {
       setIsDragging(false);
       setDragProgress(1);
       if (onConfirm) onConfirm();
@@ -40,7 +40,7 @@ export default function SwipeConfirmButton({
   const handleEnd = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    if (dragProgress < 0.8) {
+    if (dragProgress < 0.75) {
       setDragProgress(0);
     }
   };
@@ -93,7 +93,8 @@ export default function SwipeConfirmButton({
     );
   }
 
-  const offsetPercent = (1 - dragProgress) * 100;
+  const containerWidth = containerRef.current ? containerRef.current.clientWidth - 56 : 240;
+  const translateXPixels = dragProgress * containerWidth;
 
   return (
     <div className="space-y-2">
@@ -104,7 +105,7 @@ export default function SwipeConfirmButton({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onMouseDown={handleMouseDown}
-        className="relative w-full h-12 bg-[#F4F0E8] border border-[#E8E2D7] rounded-2xl p-1 select-none overflow-hidden cursor-grab active:cursor-grabbing shadow-inner flex items-center justify-between"
+        className="relative w-full h-12 bg-[#F4F0E8] border border-[#E8E2D7] rounded-2xl p-1 select-none overflow-hidden cursor-grab active:cursor-grabbing shadow-inner flex items-center justify-between touch-none"
       >
         {/* Fill Background */}
         <div
@@ -113,37 +114,38 @@ export default function SwipeConfirmButton({
         />
 
         {/* Center Label */}
-        <div className="w-full text-center text-xs font-bold text-[#78716C] z-0 flex items-center justify-center gap-2 pointer-events-none">
-          <ArrowLeft className="w-3.5 h-3.5 text-[#CC785C] animate-pulse" />
-          <span>Swipe to confirm taken</span>
+        <div className="w-full text-center text-xs font-bold text-[#78716C] z-0 flex items-center justify-center gap-2 pointer-events-none px-4">
+          <ArrowLeft className="w-3.5 h-3.5 text-[#CC785C] animate-pulse flex-shrink-0" />
+          <span className="truncate">Swipe left to confirm taken</span>
         </div>
 
         {/* Sliding Draggable Thumb Handle */}
         <div
           className="absolute right-1 top-1 bottom-1 w-11 rounded-xl bg-[#CC785C] text-white flex items-center justify-center shadow-md z-10 transition-transform duration-75 active:scale-95"
-          style={{ transform: `translateX(-${(1 - dragProgress) * 0}px)` }}
+          style={{ transform: `translateX(-${translateXPixels}px)` }}
         >
           <ArrowLeft className="w-4 h-4" />
         </div>
       </div>
 
-      {/* Fallback Direct Button for Accessibility / Mouse click */}
-      <div className="flex justify-end">
+      {/* Fallback Direct Button for Accessibility & Instant Mobile Tap */}
+      <div className="flex justify-between items-center text-[11px]">
+        <span className="text-[#A8A29E] hidden sm:inline">Drag thumb or tap</span>
         <button
           onClick={() => {
             if (!loading && !isConfirmed && onConfirm) onConfirm();
           }}
           disabled={disabled || loading}
-          className="text-[11px] font-bold text-[#CC785C] hover:text-[#B86549] underline cursor-pointer"
+          className="font-bold text-[#CC785C] hover:text-[#B86549] underline cursor-pointer p-1"
         >
-          Or click to confirm taken &rarr;
+          Or tap to confirm taken &rarr;
         </button>
       </div>
 
       {error && (
         <p className="text-[11px] text-rose-600 font-semibold flex items-center gap-1">
-          <AlertCircle className="w-3 h-3" />
-          {error}
+          <AlertCircle className="w-3 h-3 flex-shrink-0" />
+          <span>{error}</span>
         </p>
       )}
     </div>
