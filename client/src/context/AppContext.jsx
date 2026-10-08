@@ -1,20 +1,50 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getCurrentUser, setCurrentUser as saveCurrentUser, logoutUser as clearUserSession } from '../services/authService';
 
 const AppContext = createContext();
 
 export function AppProvider({ children }) {
-  const [portalRole, setPortalRole] = useState('patient'); // 'patient' | 'nurse'
-  const [activePatientId, setActivePatientId] = useState('P001');
-  const [activeNurseId, setActiveNurseId] = useState('N001');
+  const [currentUser, setCurrentUser] = useState(() => getCurrentUser());
+  const [portalRole, setPortalRole] = useState(() => (currentUser?.role === 'nurse' || currentUser?.role === 'clinician' ? 'nurse' : 'patient'));
+  const [activePatientId, setActivePatientId] = useState(() => currentUser?.patientId || 'P001');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Update activePatientId and portalRole when currentUser changes
+  const loginUser = (user) => {
+    saveCurrentUser(user);
+    setCurrentUser(user);
+    if (user.role === 'nurse' || user.role === 'clinician') {
+      setPortalRole('nurse');
+      setActivePatientId(user.assignedPatients ? user.assignedPatients[0] : 'P001');
+    } else {
+      setPortalRole('patient');
+      setActivePatientId(user.patientId || 'P001');
+    }
+  };
+
+  const logout = () => {
+    clearUserSession();
+    const defaultUser = {
+      _id: 'P001',
+      name: 'Meena Krishnan',
+      email: 'patient1@carebridge.demo',
+      role: 'patient',
+      patientId: 'P001',
+      language: 'ta'
+    };
+    setCurrentUser(defaultUser);
+    setPortalRole('patient');
+    setActivePatientId('P001');
+  };
+
   const value = {
+    currentUser,
+    loginUser,
+    logout,
     portalRole,
     setPortalRole,
     activePatientId,
     setActivePatientId,
-    activeNurseId,
-    setActiveNurseId,
     searchQuery,
     setSearchQuery
   };

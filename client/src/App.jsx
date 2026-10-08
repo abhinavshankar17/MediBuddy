@@ -4,8 +4,9 @@ import AppLayout from './layouts/AppLayout';
 import PatientLayout from './layouts/PatientLayout';
 import NurseLayout from './layouts/NurseLayout';
 
-// Landing Page
+// Landing & Login Pages
 import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
 
 // Patient Pages
 import PatientDashboard from './pages/patient/PatientDashboard';
@@ -28,8 +29,9 @@ export default function App() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        {/* Landing Page */}
+        {/* Landing & Authentication Routes */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         {/* Patient Portal Routes */}
         <Route path="/patient" element={<PatientLayout />}>
