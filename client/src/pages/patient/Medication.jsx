@@ -42,14 +42,15 @@ export default function Medication() {
     loadMedications(activePatientId || currentUser?.patientId || 'P001');
   }, [activePatientId, currentUser]);
 
-  const handleConfirmTaken = async (reminderId) => {
+  const handleConfirmTaken = async (reminderId, medPatientId) => {
     if (processingMap[reminderId]) return;
 
+    const patientId = medPatientId || activePatientId || currentUser?.patientId || 'P001';
     setProcessingMap((prev) => ({ ...prev, [reminderId]: true }));
     setErrorMap((prev) => ({ ...prev, [reminderId]: null }));
 
     try {
-      const result = await confirmMedicationTaken(reminderId);
+      const result = await confirmMedicationTaken(reminderId, patientId);
       if (result.success) {
         const confirmedTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -187,7 +188,7 @@ export default function Medication() {
                     {/* Right: Swipe Confirmation Control */}
                     <div className="w-full lg:w-72 flex-shrink-0 pt-2 lg:pt-0">
                       <SwipeConfirmButton
-                        onConfirm={() => handleConfirmTaken(med._id)}
+                        onConfirm={() => handleConfirmTaken(med._id, med.patientId)}
                         isConfirmed={isTaken}
                         confirmedTime={confirmedTime}
                         loading={processingMap[med._id] || false}

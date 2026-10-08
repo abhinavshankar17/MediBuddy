@@ -6,10 +6,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T08:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T08:00:00+05:30",
-    "respondedAt": "2026-10-08T08:07:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T07:55:00+05:30"
   },
   {
@@ -19,10 +19,10 @@
     "medicationName": "Omeprazole",
     "dose": "20 mg",
     "scheduledAt": "2026-10-08T07:30:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T07:30:00+05:30",
-    "respondedAt": "2026-10-08T07:35:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T07:25:00+05:30"
   },
   {
@@ -32,10 +32,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T20:00:00+05:30",
-    "status": "overdue",
-    "reminderSentAt": "2026-10-08T20:00:00+05:30",
+    "status": "scheduled",
+    "reminderSentAt": null,
     "respondedAt": null,
-    "responseType": "no_response",
+    "responseType": null,
     "createdAt": "2026-10-08T19:55:00+05:30"
   },
   {
@@ -45,10 +45,10 @@
     "medicationName": "Aspirin",
     "dose": "75 mg",
     "scheduledAt": "2026-10-08T07:30:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T07:30:00+05:30",
-    "respondedAt": "2026-10-08T07:38:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T07:25:00+05:30"
   },
   {
@@ -58,10 +58,10 @@
     "medicationName": "Atorvastatin",
     "dose": "40 mg",
     "scheduledAt": "2026-10-08T22:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T22:00:00+05:30",
-    "respondedAt": "2026-10-08T22:05:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T21:55:00+05:30"
   },
   {
@@ -71,10 +71,10 @@
     "medicationName": "Amoxicillin",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T08:15:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T08:15:00+05:30",
-    "respondedAt": "2026-10-08T08:22:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T08:10:00+05:30"
   },
   {
@@ -84,10 +84,10 @@
     "medicationName": "Amoxicillin",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T13:15:00+05:30",
-    "status": "missed",
-    "reminderSentAt": "2026-10-08T13:15:00+05:30",
+    "status": "scheduled",
+    "reminderSentAt": null,
     "respondedAt": null,
-    "responseType": "no_response",
+    "responseType": null,
     "createdAt": "2026-10-08T13:10:00+05:30"
   },
   {
@@ -97,10 +97,10 @@
     "medicationName": "Amoxicillin",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T20:15:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T20:15:00+05:30",
-    "respondedAt": "2026-10-08T20:20:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T20:10:00+05:30"
   },
   {
@@ -110,10 +110,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T08:30:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T08:30:00+05:30",
-    "respondedAt": "2026-10-08T08:40:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T08:25:00+05:30"
   },
   {
@@ -123,10 +123,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T20:30:00+05:30",
-    "status": "reminded",
-    "reminderSentAt": "2026-10-08T20:30:00+05:30",
-    "respondedAt": "2026-10-08T20:32:00+05:30",
-    "responseType": "dismissed",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T20:25:00+05:30"
   },
   {
@@ -136,10 +136,10 @@
     "medicationName": "Metformin",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T07:00:00+05:30",
-    "status": "missed",
-    "reminderSentAt": "2026-10-08T07:00:00+05:30",
+    "status": "scheduled",
+    "reminderSentAt": null,
     "respondedAt": null,
-    "responseType": "no_response",
+    "responseType": null,
     "createdAt": "2026-10-08T06:55:00+05:30"
   },
   {
@@ -149,10 +149,10 @@
     "medicationName": "Metformin",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T19:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T19:00:00+05:30",
-    "respondedAt": "2026-10-08T19:10:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T18:55:00+05:30"
   },
   {
@@ -162,10 +162,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T08:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T08:00:00+05:30",
-    "respondedAt": "2026-10-08T08:04:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T07:55:00+05:30"
   },
   {
@@ -175,10 +175,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T20:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T20:00:00+05:30",
-    "respondedAt": "2026-10-08T20:06:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T19:55:00+05:30"
   },
   {
@@ -188,10 +188,10 @@
     "medicationName": "Prescribed pain medicine",
     "dose": "as directed",
     "scheduledAt": "2026-10-08T08:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T08:00:00+05:30",
-    "respondedAt": "2026-10-08T08:12:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T07:55:00+05:30"
   },
   {
@@ -201,10 +201,10 @@
     "medicationName": "Prescribed pain medicine",
     "dose": "as directed",
     "scheduledAt": "2026-10-08T19:30:00+05:30",
-    "status": "overdue",
-    "reminderSentAt": "2026-10-08T19:30:00+05:30",
+    "status": "scheduled",
+    "reminderSentAt": null,
     "respondedAt": null,
-    "responseType": "no_response",
+    "responseType": null,
     "createdAt": "2026-10-08T19:25:00+05:30"
   },
   {
@@ -214,10 +214,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T08:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T08:00:00+05:30",
-    "respondedAt": "2026-10-08T08:09:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T07:55:00+05:30"
   },
   {
@@ -227,10 +227,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-08T20:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-08T20:00:00+05:30",
-    "respondedAt": "2026-10-08T20:05:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-08T19:55:00+05:30"
   },
   {
@@ -240,10 +240,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-09T08:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-09T08:00:00+05:30",
-    "respondedAt": "2026-10-09T08:06:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-09T07:55:00+05:30"
   },
   {
@@ -253,10 +253,10 @@
     "medicationName": "Omeprazole",
     "dose": "20 mg",
     "scheduledAt": "2026-10-09T07:30:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-09T07:30:00+05:30",
-    "respondedAt": "2026-10-09T07:33:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-09T07:25:00+05:30"
   },
   {
@@ -266,10 +266,10 @@
     "medicationName": "Amoxicillin",
     "dose": "500 mg",
     "scheduledAt": "2026-10-09T08:15:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-09T08:15:00+05:30",
-    "respondedAt": "2026-10-09T08:19:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-09T08:10:00+05:30"
   },
   {
@@ -292,10 +292,10 @@
     "medicationName": "Metformin",
     "dose": "500 mg",
     "scheduledAt": "2026-10-09T07:00:00+05:30",
-    "status": "missed",
-    "reminderSentAt": "2026-10-09T07:00:00+05:30",
+    "status": "scheduled",
+    "reminderSentAt": null,
     "respondedAt": null,
-    "responseType": "no_response",
+    "responseType": null,
     "createdAt": "2026-10-09T06:55:00+05:30"
   },
   {
@@ -318,10 +318,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-09T08:00:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-09T08:00:00+05:30",
-    "respondedAt": "2026-10-09T08:03:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-09T07:55:00+05:30"
   },
   {
@@ -331,10 +331,10 @@
     "medicationName": "Aspirin",
     "dose": "75 mg",
     "scheduledAt": "2026-10-09T07:30:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-09T07:30:00+05:30",
-    "respondedAt": "2026-10-09T07:36:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-09T07:25:00+05:30"
   },
   {
@@ -344,10 +344,10 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-09T08:30:00+05:30",
-    "status": "taken",
-    "reminderSentAt": "2026-10-09T08:30:00+05:30",
-    "respondedAt": "2026-10-09T08:35:00+05:30",
-    "responseType": "taken",
+    "status": "scheduled",
+    "reminderSentAt": null,
+    "respondedAt": null,
+    "responseType": null,
     "createdAt": "2026-10-09T08:25:00+05:30"
   },
   {
@@ -357,8 +357,8 @@
     "medicationName": "Paracetamol",
     "dose": "500 mg",
     "scheduledAt": "2026-10-09T08:00:00+05:30",
-    "status": "reminded",
-    "reminderSentAt": "2026-10-09T08:00:00+05:30",
+    "status": "scheduled",
+    "reminderSentAt": null,
     "respondedAt": null,
     "responseType": null,
     "createdAt": "2026-10-09T07:55:00+05:30"
