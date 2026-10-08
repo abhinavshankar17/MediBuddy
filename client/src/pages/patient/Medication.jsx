@@ -10,15 +10,13 @@ import {
   getMedicationReminders,
   confirmMedicationTaken
 } from '../../services/medicationService';
-import { getAllPatients } from '../../services/patientService';
 import { useApp } from '../../context/AppContext';
 import { Pill, Clock, Calendar, Utensils, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 
 export default function Medication() {
-  const { activePatientId, setActivePatientId } = useApp();
+  const { currentUser, activePatientId } = useApp();
   
   const [reminders, setReminders] = useState([]);
-  const [allPatientsList, setAllPatientsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -30,11 +28,7 @@ export default function Medication() {
     try {
       setLoading(true);
       setError(null);
-      const [pList, rList] = await Promise.all([
-        getAllPatients(),
-        getMedicationReminders(patientId)
-      ]);
-      setAllPatientsList(pList);
+      const rList = await getMedicationReminders(patientId);
       setReminders(rList);
     } catch (err) {
       console.error('Failed to load medication reminders:', err);
@@ -45,11 +39,10 @@ export default function Medication() {
   };
 
   useEffect(() => {
-    loadMedications(activePatientId || 'P001');
-  }, [activePatientId]);
+    loadMedications(activePatientId || currentUser?.patientId || 'P001');
+  }, [activePatientId, currentUser]);
 
   const handleConfirmTaken = async (reminderId) => {
-    // Prevent duplicate processing
     if (processingMap[reminderId]) return;
 
     setProcessingMap((prev) => ({ ...prev, [reminderId]: true }));
@@ -60,7 +53,6 @@ export default function Medication() {
       if (result.success) {
         const confirmedTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-        // Update local state cleanly
         setReminders((prevReminders) =>
           prevReminders.map((r) =>
             r._id === reminderId
@@ -88,9 +80,6 @@ export default function Medication() {
     }
   };
 
-  /**
-   * Helper function for rendering status according to exact semantic rules
-   */
   const getStatusBadgeConfig = (reminder) => {
     const { status, responseType } = reminder;
 
@@ -101,7 +90,6 @@ export default function Medication() {
       return { status: 'missed', label: 'Missed' };
     }
     if (status === 'overdue' || responseType === 'no_response') {
-      // IMPORTANT SEMANTIC RULE: Display "Not confirmed", NOT "Patient definitely did not take"
       return { status: 'pending', label: 'Not confirmed' };
     }
     if (status === 'reminded') {
@@ -124,7 +112,7 @@ export default function Medication() {
         <ErrorState
           title="Medication Schedule Error"
           message={error}
-          onRetry={() => loadMedications(activePatientId || 'P001')}
+          onRetry={() => loadMedications(activePatientId || currentUser?.patientId || 'P001')}
         />
       </PageContainer>
     );
@@ -135,29 +123,14 @@ export default function Medication() {
       title="Medication Schedule & Dosage Confirmation"
       subtitle="Track your daily dosage timing, instructions, and swipe to confirm intake."
       actions={
-        <div className="flex items-center gap-3">
-          <div className="relative flex items-center">
-            <span className="text-xs font-bold text-[#78716C] mr-2 hidden sm:inline">Select Patient:</span>
-            <select
-              value={activePatientId || 'P001'}
-              onChange={(e) => setActivePatientId(e.target.value)}
-              className="bg-white border border-[#E8E2D7] rounded-xl px-3 py-1.5 text-xs font-bold text-[#1C1917] focus:outline-none focus:border-[#CC785C] shadow-2xs cursor-pointer"
-            >
-              {allPatientsList.map((p) => (
-                <option key={p._id} value={p._id}>
-                  {p.name} ({p._id})
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            onClick={() => loadMedications(activePatientId || 'P001')}
-            className="p-2 rounded-xl bg-white border border-[#E8E2D7] text-[#78716C] hover:text-[#1C1917] transition-all shadow-2xs"
-            title="Refresh Schedule"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
-        </div>
+        <button
+          onClick={() => loadMedications(activePatientId || currentUser?.patientId || 'P001')}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-[#E8E2D7] text-xs font-bold text-[#1C1917] hover:bg-[#FAF8F5] transition-all shadow-2xs cursor-pointer"
+          title="Refresh Schedule"
+        >
+          <RefreshCw className="w-3.5 h-3.5 text-[#CC785C]" />
+          <span>Refresh Schedule</span>
+        </button>
       }
     >
       {reminders.length === 0 ? (

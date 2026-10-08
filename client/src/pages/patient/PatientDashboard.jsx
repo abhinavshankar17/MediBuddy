@@ -10,8 +10,7 @@ import {
   getPatientById,
   getPatientTodayOverview,
   getPatientRecoveryProgress,
-  getPatientDischargeInstructions,
-  getAllPatients
+  getPatientDischargeInstructions
 } from '../../services/patientService';
 import { useApp } from '../../context/AppContext';
 import {
@@ -90,7 +89,7 @@ export default function PatientDashboard() {
         <ErrorState
           title="Patient Data Unavailable"
           message={error}
-          onRetry={() => loadDashboardData(activePatientId || 'P001')}
+          onRetry={() => loadDashboardData(activePatientId || currentUser?.patientId || 'P001')}
         />
       </PageContainer>
     );
@@ -101,7 +100,7 @@ export default function PatientDashboard() {
       <PageContainer title="Patient Recovery Dashboard">
         <EmptyState
           title="No Patient Profile Found"
-          description="Please select a valid patient profile to view post-discharge guidelines."
+          description="Please log in with a valid patient profile to view post-discharge guidelines."
         />
       </PageContainer>
     );
@@ -119,6 +118,7 @@ export default function PatientDashboard() {
       subtitle="Personalized post-discharge recovery monitoring and verified clinical guidelines."
       actions={
         <div className="flex items-center gap-3">
+          <StatusBadge status="completed" label={patient.recoveryDay} />
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 px-3.5 py-1.5 bg-white hover:bg-rose-50 border border-[#E8E2D7] hover:border-rose-200 rounded-xl text-xs font-bold text-rose-700 shadow-2xs transition-all cursor-pointer"
@@ -126,7 +126,6 @@ export default function PatientDashboard() {
             <LogOut className="w-3.5 h-3.5" />
             <span>Log Out</span>
           </button>
-          <StatusBadge status="completed" label={patient.recoveryDay} />
         </div>
       }
     >
