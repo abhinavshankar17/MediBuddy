@@ -229,7 +229,6 @@ export default function Escalations() {
           { id: 'ALL', label: 'All Categories' },
           { id: 'missed_medication', label: 'Missed Medication' },
           { id: 'repeated_missed_medication', label: 'Repeated Missed' },
-          { id: 'low_quiz_score', label: 'Low Quiz Score' },
           { id: 'knowledge_gap', label: 'Knowledge Gap' },
           { id: 'medication_question', label: 'Medication Question' },
           { id: 'warning_sign', label: 'Warning Signs' }

@@ -115,7 +115,7 @@ export default function PatientInsight() {
         <div className="flex items-center gap-2 font-medium">
           <Sparkles className="w-4 h-4 text-[#CC785C] flex-shrink-0" />
           <span>
-            <strong className="text-[#CC785C]">AI-generated — verify before acting.</strong> Educational insights synthesize patient quiz answers and dosage log events.
+            <strong className="text-[#CC785C]">AI-generated — verify before acting.</strong> Educational insights synthesize patient recovery check-ins and dosage log events.
           </span>
         </div>
         <span className="text-[10px] font-bold text-[#78716C] bg-white px-2.5 py-0.5 rounded border border-[#E8E2D7] hidden sm:inline">

@@ -42,8 +42,6 @@ export default function Sidebar() {
   const patientNavItems = [
     { label: 'Patient Dashboard', path: '/patient', icon: LayoutDashboard },
     { label: 'Medication Schedule', path: '/patient/medication', icon: Pill },
-    { label: 'Daily Quiz', path: '/patient/quiz', icon: HelpCircle },
-    { label: 'Quiz Results', path: '/patient/quiz/result', icon: Award },
     { label: 'Care Insights', path: '/patient/insights', icon: Lightbulb },
     { label: 'Discharge Plan', path: '/patient/discharge', icon: FileText }
   ];
@@ -53,7 +51,6 @@ export default function Sidebar() {
     { label: 'Patient Directory', path: '/nurse/patients', icon: Users },
     { label: 'Patient Record', path: `/nurse/patients/${activePatientId || 'P001'}`, icon: UserCheck },
     { label: 'Med Adherence', path: '/nurse/adherence', icon: Activity },
-    { label: 'Quiz Analytics', path: '/nurse/quiz-performance', icon: BarChart3 },
     { label: 'AI Summaries', path: '/nurse/ai-summary', icon: Sparkles },
     { label: 'Escalation Alerts', path: '/nurse/escalations', icon: ShieldAlert, badge: 'Active' }
   ];

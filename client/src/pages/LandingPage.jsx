@@ -25,7 +25,7 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-sm sm:text-base text-[#78716C] max-w-2xl mx-auto leading-relaxed">
-            Medi Buddy connects post-discharge patients with automated medication tracking and daily teach-back quizzes, synthesizing real-time clinical briefs for nursing teams.
+            Medi Buddy connects post-discharge patients with automated medication tracking and personalized care guidelines, synthesizing real-time clinical briefs for nursing teams.
           </p>
         </div>
 
@@ -55,7 +55,7 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#CC785C]" />
-                  <span>Daily Interactive Teach-Back Quiz</span>
+                  <span>Digital Discharge Plan & Care Instructions</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#CC785C]" />
@@ -88,14 +88,14 @@ export default function LandingPage() {
               <div>
                 <h2 className="text-2xl font-extrabold text-[#1C1917] font-serif">Nurse Intelligence Portal</h2>
                 <p className="text-xs text-[#78716C] mt-2 leading-relaxed font-medium">
-                  Real-time clinical dashboard providing automated cohort adherence metrics, quiz analytics, and AI risk briefs.
+                  Real-time clinical dashboard providing automated cohort adherence metrics, risk escalation triage, and AI clinical briefs.
                 </p>
               </div>
 
               <div className="space-y-2.5 pt-2 text-xs text-[#1C1917] font-medium">
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#0D9488]" />
-                  <span>Cohort Adherence & Quiz Performance Metrics</span>
+                  <span>Cohort Adherence & Compliance Metrics</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#0D9488]" />

@@ -152,14 +152,14 @@ export default function NurseDashboard() {
           <p className="text-xs text-[#78716C] mt-2 font-medium">Cohort dosage compliance</p>
         </Card>
 
-        <Card title="Avg Quiz Score" variant="stat">
+        <Card title="Active Care Plans" variant="stat">
           <div className="flex items-center justify-between mt-1">
-            <span className="text-3xl font-extrabold text-[#0D9488] font-serif">{overview.avgQuizScore}%</span>
+            <span className="text-3xl font-extrabold text-[#0D9488] font-serif">{overview.totalPatients}</span>
             <div className="p-2 bg-[#0D9488]/10 text-[#0D9488] rounded-lg">
-              <BarChart3 className="w-5 h-5" />
+              <Activity className="w-5 h-5" />
             </div>
           </div>
-          <p className="text-xs text-[#78716C] mt-2 font-medium">Teach-back comprehension signal</p>
+          <p className="text-xs text-[#78716C] mt-2 font-medium">Post-discharge cohort telemetry</p>
         </Card>
       </div>
 
@@ -202,7 +202,7 @@ export default function NurseDashboard() {
               <Users className="w-5 h-5 text-[#0D9488]" />
               Cohort Patient Directory
             </h3>
-            <p className="text-xs text-[#78716C]">High-level medication compliance, quiz scores, and latest events</p>
+            <p className="text-xs text-[#78716C]">High-level medication compliance, risk alerts, and latest events</p>
           </div>
 
           {/* Priority Filter Buttons */}
@@ -238,7 +238,6 @@ export default function NurseDashboard() {
                     <th className="p-4">Patient</th>
                     <th className="p-4">Recovery Context</th>
                     <th className="p-4">Medication Adherence</th>
-                    <th className="p-4">Quiz Overview</th>
                     <th className="p-4">Priority / Risk Flags</th>
                     <th className="p-4">Latest Relevant Event</th>
                     <th className="p-4 text-right">Action</th>
@@ -282,22 +281,6 @@ export default function NurseDashboard() {
                           <p className="text-[#059669]">Confirmed: <strong>{p.medicationOverview.confirmed}</strong></p>
                           <p className="text-[#D97706]">Not confirmed: <strong>{p.medicationOverview.notConfirmed}</strong></p>
                           <p className="text-[#E11D48]">Missed: <strong>{p.medicationOverview.missed}</strong></p>
-                        </div>
-                      </td>
-
-                      {/* EXACT REQUIRED QUIZ OVERVIEW FORMAT */}
-                      <td className="p-4">
-                        <div className="p-2.5 bg-[#FAF8F5] rounded-xl border border-[#E8E2D7] text-[11px] space-y-1">
-                          <p className="font-bold text-[#1C1917]">
-                            Score: <strong className="text-[#0D9488] font-serif text-xs">{p.quizOverview.scoreDisplay}</strong>
-                          </p>
-                          {p.quizOverview.knowledgeGaps && p.quizOverview.knowledgeGaps.length > 0 ? (
-                            <p className="text-[#D97706] text-[10px]">
-                              Gap: <strong>{p.quizOverview.knowledgeGaps[0]}</strong>
-                            </p>
-                          ) : (
-                            <p className="text-[#059669] text-[10px]">✓ No gaps detected</p>
-                          )}
                         </div>
                       </td>
 

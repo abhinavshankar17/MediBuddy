@@ -211,14 +211,14 @@ export default function AISummary() {
                   <p className="text-[11px] font-semibold text-[#059669]">Confirmed against scheduled dosage</p>
                 </div>
 
-                {/* Metric 2: Quiz Score */}
+                {/* Metric 2: Clinical Care Status */}
                 <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Daily Recovery Quiz</span>
-                    <HelpCircle className="w-4 h-4 text-[#0D9488]" />
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Care Status</span>
+                    <Activity className="w-4 h-4 text-[#0D9488]" />
                   </div>
-                  <p className="text-2xl font-extrabold text-[#1C1917] font-serif">{brief.quizDisplay}</p>
-                  <p className="text-[11px] font-semibold text-[#78716C]">Completed teach-back questions</p>
+                  <p className="text-2xl font-extrabold text-[#1C1917] font-serif">Active</p>
+                  <p className="text-[11px] font-semibold text-[#78716C]">Grounded recovery telemetry</p>
                 </div>
 
                 {/* Metric 3: Knowledge Gaps */}
@@ -412,7 +412,6 @@ export default function AISummary() {
 
                     <div className="flex items-center gap-3">
                       <span className="text-xs font-bold text-[#78716C]">Meds: {b.medicationAdherenceDisplay}</span>
-                      <span className="text-xs font-bold text-[#78716C]">Quiz: {b.quizDisplay}</span>
                       <StatusBadge
                         status={priorityBadgeMap[b.priority]?.status}
                         label={priorityBadgeMap[b.priority]?.label}

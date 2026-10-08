@@ -241,22 +241,22 @@ export default function PatientDashboard() {
             </div>
           </Card>
 
-          {/* Daily Quiz Card */}
-          <Card variant="stat" className="hover:border-[#D97706]/40">
+          {/* Care Insights Card */}
+          <Card variant="stat" className="hover:border-[#CC785C]/40">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#78716C]">Daily Quiz</span>
-              <div className="p-2 bg-[#D97706]/10 text-[#D97706] rounded-lg">
-                <HelpCircle className="w-4 h-4" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#78716C]">Care Insights</span>
+              <div className="p-2 bg-[#CC785C]/10 text-[#CC785C] rounded-lg">
+                <Sparkles className="w-4 h-4" />
               </div>
             </div>
             <div className="mt-3">
               <span className="text-2xl font-extrabold text-[#1C1917] font-serif">
-                {overview.quiz.score !== null ? `${overview.quiz.score}%` : 'Pending'}
+                Active
               </span>
-              <p className="text-xs text-[#78716C] mt-1">Teach-back quiz score</p>
+              <p className="text-xs text-[#78716C] mt-1">Personalized guidance</p>
             </div>
             <div className="mt-3 pt-2 border-t border-[#F4F0E8] text-[11px] text-[#78716C]">
-              <strong>Status:</strong> {overview.quiz.status === 'completed' ? 'Quiz completed' : 'Daily check ready'}
+              <strong>Focus:</strong> Grounded telemetry
             </div>
           </Card>
 

@@ -176,7 +176,6 @@ export default function PatientList() {
                   <th className="p-3.5">Recovery Context</th>
                   <th className="p-3.5">Risk Level</th>
                   <th className="p-3.5">Medication Adherence</th>
-                  <th className="p-3.5">Quiz Score</th>
                   <th className="p-3.5">Latest Telemetry</th>
                   <th className="p-3.5 text-right">Actions</th>
                 </tr>
@@ -242,17 +241,6 @@ export default function PatientList() {
                             {p.medicationOverview.missed} Missed
                           </span>
                         )}
-                      </div>
-                    </td>
-
-                    {/* Quiz Score */}
-                    <td className="p-3.5">
-                      <div className="flex items-center gap-1.5">
-                        <HelpCircle className="w-3.5 h-3.5 text-[#0D9488]" />
-                        <span className="font-extrabold text-[#1C1917]">{p.quizOverview.scoreDisplay}</span>
-                        <span className="text-[10px] font-semibold text-[#78716C]">
-                          ({p.quizOverview.percentage}%)
-                        </span>
                       </div>
                     </td>
 

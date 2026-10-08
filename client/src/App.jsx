@@ -11,8 +11,6 @@ import LoginPage from './pages/LoginPage';
 // Patient Pages
 import PatientDashboard from './pages/patient/PatientDashboard';
 import Medication from './pages/patient/Medication';
-import DailyQuiz from './pages/patient/DailyQuiz';
-import QuizResult from './pages/patient/QuizResult';
 import PatientInsight from './pages/patient/PatientInsight';
 import DischargeInstructions from './pages/patient/DischargeInstructions';
 
@@ -21,7 +19,6 @@ import NurseDashboard from './pages/nurse/NurseDashboard';
 import PatientList from './pages/nurse/PatientList';
 import PatientDetail from './pages/nurse/PatientDetail';
 import MedicationAdherence from './pages/nurse/MedicationAdherence';
-import QuizPerformance from './pages/nurse/QuizPerformance';
 import AISummary from './pages/nurse/AISummary';
 import Escalations from './pages/nurse/Escalations';
 
@@ -38,8 +35,6 @@ export default function App() {
           <Route index element={<PatientDashboard />} />
           <Route path="dashboard" element={<PatientDashboard />} />
           <Route path="medication" element={<Medication />} />
-          <Route path="quiz" element={<DailyQuiz />} />
-          <Route path="quiz/result" element={<QuizResult />} />
           <Route path="insights" element={<PatientInsight />} />
           <Route path="discharge" element={<DischargeInstructions />} />
         </Route>
@@ -51,7 +46,6 @@ export default function App() {
           <Route path="patients" element={<PatientList />} />
           <Route path="patients/:id" element={<PatientDetail />} />
           <Route path="adherence" element={<MedicationAdherence />} />
-          <Route path="quiz-performance" element={<QuizPerformance />} />
           <Route path="ai-summary" element={<AISummary />} />
           <Route path="escalations" element={<Escalations />} />
         </Route>
