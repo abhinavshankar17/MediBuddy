@@ -22,8 +22,10 @@ import {
   X,
   ChevronLeft,
   CheckCircle2,
-  ListFilter
+  ListFilter,
+  UploadCloud
 } from 'lucide-react';
+import PrescriptionUploadModal from '../../components/nurse/PrescriptionUploadModal';
 
 export default function PatientDetail() {
   const { id } = useParams();
@@ -35,6 +37,8 @@ export default function PatientDetail() {
   const [detail, setDetail] = useState(null);
   const [allPatientsList, setAllPatientsList] = useState([]);
   const [selectedEventEvidence, setSelectedEventEvidence] = useState(null);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -153,6 +157,15 @@ export default function PatientDetail() {
             status={priorityBadgeMap[patient.priority]?.status}
             label={priorityBadgeMap[patient.priority]?.label}
           />
+
+          <button
+            type="button"
+            onClick={() => setIsUploadModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0D9488] hover:bg-[#0B7A70] text-white font-bold text-xs rounded-xl shadow-2xs transition-all cursor-pointer"
+          >
+            <UploadCloud className="w-4 h-4" />
+            <span>Upload PDF</span>
+          </button>
         </div>
       }
     >
@@ -351,6 +364,16 @@ export default function PatientDetail() {
           </div>
         </div>
       )}
+
+      {/* Prescription PDF Upload Modal */}
+      <PrescriptionUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onSuccess={() => loadPatientRecord(activePatientId)}
+        patients={allPatientsList}
+        preselectedPatientId={activePatientId}
+      />
     </PageContainer>
   );
 }
+

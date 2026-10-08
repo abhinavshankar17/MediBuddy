@@ -6,10 +6,12 @@ import StatusBadge from '../../components/StatusBadge';
 import LoadingState from '../../components/LoadingState';
 import ErrorState from '../../components/ErrorState';
 import EmptyState from '../../components/EmptyState';
+import PrescriptionUploadModal from '../../components/nurse/PrescriptionUploadModal';
 import {
   getNurseCohortOverview,
   getNursePatientList,
-  getNurseAlerts
+  getNurseAlerts,
+  getPrescriptionList
 } from '../../services/nurseService';
 import { useApp } from '../../context/AppContext';
 import {
@@ -26,7 +28,13 @@ import {
   Pill,
   Clock,
   Sparkles,
-  ArrowUpRight
+  ArrowUpRight,
+  UploadCloud,
+  FileText,
+  FileCheck,
+  Eye,
+  Calendar,
+  Stethoscope
 } from 'lucide-react';
 
 export default function NurseDashboard() {
@@ -36,7 +44,12 @@ export default function NurseDashboard() {
   const [overview, setOverview] = useState(null);
   const [patients, setPatients] = useState([]);
   const [alerts, setAlerts] = useState([]);
+  const [prescriptions, setPrescriptions] = useState([]);
   const [priorityFilter, setPriorityFilter] = useState('ALL'); // 'ALL' | 'HIGH' | 'MEDIUM' | 'LOW'
+
+  // Prescription Upload Modal State
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [selectedUploadPatientId, setSelectedUploadPatientId] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,15 +59,17 @@ export default function NurseDashboard() {
       setLoading(true);
       setError(null);
 
-      const [oData, pList, aList] = await Promise.all([
+      const [oData, pList, aList, docList] = await Promise.all([
         getNurseCohortOverview(),
         getNursePatientList(priority, query),
-        getNurseAlerts()
+        getNurseAlerts(),
+        getPrescriptionList()
       ]);
 
       setOverview(oData);
       setPatients(pList);
       setAlerts(aList);
+      setPrescriptions(docList || []);
     } catch (err) {
       console.error('Failed to load nurse dashboard:', err);
       setError('Unable to load clinical nurse dashboard. Please try again.');
@@ -66,6 +81,19 @@ export default function NurseDashboard() {
   useEffect(() => {
     loadNurseDashboardData(priorityFilter, searchQuery);
   }, [priorityFilter, searchQuery]);
+
+  const handleUploadSuccess = (newDoc) => {
+    // Refresh prescription list and patient directory
+    getPrescriptionList().then((list) => {
+      if (list) setPrescriptions(list);
+    });
+  };
+
+  const openUploadForPatient = (e, pId) => {
+    e.stopPropagation();
+    setSelectedUploadPatientId(pId);
+    setIsUploadModalOpen(true);
+  };
 
   if (loading) {
     return (
@@ -106,15 +134,29 @@ export default function NurseDashboard() {
   return (
     <PageContainer
       title="Nurse Clinical Dashboard"
-      subtitle="Cohort recovery directory, medication adherence counts, teach-back scores, and risk escalations."
+      subtitle="Cohort recovery directory, medication adherence counts, prescription uploads, and risk escalations."
       actions={
-        <div className="flex items-center gap-3">
-          <StatusBadge status="info" label={`${overview.totalPatients} Active Patients`} />
+        <div className="flex flex-wrap items-center gap-2.5">
+          <StatusBadge status="info" label={`${overview?.totalPatients || 0} Active Patients`} />
+          
+          {/* Main Action: Upload Prescription PDF */}
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedUploadPatientId(null);
+              setIsUploadModalOpen(true);
+            }}
+            className="flex items-center gap-2 px-3.5 py-1.5 bg-[#0D9488] hover:bg-[#0B7A70] text-white font-bold text-xs rounded-xl shadow-2xs transition-all cursor-pointer"
+          >
+            <UploadCloud className="w-4 h-4" />
+            <span>Upload Prescription PDF</span>
+          </button>
+
           <Link
             to="/nurse/patients"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0D9488] hover:bg-[#0B7A70] text-white font-bold text-xs rounded-xl shadow-2xs transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F4F0E8] hover:bg-[#E8E2D7] text-[#1C1917] font-bold text-xs rounded-xl border border-[#E8E2D7] transition-all"
           >
-            <span>Full Patient Directory</span>
+            <span>Patient Directory</span>
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -152,16 +194,119 @@ export default function NurseDashboard() {
           <p className="text-xs text-[#78716C] mt-2 font-medium">Cohort dosage compliance</p>
         </Card>
 
-        <Card title="Active Care Plans" variant="stat">
+        <Card title="Prescriptions & Records" variant="stat">
           <div className="flex items-center justify-between mt-1">
-            <span className="text-3xl font-extrabold text-[#0D9488] font-serif">{overview.totalPatients}</span>
+            <span className="text-3xl font-extrabold text-[#0D9488] font-serif">{prescriptions.length || overview.totalPatients}</span>
             <div className="p-2 bg-[#0D9488]/10 text-[#0D9488] rounded-lg">
-              <Activity className="w-5 h-5" />
+              <FileText className="w-5 h-5" />
             </div>
           </div>
-          <p className="text-xs text-[#78716C] mt-2 font-medium">Post-discharge cohort telemetry</p>
+          <p className="text-xs text-[#78716C] mt-2 font-medium">Verified clinical documents</p>
         </Card>
       </div>
+
+      {/* Prescription PDF Upload Banner / Quick Action Section */}
+      <Card
+        title="Prescription & Clinical Document Records"
+        subtitle="Upload and manage verified PDF prescriptions, discharge instructions, and orders"
+        actions={
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedUploadPatientId(null);
+              setIsUploadModalOpen(true);
+            }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0D9488] hover:bg-[#0B7A70] text-white font-bold text-xs rounded-xl shadow-2xs transition-all cursor-pointer"
+          >
+            <UploadCloud className="w-4 h-4" />
+            <span>Upload New PDF</span>
+          </button>
+        }
+      >
+        {prescriptions.length === 0 ? (
+          <div className="p-6 border-2 border-dashed border-[#E8E2D7] rounded-2xl text-center bg-[#FAF8F5]">
+            <FileText className="w-8 h-8 text-[#78716C] mx-auto mb-2 opacity-60" />
+            <h4 className="text-xs font-bold text-[#1C1917]">No Uploaded Prescriptions Yet</h4>
+            <p className="text-[11px] text-[#78716C] mt-1 max-w-sm mx-auto">
+              Upload patient prescriptions or clinical summaries in PDF format for instant ingestion and verification.
+            </p>
+            <button
+              type="button"
+              onClick={() => setIsUploadModalOpen(true)}
+              className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 bg-[#0D9488] hover:bg-[#0B7A70] text-white font-bold text-xs rounded-xl shadow-2xs transition-all cursor-pointer"
+            >
+              <UploadCloud className="w-4 h-4" />
+              <span>Upload First Prescription PDF</span>
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {prescriptions.slice(0, 6).map((doc) => {
+              const pObj = patients.find((p) => p._id === doc.patientId);
+              return (
+                <div
+                  key={doc._id}
+                  className="p-3.5 bg-white border border-[#E8E2D7] rounded-xl hover:border-[#0D9488]/50 hover:shadow-xs transition-all flex flex-col justify-between gap-3 group"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-lg bg-[#0D9488]/10 text-[#0D9488] flex items-center justify-center flex-shrink-0">
+                          <FileText className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <span className="font-bold text-xs text-[#1C1917] block truncate max-w-[170px]">
+                            {doc.fileName || `${doc.documentType || 'Prescription'}.pdf`}
+                          </span>
+                          <span className="text-[10px] text-[#78716C]">
+                            {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Recent'}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold px-2 py-0.5 bg-[#FAF8F5] text-[#0D9488] border border-[#E8E2D7] rounded-md uppercase">
+                        {doc.documentType === 'discharge_summary' ? 'Discharge' : 'Prescription'}
+                      </span>
+                    </div>
+
+                    <div className="pt-1 text-[11px] space-y-0.5 text-[#78716C]">
+                      <p>
+                        Patient: <strong className="text-[#1C1917]">{pObj?.name || doc.patientName || doc.patientId}</strong> ({doc.patientId})
+                      </p>
+                      <p className="truncate">
+                        Doctor: <span className="text-[#1C1917]">{doc.doctorName || 'Dr. Attending'}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-[#F4F0E8] text-xs">
+                    {doc.fileUrl ? (
+                      <a
+                        href={doc.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[#0D9488] hover:text-[#0B7A70] font-bold text-[11px]"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>View PDF</span>
+                      </a>
+                    ) : (
+                      <span className="text-[10px] text-[#78716C] italic">Embedded Document</span>
+                    )}
+
+                    <Link
+                      to={`/nurse/patients/${doc.patientId}`}
+                      className="inline-flex items-center gap-1 text-[#78716C] hover:text-[#1C1917] font-semibold text-[11px]"
+                    >
+                      <span>Patient Profile</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </Card>
 
       {/* Escalation Category Alerts Banner */}
       {alerts && alerts.length > 0 && (
@@ -202,7 +347,7 @@ export default function NurseDashboard() {
               <Users className="w-5 h-5 text-[#0D9488]" />
               Cohort Patient Directory
             </h3>
-            <p className="text-xs text-[#78716C]">High-level medication compliance, risk alerts, and latest events</p>
+            <p className="text-xs text-[#78716C]">High-level medication compliance, risk alerts, and prescription actions</p>
           </div>
 
           {/* Priority Filter Buttons */}
@@ -240,7 +385,7 @@ export default function NurseDashboard() {
                     <th className="p-4">Medication Adherence</th>
                     <th className="p-4">Priority / Risk Flags</th>
                     <th className="p-4">Latest Relevant Event</th>
-                    <th className="p-4 text-right">Action</th>
+                    <th className="p-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#F4F0E8]">
@@ -306,15 +451,27 @@ export default function NurseDashboard() {
                         </span>
                       </td>
 
-                      {/* Patient Detail Navigation Action */}
+                      {/* Patient Actions (Upload PDF & Inspect) */}
                       <td className="p-4 text-right">
-                        <Link
-                          to={`/nurse/patients/${p._id}`}
-                          className="inline-flex items-center gap-1 text-[#0D9488] hover:text-[#0B7A70] font-bold text-xs"
-                        >
-                          <span>Inspect</span>
-                          <ChevronRight className="w-4 h-4" />
-                        </Link>
+                        <div className="inline-flex items-center gap-2">
+                          <button
+                            type="button"
+                            title="Upload Prescription PDF for this patient"
+                            onClick={(e) => openUploadForPatient(e, p._id)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FAF8F5] hover:bg-[#0D9488] text-[#0D9488] hover:text-white font-bold text-[11px] rounded-lg border border-[#0D9488]/30 transition-all cursor-pointer"
+                          >
+                            <UploadCloud className="w-3.5 h-3.5" />
+                            <span>Upload PDF</span>
+                          </button>
+
+                          <Link
+                            to={`/nurse/patients/${p._id}`}
+                            className="inline-flex items-center gap-0.5 text-[#78716C] hover:text-[#0D9488] font-bold text-xs px-2 py-1 rounded-lg hover:bg-[#FAF8F5]"
+                          >
+                            <span>Inspect</span>
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -324,6 +481,15 @@ export default function NurseDashboard() {
           </Card>
         )}
       </div>
+
+      {/* Prescription PDF Upload Modal */}
+      <PrescriptionUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onSuccess={handleUploadSuccess}
+        patients={patients}
+        preselectedPatientId={selectedUploadPatientId}
+      />
     </PageContainer>
   );
 }

@@ -141,6 +141,62 @@ const dataStore = {
   },
 
   /**
+   * Save or update a clinical document or prescription
+   * @param {Object} docData 
+   */
+  async saveDocument(docData) {
+    if (!docData || !docData._id) {
+      throw new Error('Document must have an _id');
+    }
+
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        await Document.findOneAndUpdate(
+          { _id: docData._id },
+          docData,
+          { upsert: true, new: true }
+        );
+      } catch (err) {
+        console.error('Error saving document to MongoDB:', err.message);
+      }
+    }
+
+    const { documents } = getCache();
+    const idx = documents.findIndex(d => d._id === docData._id);
+    if (idx >= 0) {
+      documents[idx] = { ...documents[idx], ...docData };
+    } else {
+      documents.unshift(docData);
+    }
+    return docData;
+  },
+
+  /**
+   * List all documents or filter by patientId
+   * @param {string} [patientId] 
+   */
+  async listDocuments(patientId = null) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const query = patientId ? { patientId } : {};
+        const docs = await Document.find(query).sort({ uploadedAt: -1 }).lean();
+        if (docs && docs.length > 0) return docs;
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { documents } = getCache();
+    if (patientId) {
+      return documents.filter(d => d.patientId === patientId);
+    }
+    return documents;
+  },
+
+
+  /**
    * Get extracted instructions strictly isolated by patientId
    * @param {string} patientId 
    * @param {Object} [options] 

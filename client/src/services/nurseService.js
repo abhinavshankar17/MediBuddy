@@ -774,4 +774,41 @@ export async function getQuizAnalyticsCohort() {
   };
 }
 
+/**
+ * Upload a real Prescription PDF file to the backend
+ * @param {FormData} formData 
+ */
+export async function uploadPrescriptionPdf(formData) {
+  const res = await fetch('/api/nurse/prescriptions/upload', {
+    method: 'POST',
+    body: formData
+  });
+
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'Failed to upload prescription PDF');
+  }
+
+  return json.data !== undefined ? json.data : json;
+}
+
+/**
+ * Fetch uploaded prescriptions or documents
+ * @param {string} [patientId]
+ */
+export async function getPrescriptionList(patientId = null) {
+  try {
+    const url = patientId ? `/api/nurse/prescriptions?patientId=${patientId}` : '/api/nurse/prescriptions';
+    const res = await fetch(url);
+    if (res.ok) {
+      const json = await res.json();
+      return json.data !== undefined ? json.data : json;
+    }
+  } catch (err) {
+    console.warn('Prescriptions fetch fallback:', err.message);
+  }
+  return [];
+}
+
+
 

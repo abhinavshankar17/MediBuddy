@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const nurseController = require('../controllers/nurse.controller');
 const escalationController = require('../controllers/escalation.controller');
+const documentController = require('../controllers/document.controller');
+const upload = require('../middleware/upload');
 
 /**
  * Nurse Dashboard Routes (/api/nurse)
@@ -11,6 +13,14 @@ const escalationController = require('../controllers/escalation.controller');
 router.get('/dashboard', nurseController.getDashboard);
 router.get('/dashboard-overview', nurseController.getCohortOverview);
 router.get('/alerts', escalationController.getEscalations);
+
+// Prescription PDF Upload and Retrieval
+router.post('/prescriptions/upload', upload.single('file'), documentController.uploadDocument);
+router.get('/prescriptions', documentController.getAllDocuments);
+router.get('/patients/:id/prescriptions', (req, res, next) => {
+  req.params.patientId = req.params.id;
+  return documentController.getDocumentByPatientId(req, res, next);
+});
 
 // Patient list monitoring view (alias to dashboard list)
 router.get('/patients', nurseController.getDashboard);
