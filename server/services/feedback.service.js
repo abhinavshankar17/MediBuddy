@@ -61,7 +61,11 @@ const feedbackService = {
       urgency: urgency.toLowerCase(),
       notes: notes || '',
       submittedAt: new Date().toISOString(),
-      status: 'submitted'
+      status: 'pending_review',
+      reviewStatus: 'pending',
+      caregiverNote: null,
+      reviewedAt: null,
+      reviewedBy: null
     };
 
     // Store in dataStore

@@ -12,6 +12,7 @@ import {
   getPatientAppointments,
   clearPatientHistory
 } from '../../services/feedbackService';
+import { useRealtimeSync } from '../../utils/realtimeSync';
 import {
   MessageSquarePlus,
   AlertTriangle,
@@ -98,6 +99,13 @@ export default function PatientFeedback() {
   useEffect(() => {
     loadHistory();
   }, [patientId]);
+
+  useRealtimeSync({
+    patientId,
+    onUpdate: () => loadHistory(),
+    pollingInterval: 3000,
+    enabled: true
+  });
 
   const loadHistory = async () => {
     setHistoryLoading(true);

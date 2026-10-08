@@ -38,16 +38,71 @@ export function getDiagnosingDoctor(patientId) {
   };
 }
 
+const STORAGE_FEEDBACKS_PREFIX = 'medi_buddy_patient_feedbacks_';
+
+export function getLocalFeedbacks(patientId) {
+  try {
+    const raw = localStorage.getItem(`${STORAGE_FEEDBACKS_PREFIX}${patientId}`);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveLocalFeedbacks(patientId, feedbacks) {
+  try {
+    localStorage.setItem(`${STORAGE_FEEDBACKS_PREFIX}${patientId}`, JSON.stringify(feedbacks));
+  } catch (e) {
+    console.error('Failed to save local feedbacks:', e);
+  }
+}
+
+export function updateLocalFeedbackReview(patientId, feedbackId, reviewData = {}) {
+  const localList = getLocalFeedbacks(patientId);
+  const updated = localList.map((fb) =>
+    fb._id === feedbackId
+      ? {
+          ...fb,
+          status: 'reviewed',
+          reviewStatus: 'reviewed',
+          caregiverNote: reviewData.caregiverNote || reviewData.note || 'Acknowledged by caregiver.',
+          reviewedAt: new Date().toISOString(),
+          reviewedBy: reviewData.caregiverId || 'Family Member'
+        }
+      : fb
+  );
+  saveLocalFeedbacks(patientId, updated);
+}
+
 /**
  * Submit patient condition feedback
  */
 export async function submitFeedback(patientId, feedbackData) {
+  const newFeedback = {
+    _id: `FB${Date.now()}`,
+    patientId,
+    ...feedbackData,
+    submittedAt: new Date().toISOString(),
+    status: 'pending_review',
+    reviewStatus: 'pending',
+    caregiverNote: null,
+    reviewedAt: null,
+    reviewedBy: null
+  };
+
+  // 1. Immediately persist to localStorage
+  const existingLocal = getLocalFeedbacks(patientId);
+  saveLocalFeedbacks(patientId, [newFeedback, ...existingLocal]);
+
+  // 2. Broadcast real-time update
   notifyPatientUpdate({
     type: 'feedback_submitted',
     patientId,
+    feedback: newFeedback,
     timestamp: Date.now()
   });
 
+  // 3. Sync to backend
   try {
     const res = await fetch(`${API_BASE}/patients/${patientId}/feedback`, {
       method: 'POST',
@@ -56,43 +111,67 @@ export async function submitFeedback(patientId, feedbackData) {
     });
     if (res.ok) {
       const json = await res.json();
-      return json.data !== undefined ? json.data : json;
+      const serverFeedback = json.data !== undefined ? json.data : json;
+      if (serverFeedback && serverFeedback._id) {
+        const currentLocal = getLocalFeedbacks(patientId);
+        const updated = currentLocal.map((item) =>
+          item._id === newFeedback._id ? { ...newFeedback, ...serverFeedback } : item
+        );
+        saveLocalFeedbacks(patientId, updated);
+        return { ...newFeedback, ...serverFeedback };
+      }
     }
   } catch (err) {
     // offline fallback
   }
 
-  // Mock fallback
-  return {
-    _id: `FB${Date.now()}`,
-    patientId,
-    ...feedbackData,
-    submittedAt: new Date().toISOString(),
-    status: 'submitted'
-  };
+  return newFeedback;
 }
 
 /**
  * Get all feedbacks for a patient
  */
 export async function getPatientFeedbacks(patientId) {
+  const localList = getLocalFeedbacks(patientId);
+  let remoteList = [];
+
   try {
     const res = await fetch(`${API_BASE}/patients/${patientId}/feedback`);
     if (res.ok) {
       const json = await res.json();
       const data = json.data !== undefined ? json.data : json;
-      if (Array.isArray(data)) return data;
+      if (Array.isArray(data)) {
+        remoteList = data;
+      }
     }
   } catch (err) {
     // offline fallback
   }
-  return [];
+
+  // Merge remote and local (avoiding duplicates by _id)
+  const map = new Map();
+  remoteList.forEach((fb) => map.set(fb._id, fb));
+  localList.forEach((fb) => {
+    if (map.has(fb._id)) {
+      map.set(fb._id, { ...map.get(fb._id), ...fb });
+    } else {
+      map.set(fb._id, fb);
+    }
+  });
+
+  return Array.from(map.values()).sort(
+    (a, b) => new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0)
+  );
 }
 
 /**
  * Clear all feedbacks and appointments history for a patient
  */
 export async function clearPatientHistory(patientId) {
+  try {
+    localStorage.removeItem(`${STORAGE_FEEDBACKS_PREFIX}${patientId}`);
+  } catch (e) {}
+
   try {
     const res = await fetch(`${API_BASE}/patients/${patientId}/feedback`, {
       method: 'DELETE'

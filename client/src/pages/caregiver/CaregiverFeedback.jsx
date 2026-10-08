@@ -63,7 +63,18 @@ export default function CaregiverFeedback() {
         getPatientFeedbacks(patientId)
       ]);
 
-      setLinkedPatients(patientsRes.patients || []);
+      const pts = patientsRes.patients || [];
+      setLinkedPatients(pts);
+
+      // If active patient is not in linked patients, automatically align to first linked patient
+      if (currentUser?.role === 'caregiver' && pts.length > 0 && !pts.some((p) => p._id === patientId)) {
+        const firstId = pts[0]._id;
+        setActivePatientId(firstId);
+        const realignedFeedbacks = await getPatientFeedbacks(firstId);
+        setFeedbacks(Array.isArray(realignedFeedbacks) ? realignedFeedbacks : []);
+        return;
+      }
+
       setFeedbacks(Array.isArray(feedbacksRes) ? feedbacksRes : []);
     } catch (err) {
       if (!isSilent) {
@@ -79,7 +90,7 @@ export default function CaregiverFeedback() {
   const { isLiveConnected, isRefreshing, refreshNow } = useRealtimeSync({
     patientId,
     onUpdate: (isSilent) => loadFeedbacks(isSilent),
-    pollingInterval: 4000,
+    pollingInterval: 3000,
     enabled: true
   });
 
@@ -140,10 +151,17 @@ export default function CaregiverFeedback() {
     relationship: 'Family Member'
   };
 
+  const isPendingFeedback = (f) =>
+    f.status === 'pending' ||
+    f.status === 'pending_review' ||
+    f.status === 'submitted' ||
+    f.reviewStatus === 'pending' ||
+    (!f.reviewedAt && f.status !== 'reviewed');
+
   // Filter feedbacks
   const filteredFeedbacks = feedbacks.filter((f) => {
-    const isPending = f.status === 'pending' || f.reviewStatus === 'pending' || !f.reviewedAt;
-    const isUrgent = f.urgency === 'urgent' || f.urgency === 'high';
+    const isPending = isPendingFeedback(f);
+    const isUrgent = f.urgency === 'urgent' || f.urgency === 'high' || f.urgency === 'emergency';
 
     if (activeFilter === 'pending') return isPending;
     if (activeFilter === 'urgent') return isUrgent;
@@ -151,9 +169,7 @@ export default function CaregiverFeedback() {
     return true;
   });
 
-  const pendingCount = feedbacks.filter(
-    (f) => f.status === 'pending' || f.reviewStatus === 'pending' || !f.reviewedAt
-  ).length;
+  const pendingCount = feedbacks.filter(isPendingFeedback).length;
 
   return (
     <PageContainer
@@ -338,8 +354,8 @@ export default function CaregiverFeedback() {
       ) : (
         <div className="space-y-4">
           {filteredFeedbacks.map((f) => {
-            const isPending = f.status === 'pending' || f.reviewStatus === 'pending' || !f.reviewedAt;
-            const isUrgent = f.urgency === 'urgent' || f.urgency === 'high';
+            const isPending = isPendingFeedback(f);
+            const isUrgent = f.urgency === 'urgent' || f.urgency === 'high' || f.urgency === 'emergency';
             const isCurrentlyEditing = reviewingId === f._id;
 
             return (
@@ -347,10 +363,10 @@ export default function CaregiverFeedback() {
                 key={f._id}
                 className={`p-5 sm:p-6 transition-all border ${
                   isUrgent
-                    ? 'border-amber-300 bg-amber-50/20 shadow-xs'
+                    ? 'border-rose-300 bg-rose-50/20 shadow-xs'
                     : isPending
-                    ? 'border-[#E8E2D7] bg-white shadow-2xs'
-                    : 'border-[#E8E2D7] bg-[#FAF8F5]/50'
+                    ? 'border-amber-200 bg-white shadow-2xs'
+                    : 'border-[#E8E2D7] bg-[#FAF8F5]/60'
                 }`}
               >
                 {/* Header: Date + Urgency + Status */}
@@ -377,7 +393,7 @@ export default function CaregiverFeedback() {
                           : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                       }`}
                     >
-                      {f.urgency || 'Low'} Priority
+                      {f.urgency || 'Normal'} Urgency
                     </span>
                   </div>
 
@@ -396,12 +412,27 @@ export default function CaregiverFeedback() {
                   </div>
                 </div>
 
-                {/* Content: Symptoms & Patient Note */}
+                {/* Content: Reported Condition & Patient Notes */}
                 <div className="space-y-3 mb-4">
+                  {/* Primary Reported Health Condition / Concern */}
+                  <div className="p-3.5 rounded-xl bg-gradient-to-r from-[#FAF8F5] to-white border border-[#E8E2D7]">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-6 h-6 rounded-lg bg-[#CC785C]/15 text-[#CC785C] flex items-center justify-center">
+                        <Activity className="w-3.5 h-3.5" />
+                      </div>
+                      <p className="text-[11px] font-bold text-[#78716C] uppercase tracking-wider">
+                        Patient's Reported Condition:
+                      </p>
+                    </div>
+                    <p className="text-sm font-bold text-[#1C1917] ml-8">
+                      {f.condition || 'General Post-Discharge Health Check-in'}
+                    </p>
+                  </div>
+
                   {/* Symptoms & Feelings Snapshot */}
                   {Array.isArray(f.symptoms) && f.symptoms.length > 0 && (
                     <div className="flex items-center gap-1.5 flex-wrap text-xs">
-                      <span className="text-[#78716C]">Reported Feelings:</span>
+                      <span className="text-[#78716C] font-semibold">Reported Feelings / Symptoms:</span>
                       {f.symptoms.map((s, idx) => (
                         <span
                           key={idx}
@@ -413,15 +444,17 @@ export default function CaregiverFeedback() {
                     </div>
                   )}
 
-                  {/* Patient's Note */}
-                  <div className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E8E2D7]">
-                    <p className="text-[11px] font-bold text-[#78716C] uppercase tracking-wider mb-1">
-                      Note from {activePatientObj.name}:
-                    </p>
-                    <p className="text-xs text-[#1C1917] leading-relaxed italic">
-                      "{f.notes || f.comment || f.message || 'Feeling good today, rested well after taking scheduled doses.'}"
-                    </p>
-                  </div>
+                  {/* Patient's Note / Details */}
+                  {f.notes && (
+                    <div className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E8E2D7]">
+                      <p className="text-[11px] font-bold text-[#78716C] uppercase tracking-wider mb-1">
+                        Additional Note from {activePatientObj.name}:
+                      </p>
+                      <p className="text-xs text-[#1C1917] leading-relaxed italic">
+                        "{f.notes}"
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Caregiver Review Section */}

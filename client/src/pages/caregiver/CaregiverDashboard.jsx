@@ -62,7 +62,18 @@ export default function CaregiverDashboard() {
         getDailyReport(patientId, caregiverId)
       ]);
 
-      setLinkedPatients(patientsData.patients || []);
+      const pts = patientsData.patients || [];
+      setLinkedPatients(pts);
+
+      // Auto-align active patient if current is not in linked list
+      if (currentUser?.role === 'caregiver' && pts.length > 0 && !pts.some((p) => p._id === patientId)) {
+        const firstId = pts[0]._id;
+        setActivePatientId(firstId);
+        const realignedReport = await getDailyReport(firstId, caregiverId);
+        setReport(realignedReport);
+        return;
+      }
+
       setReport(reportData);
     } catch (err) {
       if (!isSilent) {
@@ -74,11 +85,11 @@ export default function CaregiverDashboard() {
     }
   };
 
-  // Real-time synchronization hook (SSE + BroadcastChannel + localStorage + 4s polling)
+  // Real-time synchronization hook (SSE + BroadcastChannel + localStorage + 3s polling)
   const { isLiveConnected, isRefreshing, lastSyncTime, refreshNow } = useRealtimeSync({
     patientId,
     onUpdate: (isSilent) => loadDashboard(isSilent),
-    pollingInterval: 4000,
+    pollingInterval: 3000,
     enabled: true
   });
 
@@ -443,6 +454,110 @@ export default function CaregiverDashboard() {
             </Card>
           </div>
         </div>
+
+        {/* 4. Recent Patient Feedback & Condition Updates */}
+        <Card
+          title="Recent Patient Feedback & Condition Reports"
+          subtitle={`Real-time health updates and check-in reports submitted by ${patient.name} from the patient portal`}
+          badge={
+            <button
+              onClick={() => navigate('/caregiver/feedback')}
+              className="text-xs font-bold text-[#E07A5F] hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              <span>Feedback Review Center</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          }
+        >
+          {(!recentFeedbacks || recentFeedbacks.length === 0) ? (
+            <div className="p-6 text-center rounded-xl bg-[#FAF8F5] border border-[#E8E2D7]">
+              <MessageSquare className="w-6 h-6 text-[#A8A29E] mx-auto mb-1.5" />
+              <p className="text-xs font-bold text-[#1C1917]">No feedback reports submitted yet</p>
+              <p className="text-[11px] text-[#78716C] mt-0.5">
+                When {patient.name} logs a condition or note on their portal, it appears here in real time.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {recentFeedbacks.slice(0, 3).map((fb) => {
+                const isPending =
+                  fb.status === 'pending' ||
+                  fb.status === 'pending_review' ||
+                  fb.status === 'submitted' ||
+                  fb.reviewStatus === 'pending' ||
+                  (!fb.reviewedAt && fb.status !== 'reviewed');
+                const isUrgent = fb.urgency === 'urgent' || fb.urgency === 'high' || fb.urgency === 'emergency';
+
+                return (
+                  <div
+                    key={fb._id}
+                    className={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                      isUrgent
+                        ? 'border-rose-200 bg-rose-50/30'
+                        : isPending
+                        ? 'border-amber-200 bg-amber-50/20'
+                        : 'border-[#E8E2D7] bg-[#FAF8F5]'
+                    }`}
+                  >
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-bold text-xs text-[#1C1917]">
+                          {fb.condition || 'Health Check-in Report'}
+                        </span>
+                        <span
+                          className={`text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
+                            isUrgent
+                              ? 'bg-rose-100 text-rose-800'
+                              : fb.urgency === 'moderate'
+                              ? 'bg-amber-100 text-amber-800'
+                              : 'bg-emerald-100 text-emerald-800'
+                          }`}
+                        >
+                          {fb.urgency || 'Normal'}
+                        </span>
+                        {isPending ? (
+                          <span className="text-[10px] font-bold text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded-md flex items-center gap-1">
+                            <Clock className="w-2.5 h-2.5" />
+                            Needs Review
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-md flex items-center gap-1">
+                            <CheckCircle2 className="w-2.5 h-2.5" />
+                            Reviewed
+                          </span>
+                        )}
+                      </div>
+
+                      {fb.notes && (
+                        <p className="text-xs text-[#1C1917] italic truncate">
+                          "{fb.notes}"
+                        </p>
+                      )}
+
+                      {fb.caregiverNote && (
+                        <p className="text-[11px] text-emerald-800 font-medium">
+                          Caregiver response: "{fb.caregiverNote}"
+                        </p>
+                      )}
+
+                      <p className="text-[10px] text-[#78716C]">
+                        Submitted {fb.submittedAt ? new Date(fb.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }) : 'Recently'}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => navigate('/caregiver/feedback')}
+                      className="self-start sm:self-center px-3 py-1.5 rounded-lg text-xs font-bold text-[#E07A5F] hover:bg-[#E07A5F]/10 border border-[#E07A5F]/30 transition-all flex items-center gap-1 cursor-pointer flex-shrink-0"
+                    >
+                      <span>Review Details</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </Card>
 
         {/* 5. Encouragement Board Section */}
         {encouragements.length > 0 && (
