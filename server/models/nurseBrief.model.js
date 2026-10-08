@@ -9,6 +9,9 @@ const NurseBriefSchema = new mongoose.Schema({
     default: 'MEDIUM'
   },
   summary: { type: String, required: true },
+  aiSummary: { type: String },
+  disclaimer: { type: String, default: 'AI-generated — verify before acting.' },
+  evidence: { type: mongoose.Schema.Types.Mixed },
   medicationAdherence: {
     total: { type: Number, default: 0 },
     confirmed: { type: Number, default: 0 },

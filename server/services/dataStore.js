@@ -14,7 +14,8 @@ let memoryCache = {
   quizQuestions: null,
   quizAnswers: null,
   patientInsights: null,
-  nurseBriefs: null
+  nurseBriefs: null,
+  escalations: null
 };
 
 const getCache = () => {
@@ -30,6 +31,7 @@ const getCache = () => {
     memoryCache.quizAnswers = loadMockJson('quizAnswers.json') || [];
     memoryCache.patientInsights = loadMockJson('patientInsights.json') || [];
     memoryCache.nurseBriefs = loadMockJson('nurseBriefs.json') || [];
+    memoryCache.escalations = loadMockJson('escalations.json') || [];
   }
   return memoryCache;
 };
@@ -845,6 +847,16 @@ const dataStore = {
       nurseBriefs.push(briefData);
       return briefData;
     }
+  },
+
+  /**
+   * Get escalations for a patient
+   * @param {string} patientId 
+   */
+  async getEscalationsByPatient(patientId) {
+    if (!patientId) return [];
+    const { escalations } = getCache();
+    return escalations.filter(e => e.patientId === patientId);
   }
 };
 

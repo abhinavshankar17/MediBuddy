@@ -1274,11 +1274,127 @@ RESPONSE:
 
 ---
 
+### Feature 9: Nurse AI Summary Endpoints (`/api/nurse/ai-summary` & `/api/patients/:id/nurse-ai-summary`)
+
+```text
+METHOD: GET
+PATH: /api/nurse/ai-summary/:patientId
+PATH (alias): /api/nurse/ai-summary?patientId=:patientId
+PATH (alias): /api/nurse/patients/:id/ai-summary
+PATH (alias): /api/nurse/patients/:id/summary
+PATH (alias): /api/nurse/dashboard/:id/ai-summary
+PATH (nested): /api/patients/:id/nurse-ai-summary
+AUTH: Required / Nurse or Clinician role
+PURPOSE: Retrieve Nurse AI Summary combining 7 data sources:
+         1. Medication adherence
+         2. Medication events
+         3. Quiz performance
+         4. Quiz answers
+         5. Knowledge gaps
+         6. Verified discharge instructions
+         7. Relevant escalations
+REQUEST:
+  Headers: None
+  Params:
+    - patientId / id (string, required): Patient ID (e.g. P001, P003)
+RESPONSE:
+  Status: 200 OK
+  Body:
+    {
+      "success": true,
+      "message": "Nurse AI Summary for patient P001 retrieved successfully",
+      "data": {
+        "_id": "NB006",
+        "patientId": "P001",
+        "priority": "MEDIUM",
+        "medicationAdherence": {
+          "total": 3,
+          "confirmed": 2,
+          "notConfirmed": 1,
+          "missed": 0
+        },
+        "quizPerformance": {
+          "score": 80,
+          "correct": 4,
+          "total": 5
+        },
+        "flags": [
+          "Medication not confirmed",
+          "Mobility aid knowledge gap"
+        ],
+        "knowledgeGaps": [
+          "Mobility aid usage"
+        ],
+        "questionsForNurse": [
+          "Confirm whether evening Paracetamol was taken.",
+          "Reinforce the importance of using a walker."
+        ],
+        "recommendedFollowUp": "Routine nurse review.",
+        "aiSummary": "Patient confirmed 2 of 3 medications and scored 80% in today's recovery quiz. The patient may need reinforcement of walker-assisted walking instructions. Evening Paracetamol was not confirmed.",
+        "summary": "Patient confirmed 2 of 3 medications and scored 80% in today's recovery quiz. The patient may need reinforcement of walker-assisted walking instructions. Evening Paracetamol was not confirmed.",
+        "evidenceEventIds": [
+          "E101",
+          "E105",
+          "E107"
+        ],
+        "evidence": {
+          "medicationEvents": [ ... ],
+          "quizAnswers": [ ... ],
+          "verifiedInstructions": [ ... ],
+          "escalations": [ ... ],
+          "traces": [
+            {
+              "claim": "Medication not confirmed",
+              "sourceType": "medication_event",
+              "sourceId": "E107",
+              "details": "Event E107 (medication_not_taken) recorded at 2026-10-08T18:00:00+05:30"
+            },
+            {
+              "claim": "Knowledge gap: Which mobility aid should you use?",
+              "sourceType": "quiz_answer",
+              "sourceId": "QQ004",
+              "sourceItemId": "EI005",
+              "sourceSentence": "Use walker when walking."
+            }
+          ]
+        },
+        "aiGenerated": true,
+        "disclaimer": "AI-generated — verify before acting.",
+        "generatedAt": "2026-10-08T13:10:00+05:30"
+      }
+    }
+
+---
+
+METHOD: POST
+PATH: /api/nurse/ai-summary/generate
+PATH (alias): /api/nurse/patients/:id/ai-summary/generate
+PATH (nested): /api/patients/:id/nurse-ai-summary/generate
+AUTH: Required / Nurse or Clinician role
+PURPOSE: Dynamically synthesize a fresh grounded Nurse AI Summary strictly verified against safety boundaries
+REQUEST:
+  Headers: Content-Type: application/json
+  Body:
+    {
+      "patientId": "P001"
+    }
+RESPONSE:
+  Status: 200 OK
+  Body:
+    {
+      "success": true,
+      "message": "Nurse AI Summary for patient P001 generated successfully",
+      "data": { ... }
+    }
+```
+
+---
+
 ## 3. Strict Patient Isolation & Semantic Guarantees
 
-1. **Mandatory Patient Scoping**: Every query requires `patientId` either as a route path parameter (`/api/patients/:id/*`, `/api/documents/patient/:patientId`) or as a mandatory query parameter (`/api/tasks?patientId=...`, `/api/reminders?patientId=...`, `/api/events?patientId=...`, `/api/adherence?patientId=...`, `/api/quiz/today?patientId=...`, `/api/insights?patientId=...`).
+1. **Mandatory Patient Scoping**: Every query requires `patientId` either as a route path parameter (`/api/patients/:id/*`, `/api/documents/patient/:patientId`) or as a mandatory query parameter (`/api/tasks?patientId=...`, `/api/reminders?patientId=...`, `/api/events?patientId=...`, `/api/adherence?patientId=...`, `/api/quiz/today?patientId=...`, `/api/insights?patientId=...`, `/api/nurse/ai-summary?patientId=...`).
 2. **Existence Verification**: Queries against invalid or non-existent patient IDs (e.g. `P999`) return `404 Not Found`.
-3. **Zero Cross-Patient Leakage**: Tasks, documents, extracted instructions, reminders, events, adherence counts, quiz data, patient insights, and nurse dashboard cards are strictly isolated. Confirmations, event logs, answer submissions, score queries, or insight lookups with mismatched IDs are blocked with `403 Forbidden`.
+3. **Zero Cross-Patient Leakage**: Tasks, documents, extracted instructions, reminders, events, adherence counts, quiz data, patient insights, nurse dashboard cards, and nurse AI summaries are strictly isolated. Confirmations, event logs, answer submissions, score queries, or insight lookups with mismatched IDs are blocked with `403 Forbidden`.
 4. **Critical Quiz Session Invariant**: Every quiz session strictly enforces `totalQuestions === 5`. Sessions with 4 questions, 6 questions, or duplicate questions are rejected with `400 Bad Request`.
 5. **API Safety Guarantee**: `correctAnswer` is strictly stripped and hidden from the patient prior to quiz submission or completion.
 6. **Feature 6 Semantic Rule (Educational Signal)**: The quiz score is strictly an **educational knowledge and engagement signal**. It must **NEVER** be termed a clinical score, medical risk score, or diagnosis.
@@ -1292,3 +1408,10 @@ RESPONSE:
    All summaries are validated against these strict clinical boundary rules.
 10. **Feature 7 Frontend Disclaimer**: Insights supply the mandatory safety disclaimer: `disclaimer: "AI-generated — verify before acting."` with `aiGenerated: true`.
 11. **Feature 8 Nurse Dashboard Association Guarantee**: For each patient card, `patient`, `medicationAdherence` (`{ total, confirmed, notConfirmed, missed }`), `quizPerformance` (`{ score, correct, total: 5 }`), `knowledgeGaps`, `flags`, and `latestRelevantEvents` are strictly derived from and associated with that specific patient's data. Cross-patient data mixing is prohibited and verified.
+12. **Feature 9 Nurse AI Summary Multi-Source & Traceability Guarantee**: The Nurse AI Summary strictly synthesizes 7 distinct sources (medication adherence, medication events, quiz performance, quiz answers, knowledge gaps, verified instructions, escalations). Every claim is traceable through `evidenceEventIds` and `evidence.traces` (linking unconfirmed/missed meds to events, low quiz performance to quiz answers, and knowledge gaps to questions and verified instructions).
+13. **Feature 9 Clinical AI Safety Boundaries**: Nurse AI summaries strictly enforce that generated text must **NEVER** contain:
+    - Diagnosis
+    - Prescription
+    - Dosage changes (e.g., increase/decrease dose)
+    - Treatment plans or medication discontinuation
+    All summaries strictly feature the mandatory disclaimer: `"AI-generated — verify before acting."`.

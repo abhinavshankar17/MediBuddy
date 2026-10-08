@@ -82,6 +82,60 @@ const nurseController = {
     } catch (err) {
       return next(err);
     }
+  },
+
+  /**
+   * GET /api/nurse/ai-summary
+   * GET /api/nurse/ai-summary/:patientId
+   * GET /api/nurse/patients/:id/ai-summary
+   * GET /api/nurse/patients/:id/summary
+   * GET /api/nurse/dashboard/:id/ai-summary
+   * GET /api/patients/:id/nurse-ai-summary
+   * Retrieve Nurse AI Summary combining medication adherence, medication events,
+   * quiz performance, quiz answers, knowledge gaps, verified instructions, escalations
+   */
+  async getAISummary(req, res, next) {
+    try {
+      const patientId = req.params.patientId || req.params.id || req.query.patientId;
+      if (!patientId) {
+        throw { statusCode: 400, message: 'patientId parameter or query is required' };
+      }
+
+      const summary = await nurseService.getNurseAISummary(patientId);
+
+      return successResponse(
+        res,
+        summary,
+        `Nurse AI Summary for patient ${patientId} retrieved successfully`
+      );
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  /**
+   * POST /api/nurse/ai-summary/generate
+   * POST /api/nurse/patients/:id/ai-summary/generate
+   * POST /api/patients/:id/nurse-ai-summary/generate
+   * Generate fresh grounded Nurse AI Summary for patient
+   */
+  async generateAISummary(req, res, next) {
+    try {
+      const patientId = req.params.patientId || req.params.id || req.body.patientId;
+      if (!patientId) {
+        throw { statusCode: 400, message: 'patientId parameter or body is required' };
+      }
+
+      const summary = await nurseService.generateNurseAISummary(patientId);
+
+      return successResponse(
+        res,
+        summary,
+        `Nurse AI Summary for patient ${patientId} generated successfully`
+      );
+    } catch (err) {
+      return next(err);
+    }
   }
 };
 

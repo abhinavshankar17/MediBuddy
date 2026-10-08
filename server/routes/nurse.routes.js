@@ -21,4 +21,13 @@ router.get('/patients/:id', nurseController.getPatientDetail);
 router.get('/briefs/:patientId', nurseController.getBriefs);
 router.get('/briefs', nurseController.getBriefs);
 
+// Feature 9: Nurse AI Summary
+router.get('/ai-summary', nurseController.getAISummary);
+router.get('/ai-summary/:patientId', nurseController.getAISummary);
+router.get('/patients/:id/ai-summary', nurseController.getAISummary);
+router.get('/patients/:id/summary', nurseController.getAISummary);
+router.get('/dashboard/:id/ai-summary', nurseController.getAISummary);
+router.post('/ai-summary/generate', nurseController.generateAISummary);
+router.post('/patients/:id/ai-summary/generate', nurseController.generateAISummary);
+
 module.exports = router;

@@ -66,4 +66,9 @@ router.post('/:id/insights/generate', insightController.generateInsight);
 // Feature 8: Nested Nurse Dashboard Patient Summary
 router.get('/:id/nurse-dashboard', nurseController.getPatientDetail);
 
+// Feature 9: Nested Nurse AI Summary for Patient
+router.get('/:id/nurse-ai-summary', nurseController.getAISummary);
+router.get('/:id/nurse-summary', nurseController.getAISummary);
+router.post('/:id/nurse-ai-summary/generate', nurseController.generateAISummary);
+
 module.exports = router;
