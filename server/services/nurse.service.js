@@ -14,7 +14,8 @@ const FORBIDDEN_NURSE_AI_PATTERNS = [
   /\bprescrib(e|ed|ing|tion)\b/i,
   /\b(increase|decrease|change|modify|adjust|double|halve)\s+(the\s+)?(dose|dosage|medication|prescription)\b/i,
   /\b(start|stop|discontinue)\s+(taking\s+)?(the\s+)?(medication|drug|pill|tablets?)\b/i,
-  /\btreatment\s+plan\b/i
+  /\btreatment\s+plan\b/i,
+  /\b(emergency\s+classification|code\s+blue|critical\s+care|icu\s+admission|life-threatening)\b/i
 ];
 
 const enforceNurseAISafety = (text) => {

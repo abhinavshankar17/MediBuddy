@@ -13,6 +13,7 @@ const QuizQuestion = require('./quizQuestion.model');
 const QuizAnswer = require('./quizAnswer.model');
 const PatientInsight = require('./patientInsight.model');
 const NurseBrief = require('./nurseBrief.model');
+const Escalation = require('./escalation.model');
 
 module.exports = {
   Patient,
@@ -25,5 +26,6 @@ module.exports = {
   QuizQuestion,
   QuizAnswer,
   PatientInsight,
-  NurseBrief
+  NurseBrief,
+  Escalation
 };

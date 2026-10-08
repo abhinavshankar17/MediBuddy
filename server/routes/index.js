@@ -11,6 +11,7 @@ const adherenceRoutes = require('./adherence.routes');
 const quizRoutes = require('./quiz.routes');
 const insightRoutes = require('./insight.routes');
 const nurseRoutes = require('./nurse.routes');
+const escalationRoutes = require('./escalation.routes');
 
 // System Health Check
 router.use('/health', healthRoutes);
@@ -27,6 +28,7 @@ router.use('/quiz', quizRoutes);
 router.use('/quizzes', quizRoutes);
 router.use('/insights', insightRoutes);
 router.use('/nurse', nurseRoutes);
+router.use('/escalations', escalationRoutes);
 
 // Root API information endpoint
 router.get('/', (req, res) => {
@@ -45,7 +47,8 @@ router.get('/', (req, res) => {
       adherence: '/api/adherence',
       quiz: '/api/quiz',
       insights: '/api/insights',
-      nurse: '/api/nurse'
+      nurse: '/api/nurse',
+      escalations: '/api/escalations'
     },
     status: 'active'
   });

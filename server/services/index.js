@@ -6,6 +6,7 @@ const adherenceService = require('./adherence.service');
 const { quizService, validateExactFiveQuestions } = require('./quiz.service');
 const insightService = require('./insight.service');
 const nurseService = require('./nurse.service');
+const escalationService = require('./escalation.service');
 const dataStore = require('./dataStore');
 
 module.exports = {
@@ -18,5 +19,6 @@ module.exports = {
   validateExactFiveQuestions,
   insightService,
   nurseService,
+  escalationService,
   dataStore
 };

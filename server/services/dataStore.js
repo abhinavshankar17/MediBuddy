@@ -1,6 +1,6 @@
 const { loadMockJson } = require('../seed/seed');
 const { getDBStatus } = require('../config/db');
-const { Patient, Document, ExtractedItem, Task, MedicationReminder, Event, QuizSession, QuizQuestion, QuizAnswer, PatientInsight, NurseBrief } = require('../models');
+const { Patient, Document, ExtractedItem, Task, MedicationReminder, Event, QuizSession, QuizQuestion, QuizAnswer, PatientInsight, NurseBrief, Escalation } = require('../models');
 
 // In-memory cache loaded from authoritative data/mock/
 let memoryCache = {
@@ -850,13 +850,117 @@ const dataStore = {
   },
 
   /**
+   * List escalations with optional filters
+   * @param {Object} [filters] { patientId, category, status, severity, priority }
+   */
+  async listEscalations(filters = {}) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const query = {};
+        if (filters.patientId) query.patientId = filters.patientId;
+        if (filters.category) query.category = filters.category;
+        if (filters.status) query.status = filters.status;
+        if (filters.severity) query.severity = filters.severity;
+        if (filters.priority) query.priority = filters.priority;
+        return await Escalation.find(query).sort({ createdAt: -1, timestamp: -1 }).lean();
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { escalations } = getCache();
+    let results = [...escalations];
+    if (filters.patientId) results = results.filter(e => e.patientId === filters.patientId);
+    if (filters.category) results = results.filter(e => e.category === filters.category);
+    if (filters.status) results = results.filter(e => e.status === filters.status);
+    if (filters.severity) results = results.filter(e => e.severity === filters.severity);
+    if (filters.priority) results = results.filter(e => (e.priority || e.severity) === filters.priority);
+    return results;
+  },
+
+  /**
+   * Get single escalation by ID
+   * @param {string} id 
+   */
+  async getEscalationById(id) {
+    if (!id) return null;
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const doc = await Escalation.findById(id).lean();
+        if (doc) return doc;
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { escalations } = getCache();
+    return escalations.find(e => e._id === id) || null;
+  },
+
+  /**
    * Get escalations for a patient
    * @param {string} patientId 
    */
   async getEscalationsByPatient(patientId) {
     if (!patientId) return [];
+    return await this.listEscalations({ patientId });
+  },
+
+  /**
+   * Save a new or existing escalation
+   * @param {Object} escalationData 
+   */
+  async saveEscalation(escalationData) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const doc = await Escalation.findByIdAndUpdate(
+          escalationData._id,
+          escalationData,
+          { upsert: true, new: true, setDefaultsOnInsert: true }
+        ).lean();
+        return doc;
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
     const { escalations } = getCache();
-    return escalations.filter(e => e.patientId === patientId);
+    const idx = escalations.findIndex(e => e._id === escalationData._id);
+    if (idx !== -1) {
+      escalations[idx] = { ...escalations[idx], ...escalationData };
+      return escalations[idx];
+    } else {
+      escalations.push(escalationData);
+      return escalationData;
+    }
+  },
+
+  /**
+   * Update an existing escalation by ID
+   * @param {string} id 
+   * @param {Object} updates 
+   */
+  async updateEscalation(id, updates) {
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        const doc = await Escalation.findByIdAndUpdate(id, updates, { new: true }).lean();
+        if (doc) return doc;
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { escalations } = getCache();
+    const idx = escalations.findIndex(e => e._id === id);
+    if (idx !== -1) {
+      escalations[idx] = { ...escalations[idx], ...updates };
+      return escalations[idx];
+    }
+    return null;
   }
 };
 

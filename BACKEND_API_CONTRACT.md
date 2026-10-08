@@ -1390,11 +1390,131 @@ RESPONSE:
 
 ---
 
+### Feature 10: Escalations Endpoints (`/api/escalations` & `/api/patients/:id/escalations`)
+
+```text
+METHOD: GET
+PATH: /api/escalations
+PATH (alias): /api/nurse/escalations
+AUTH: Required / Nurse or Caregiver
+PURPOSE: Retrieve all escalations with optional filtering by patientId, category, status, priority
+REQUEST:
+  Headers: None
+  Query Parameters:
+    - patientId (string, optional)
+    - category (string, optional): Filter by category
+    - status (string, optional): Filter by status ('OPEN', 'IN_REVIEW', 'RESOLVED')
+    - priority (string, optional): Filter by priority ('LOW', 'MEDIUM', 'HIGH')
+RESPONSE:
+  Status: 200 OK
+  Body:
+    {
+      "success": true,
+      "message": "Retrieved 5 escalation(s) successfully",
+      "data": [
+        {
+          "_id": "ESC001",
+          "patientId": "P003",
+          "patient": {
+            "_id": "P003",
+            "name": "Lakshmi Devi",
+            "age": 47,
+            "condition": "Pneumonia recovery"
+          },
+          "category": "warning_sign",
+          "description": "Patient reported increased breathing difficulty / warning sign context",
+          "reason": "Patient reported increased breathing difficulty / warning sign context",
+          "timestamp": "2026-10-08T13:10:00+05:30",
+          "status": "OPEN",
+          "priority": "HIGH",
+          "severity": "HIGH",
+          "relatedEvent": {
+            "_id": "E003",
+            "type": "task_snoozed"
+          },
+          "evidence": [
+            "increased breathlessness",
+            "pain level 7"
+          ]
+        }
+      ]
+    }
+
+---
+
+METHOD: GET
+PATH: /api/escalations/:id
+AUTH: Required
+PURPOSE: Retrieve a specific escalation by ID
+REQUEST:
+  Headers: None
+  Params:
+    - id (string, required): Escalation ID (e.g. ESC001)
+RESPONSE:
+  Status: 200 OK
+
+---
+
+METHOD: GET
+PATH: /api/escalations/patient/:patientId
+PATH (nested): /api/patients/:patientId/escalations
+AUTH: Required / Scoped to patient
+PURPOSE: Retrieve all escalations belonging strictly to a specific patient
+
+---
+
+METHOD: POST
+PATH: /api/escalations
+PATH (nested): /api/patients/:patientId/escalations
+AUTH: Required
+PURPOSE: Create a new escalation grounded in actual patient data
+REQUEST:
+  Headers: Content-Type: application/json
+  Body:
+    {
+      "patientId": "P001",
+      "category": "missed_medication", // Supported: warning_sign, missed_medication, missing_information, overdue_task, medication_question, repeated_missed_medication, low_quiz_score, knowledge_gap
+      "description": "Patient missed scheduled dose of Paracetamol.",
+      "priority": "MEDIUM", // Allowed: LOW, MEDIUM, HIGH (emergency classifications prohibited)
+      "relatedEventId": "E107" // Must strictly belong to the patient
+    }
+RESPONSE:
+  Status: 201 Created
+
+---
+
+METHOD: PATCH / PUT
+PATH: /api/escalations/:id
+AUTH: Required
+PURPOSE: Update escalation status or resolution
+REQUEST:
+  Headers: Content-Type: application/json
+  Body:
+    {
+      "status": "RESOLVED",
+      "resolution": "Nurse contacted patient to verify current breathing status."
+    }
+RESPONSE:
+  Status: 200 OK
+
+---
+
+METHOD: POST
+PATH: /api/escalations/evaluate/:patientId
+PATH (nested): /api/patients/:patientId/escalations/evaluate
+AUTH: Required
+PURPOSE: Automatically evaluate patient records (events, reminders, quiz answers) to detect and record grounded escalations
+RESPONSE:
+  Status: 200 OK
+```
+
+---
+
 ## 3. Strict Patient Isolation & Semantic Guarantees
 
-1. **Mandatory Patient Scoping**: Every query requires `patientId` either as a route path parameter (`/api/patients/:id/*`, `/api/documents/patient/:patientId`) or as a mandatory query parameter (`/api/tasks?patientId=...`, `/api/reminders?patientId=...`, `/api/events?patientId=...`, `/api/adherence?patientId=...`, `/api/quiz/today?patientId=...`, `/api/insights?patientId=...`, `/api/nurse/ai-summary?patientId=...`).
+1. **Mandatory Patient Scoping**: Every query requires `patientId` either as a route path parameter (`/api/patients/:id/*`, `/api/documents/patient/:patientId`) or as a mandatory query parameter (`/api/tasks?patientId=...`, `/api/reminders?patientId=...`, `/api/events?patientId=...`, `/api/adherence?patientId=...`, `/api/quiz/today?patientId=...`, `/api/insights?patientId=...`, `/api/nurse/ai-summary?patientId=...`, `/api/escalations/patient/:patientId`).
 2. **Existence Verification**: Queries against invalid or non-existent patient IDs (e.g. `P999`) return `404 Not Found`.
-3. **Zero Cross-Patient Leakage**: Tasks, documents, extracted instructions, reminders, events, adherence counts, quiz data, patient insights, nurse dashboard cards, and nurse AI summaries are strictly isolated. Confirmations, event logs, answer submissions, score queries, or insight lookups with mismatched IDs are blocked with `403 Forbidden`.
+3. **Zero Cross-Patient Leakage**: Tasks, documents, extracted instructions, reminders, events, adherence counts, quiz data, patient insights, nurse dashboard cards, nurse AI summaries, and escalations are strictly isolated. Confirmations, event logs, answer submissions, score queries, or insight lookups with mismatched IDs are blocked with `403 Forbidden` or `400 Bad Request`.
 4. **Critical Quiz Session Invariant**: Every quiz session strictly enforces `totalQuestions === 5`. Sessions with 4 questions, 6 questions, or duplicate questions are rejected with `400 Bad Request`.
 5. **API Safety Guarantee**: `correctAnswer` is strictly stripped and hidden from the patient prior to quiz submission or completion.
 6. **Feature 6 Semantic Rule (Educational Signal)**: The quiz score is strictly an **educational knowledge and engagement signal**. It must **NEVER** be termed a clinical score, medical risk score, or diagnosis.
@@ -1415,3 +1535,5 @@ RESPONSE:
     - Dosage changes (e.g., increase/decrease dose)
     - Treatment plans or medication discontinuation
     All summaries strictly feature the mandatory disclaimer: `"AI-generated — verify before acting."`.
+14. **Feature 10 Category Preservation & Expansion**: All pre-existing escalation categories (`warning_sign`, `missed_medication`, `missing_information`, `overdue_task`, `medication_question`) are strictly preserved alongside newer categories (`repeated_missed_medication`, `low_quiz_score`, `knowledge_gap`).
+15. **Feature 10 Escalation Grounding & Non-Clinical Severity**: Every escalation must be strictly traceable to actual patient records (events, reminders, quiz scores, knowledge gaps). Escalations must **NEVER** turn a missed medication into a diagnosis, nor invent arbitrary clinical emergency classifications (e.g., `EMERGENCY`, `CRITICAL CARE`, `CODE BLUE` are rejected with `400 Bad Request`). Only supported priorities (`LOW`, `MEDIUM`, `HIGH`) are permitted.

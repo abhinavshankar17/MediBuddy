@@ -7,6 +7,7 @@ const adherenceController = require('../controllers/adherence.controller');
 const quizController = require('../controllers/quiz.controller');
 const insightController = require('../controllers/insight.controller');
 const nurseController = require('../controllers/nurse.controller');
+const escalationController = require('../controllers/escalation.controller');
 
 /**
  * Patient Routes (/api/patients)
@@ -70,5 +71,10 @@ router.get('/:id/nurse-dashboard', nurseController.getPatientDetail);
 router.get('/:id/nurse-ai-summary', nurseController.getAISummary);
 router.get('/:id/nurse-summary', nurseController.getAISummary);
 router.post('/:id/nurse-ai-summary/generate', nurseController.generateAISummary);
+
+// Feature 10: Nested Patient Escalations
+router.get('/:id/escalations', escalationController.getPatientEscalations);
+router.post('/:id/escalations', escalationController.createEscalation);
+router.post('/:id/escalations/evaluate', escalationController.evaluateEscalations);
 
 module.exports = router;
