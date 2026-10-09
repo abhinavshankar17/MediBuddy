@@ -810,5 +810,57 @@ export async function getPrescriptionList(patientId = null) {
   return [];
 }
 
+/**
+ * Fetch multi-factor AI Clinical Summary for a patient
+ * @param {string} patientId 
+ * @param {string} [apiKey] Optional Gemini API Key
+ */
+export async function getNurseAISummary(patientId = 'P001', apiKey = '') {
+  try {
+    const headers = {};
+    if (apiKey) headers['x-gemini-api-key'] = apiKey;
+
+    const res = await fetch(`/api/nurse/patients/${patientId}/ai-summary`, { headers });
+    if (res.ok) {
+      const json = await res.json();
+      return json.data !== undefined ? json.data : json;
+    }
+  } catch (err) {
+    console.warn('getNurseAISummary fetch fallback:', err.message);
+  }
+
+  // Fallback to brief synthesis
+  return await getNurseAIBrief(patientId);
+}
+
+/**
+ * Generate fresh multi-factor AI Clinical Summary powered by Gemini API
+ * @param {string} patientId 
+ * @param {string} [apiKey] Optional Gemini API Key
+ */
+export async function generateNurseAISummary(patientId = 'P001', apiKey = '') {
+  try {
+    const headers = { 'Content-Type': 'application/json' };
+    if (apiKey) headers['x-gemini-api-key'] = apiKey;
+
+    const res = await fetch(`/api/nurse/patients/${patientId}/ai-summary/generate`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ apiKey: apiKey || undefined })
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      return json.data !== undefined ? json.data : json;
+    }
+    const errJson = await res.json().catch(() => ({}));
+    throw new Error(errJson.message || `Failed with status ${res.status}`);
+  } catch (err) {
+    console.error('generateNurseAISummary failed:', err);
+    throw err;
+  }
+}
+
+
 
 

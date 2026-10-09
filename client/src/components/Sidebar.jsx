@@ -87,7 +87,7 @@ export default function Sidebar() {
             <HeartPulse className="w-4 h-4" />
           </div>
           <span className="font-bold text-sm text-[#1C1917] font-serif">
-            {isCaregiver ? t('roles.caregiver') : isNurse ? t('roles.nurse') : t('roles.patient')}
+            {isCaregiver ? 'Family Portal' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
           </span>
         </div>
         <button
@@ -108,7 +108,7 @@ export default function Sidebar() {
           <div>
             <p className="text-[10px] uppercase tracking-wider font-extrabold text-[#78716C]">{t('common.status', 'Portal')}</p>
             <p className="text-xs font-bold text-[#1C1917]">
-              {isCaregiver ? t('roles.caregiver') : isNurse ? t('roles.nurse') : t('roles.patient')}
+              {isCaregiver ? 'Family Portal' : isNurse ? 'Nurse Workspace' : 'Patient Portal'}
             </p>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function Sidebar() {
       {/* Navigation List */}
       <div className="flex-1 space-y-1 overflow-y-auto pr-1">
         <p className="px-3 text-[10px] font-extrabold uppercase tracking-widest text-[#78716C] mb-2 hidden md:block">
-          {isCaregiver ? t('roles.caregiver') : isNurse ? t('roles.nurse') : t('roles.patient')}
+          {isCaregiver ? 'Family Views' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
         </p>
 
         {navItems.map((item) => {
@@ -130,17 +130,15 @@ export default function Sidebar() {
               key={item.path}
               to={item.path}
               onClick={closeMobileMenu}
-              className={`group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 ${
-                isActive
+              className={`group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 ${isActive
                   ? 'bg-[#FAF8F5] text-[#CC785C] font-bold border border-[#E8E2D7] border-l-4 border-l-[#CC785C] shadow-2xs'
                   : 'text-[#78716C] hover:text-[#1C1917] hover:bg-[#FAF8F5]/60'
-              }`}
+                }`}
             >
               <div className="flex items-center gap-3">
                 <Icon
-                  className={`w-4 h-4 transition-colors ${
-                    isActive ? 'text-[#CC785C]' : 'text-[#A8A29E] group-hover:text-[#78716C]'
-                  }`}
+                  className={`w-4 h-4 transition-colors ${isActive ? 'text-[#CC785C]' : 'text-[#A8A29E] group-hover:text-[#78716C]'
+                    }`}
                 />
                 <span className="truncate">{item.label}</span>
               </div>
@@ -163,7 +161,7 @@ export default function Sidebar() {
           <div className="flex-1 min-w-0">
             <p className="text-xs font-bold text-[#1C1917] truncate">{currentUser?.name || 'Logged In User'}</p>
             <p className="text-[10px] text-[#78716C] truncate">
-              {currentUser?.role ? currentUser.role.toUpperCase() : 'USER'} • {activePatientId}
+              {currentUser?.role === 'caregiver' ? 'FAMILY' : currentUser?.role ? currentUser.role.toUpperCase() : 'USER'} • {activePatientId}
             </p>
           </div>
         </div>

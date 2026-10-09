@@ -103,10 +103,10 @@ export default function CaregiverFeedback() {
   const handleReview = async (feedbackId) => {
     try {
       setSubmittingReview(true);
-      const note = caregiverNoteText[feedbackId] || 'Acknowledged and noted by family caregiver.';
+      const note = caregiverNoteText[feedbackId] || 'Acknowledged and noted by family member.';
       const updated = await reviewFeedback(patientId, feedbackId, {
         caregiverId,
-        caregiverName: currentUser?.name || 'Family Caregiver',
+        caregiverName: currentUser?.name || 'Family Member',
         caregiverNote: note,
         status: 'reviewed'
       });
@@ -133,7 +133,7 @@ export default function CaregiverFeedback() {
       setSendingQuick(true);
       await sendEncouragement(patientId, {
         caregiverId,
-        caregiverName: currentUser?.name || 'Family Caregiver',
+        caregiverName: currentUser?.name || 'Family Member',
         message: quickEncouragement,
         tag: 'love'
       });
@@ -233,7 +233,7 @@ export default function CaregiverFeedback() {
 
         <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E2D7] shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">{t('caregiver.awaitingReview', 'Awaiting Caregiver Review')}</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Awaiting Family Review</p>
             <p className="text-2xl font-serif font-bold text-[#CC785C] mt-0.5">{pendingCount}</p>
             <p className="text-[11px] text-[#78716C] mt-1">
               {pendingCount > 0 ? t('status.actionSuggested', 'Action suggested') : t('status.allReviewed', 'All feedback reviewed')}
@@ -246,7 +246,7 @@ export default function CaregiverFeedback() {
 
         <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E2D7] shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">{t('caregiver.caregiverSupport', 'Caregiver Support')}</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Family Support</p>
             <p className="text-2xl font-serif font-bold text-emerald-700 mt-0.5">
               {feedbacks.length - pendingCount}
             </p>
@@ -301,11 +301,10 @@ export default function CaregiverFeedback() {
             <button
               key={tab.id}
               onClick={() => setActiveFilter(tab.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeFilter === tab.id
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeFilter === tab.id
                   ? 'bg-[#1C1917] text-white shadow-2xs'
                   : 'bg-[#FAF8F5] text-[#78716C] hover:text-[#1C1917] border border-[#E8E2D7]'
-              }`}
+                }`}
             >
               {tab.label}
             </button>
@@ -342,13 +341,12 @@ export default function CaregiverFeedback() {
             return (
               <Card
                 key={f._id}
-                className={`p-5 sm:p-6 transition-all border ${
-                  isUrgent
+                className={`p-5 sm:p-6 transition-all border ${isUrgent
                     ? 'border-rose-300 bg-rose-50/20 shadow-xs'
                     : isPending
-                    ? 'border-amber-200 bg-white shadow-2xs'
-                    : 'border-[#E8E2D7] bg-[#FAF8F5]/60'
-                }`}
+                      ? 'border-amber-200 bg-white shadow-2xs'
+                      : 'border-[#E8E2D7] bg-[#FAF8F5]/60'
+                  }`}
               >
                 {/* Header: Date + Urgency + Status */}
                 <div className="flex items-center justify-between flex-wrap gap-2 pb-3 mb-3 border-b border-[#E8E2D7]/70">
@@ -356,23 +354,22 @@ export default function CaregiverFeedback() {
                     <span className="text-xs font-bold text-[#1C1917]">
                       {f.submittedAt
                         ? new Date(f.submittedAt).toLocaleDateString(undefined, {
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })
                         : 'Recent Check-in'}
                     </span>
                     <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
-                        isUrgent
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${isUrgent
                           ? 'bg-rose-100 text-rose-700 border border-rose-200'
                           : f.urgency === 'moderate'
-                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                          : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                      }`}
+                            ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                            : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                        }`}
                     >
                       {f.urgency || 'Normal'} Urgency
                     </span>
@@ -445,7 +442,7 @@ export default function CaregiverFeedback() {
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-bold text-emerald-900 flex items-center gap-1.5">
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-                        {t('caregiver.caregiverSupport', 'Caregiver Acknowledgment Note')}:
+                        Family Acknowledgment Note:
                       </span>
                       <span className="text-[10px] text-emerald-700">
                         {f.reviewedAt ? new Date(f.reviewedAt).toLocaleDateString() : t('status.reviewed', 'Acknowledged')}
@@ -517,7 +514,7 @@ export default function CaregiverFeedback() {
                             }}
                             className="px-3 py-1.5 bg-[#FAF8F5] hover:bg-[#F4F0E8] border border-[#E8E2D7] text-xs font-bold text-[#1C1917] rounded-xl transition-all cursor-pointer"
                           >
-                            {t('common.notes', 'Add Caregiver Note')}
+                            Add Family Note
                           </button>
                         </div>
 

@@ -1,5 +1,6 @@
 const dataStore = require('./dataStore');
 const adherenceService = require('./adherence.service');
+const geminiService = require('./gemini.service');
 
 /**
  * AI Safety Boundary Enforcement
@@ -408,41 +409,72 @@ const nurseService = {
       if (escalations.length > 0) flags.push(...escalations.map(e => e.category));
     }
 
+    // 8. Fetch Dynamic Driving Factors: Prescription Report, Patient Feedbacks, Medication Reminders
+    const document = await dataStore.getDocumentByPatient(patientId);
+    const feedbacks = await dataStore.getFeedbacksByPatient(patientId);
+    const reminders = await dataStore.getRemindersByPatient(patientId);
+
+    // Generate multi-factor Gemini Clinical Summary
+    let geminiResult = null;
+    try {
+      geminiResult = await geminiService.generatePatientSummary({
+        patient,
+        document,
+        extractedItems,
+        adherence: medicationAdherence,
+        reminders,
+        feedbacks,
+        events: medicationEvents,
+        apiKey: options.apiKey
+      });
+    } catch (gErr) {
+      console.warn('Gemini synthesis warning:', gErr.message);
+    }
+
     // Questions for nurse & recommended follow-up
-    const questionsForNurse = mockBrief && Array.isArray(mockBrief.questionsForNurse)
-      ? [...mockBrief.questionsForNurse]
-      : (mockBrief && Array.isArray(mockBrief.questions) ? [...mockBrief.questions] : []);
+    const questionsForNurse = geminiResult && Array.isArray(geminiResult.nurseActionItems) && geminiResult.nurseActionItems.length > 0
+      ? geminiResult.nurseActionItems
+      : (mockBrief && Array.isArray(mockBrief.questionsForNurse)
+        ? [...mockBrief.questionsForNurse]
+        : (mockBrief && Array.isArray(mockBrief.questions) ? [...mockBrief.questions] : []));
+
     const recommendedFollowUp = mockBrief
       ? mockBrief.recommendedFollowUp || mockBrief.recommendedAction || 'Routine nurse review.'
       : 'Routine nurse review.';
 
     // Priority
-    const priority = mockBrief && mockBrief.priority
-      ? mockBrief.priority
-      : (medicationAdherence.missed > 0 || (quizPerformance && quizPerformance.score < 50) ? 'HIGH' : 'MEDIUM');
+    const priority = geminiResult && geminiResult.priority
+      ? geminiResult.priority
+      : (mockBrief && mockBrief.priority
+        ? mockBrief.priority
+        : (medicationAdherence.missed > 0 || (quizPerformance && quizPerformance.score < 50) ? 'HIGH' : 'MEDIUM'));
 
-    // AI Summary (Use existing synthetic nurse brief where available, or grounded synthesis)
+    // AI Summary
     let aiSummary = mockBrief && mockBrief.summary ? mockBrief.summary : null;
-    if (!aiSummary || options.forceGenerate) {
-      const missedMedNote = medicationAdherence.missed > 0
-        ? `Patient missed ${medicationAdherence.missed} scheduled dose(s). `
-        : medicationAdherence.notConfirmed > 0
-        ? `Patient has ${medicationAdherence.notConfirmed} unconfirmed medication dose(s). `
-        : 'All scheduled medications were confirmed. ';
+    if (options.forceGenerate || options.apiKey || !aiSummary) {
+      if (geminiResult && geminiResult.summary) {
+        aiSummary = geminiResult.summary;
+      } else {
+        const missedMedNote = medicationAdherence.missed > 0
+          ? `Patient missed ${medicationAdherence.missed} scheduled dose(s). `
+          : medicationAdherence.notConfirmed > 0
+          ? `Patient has ${medicationAdherence.notConfirmed} unconfirmed medication dose(s). `
+          : 'All scheduled medications were confirmed. ';
 
-      const quizNote = quizPerformance
-        ? `Scored ${quizPerformance.score}% on daily recovery quiz. `
-        : 'Recovery quiz not completed. ';
+        const quizNote = quizPerformance
+          ? `Scored ${quizPerformance.score}% on daily recovery quiz. `
+          : 'Recovery quiz not completed. ';
 
-      const gapNote = knowledgeGaps.length > 0
-        ? `Knowledge gaps identified in: ${knowledgeGaps.join(', ')}. `
-        : 'No knowledge gaps identified. ';
+        const gapNote = knowledgeGaps.length > 0
+          ? `Knowledge gaps identified in: ${knowledgeGaps.join(', ')}. `
+          : 'No knowledge gaps identified. ';
 
-      const escNote = escalations.length > 0
-        ? `Active escalation noted: ${escalations[0].reason}. `
-        : '';
+        const escNote = escalations.length > 0
+          ? `Active escalation noted: ${escalations[0].reason}. `
+          : '';
 
-      aiSummary = `${missedMedNote}${quizNote}${gapNote}${escNote}Recommend nurse follow-up to reinforce verified discharge instructions.`;
+        aiSummary = `${missedMedNote}${quizNote}${gapNote}${escNote}Recommend nurse follow-up to reinforce verified discharge instructions.`;
+      }
     }
 
     // Safety check: Validate no diagnosis, prescription, dosage changes, or treatment plans
@@ -489,6 +521,18 @@ const nurseService = {
       aiSummary,
       summary: aiSummary,
       evidenceEventIds,
+      prescriptionReportSummary: geminiResult?.prescriptionReportSummary || null,
+      medicineHistorySummary: geminiResult?.medicineHistorySummary || null,
+      patientFeedbackSummary: geminiResult?.patientFeedbackSummary || null,
+      nurseActionItems: geminiResult?.nurseActionItems || questionsForNurse,
+      keyObservations: geminiResult?.keyObservations || [],
+      provider: geminiResult?.provider || 'CareBridge Clinical AI',
+      hasLiveKey: geminiResult?.hasLiveKey || false,
+      factors: geminiResult?.factors || {
+        medicineHistory: { adherenceRate: 100, confirmed: medicationAdherence.confirmed, total: medicationAdherence.total },
+        patientFeedback: feedbacks,
+        prescriptionReport: { diagnosingDoctor: patient.assignedDoctor || 'Attending Physician', hospitalName: 'CareBridge Demo Hospital' }
+      },
       evidence: {
         medicationEvents: evidenceMedEvents.slice(0, 5),
         quizAnswers: quizAnswers.slice(0, 5),
@@ -525,11 +569,12 @@ const nurseService = {
   },
 
   /**
-   * Synthesize fresh Nurse AI Summary for a patient
+   * Synthesize fresh Nurse AI Summary for a patient using Gemini API or grounded clinical synthesis
    * @param {string} patientId 
+   * @param {Object} [options]
    */
-  async generateNurseAISummary(patientId) {
-    return await this.getNurseAISummary(patientId, { forceGenerate: true });
+  async generateNurseAISummary(patientId, options = {}) {
+    return await this.getNurseAISummary(patientId, { forceGenerate: true, ...options });
   }
 };
 

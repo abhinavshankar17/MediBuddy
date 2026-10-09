@@ -8,6 +8,7 @@ const insightService = require('./insight.service');
 const nurseService = require('./nurse.service');
 const escalationService = require('./escalation.service');
 const notificationService = require('./notification.service');
+const geminiService = require('./gemini.service');
 const dataStore = require('./dataStore');
 
 module.exports = {
@@ -22,5 +23,6 @@ module.exports = {
   nurseService,
   escalationService,
   notificationService,
+  geminiService,
   dataStore
 };

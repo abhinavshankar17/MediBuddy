@@ -77,7 +77,7 @@ export default function LandingPage() {
             </div>
           </Card>
 
-          {/* Family / Caregiver Portal Card */}
+          {/* Family Portal Card */}
           <Card className="hover:border-amber-400/60 transition-all p-6 sm:p-7 flex flex-col justify-between group relative overflow-hidden bg-white shadow-xs hover:shadow-md" variant="gradient">
             <div className="space-y-5">
               <div className="flex items-center justify-between">
@@ -88,7 +88,7 @@ export default function LandingPage() {
               </div>
 
               <div>
-                <h2 className="text-xl font-extrabold text-[#1C1917] font-serif">{t('landing.caregiverCardTitle', 'Family & Caregiver')}</h2>
+                <h2 className="text-xl font-extrabold text-[#1C1917] font-serif">Family</h2>
                 <p className="text-xs text-[#78716C] mt-1.5 leading-relaxed font-medium">
                   {t('landing.caregiverCardDesc', 'Stay closely connected with daily AI recovery reports, interactive care calendar, and review loved ones\' feedback.')}
                 </p>
@@ -116,7 +116,7 @@ export default function LandingPage() {
                 onClick={() => setPortalRole('caregiver')}
                 className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs shadow-xs transition-all"
               >
-                {t('landing.caregiverBtn', 'Launch Caregiver Portal')} <ArrowRight className="w-3.5 h-3.5" />
+                Launch Family Portal <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </Card>

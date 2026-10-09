@@ -17,7 +17,7 @@ export async function getAllDemoUsers() {
     } else if (u.role === 'clinician') {
       detail = `${u.specialization || 'Attending Physician'}`;
     } else if (u.role === 'caregiver') {
-      detail = `Caregiver for ${u.patientIds ? u.patientIds.join(', ') : 'Family'}`;
+      detail = `Family Member for ${u.patientIds ? u.patientIds.join(', ') : 'Patient'}`;
     }
 
     return {

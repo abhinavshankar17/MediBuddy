@@ -44,10 +44,10 @@
     "medicationName": "Aspirin",
     "dose": "75 mg",
     "scheduledAt": "2026-10-08T07:30:00+05:30",
-    "status": "scheduled",
+    "status": "taken",
     "reminderSentAt": null,
-    "respondedAt": null,
-    "responseType": null,
+    "respondedAt": "2026-10-08T23:17:32.612Z",
+    "responseType": "taken",
     "createdAt": "2026-10-08T07:25:00+05:30"
   },
   {
