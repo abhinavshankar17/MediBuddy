@@ -114,7 +114,8 @@ const nurseController = {
         throw { statusCode: 400, message: 'patientId parameter or query is required' };
       }
 
-      const summary = await nurseService.getNurseAISummary(patientId);
+      const apiKey = req.query.apiKey || req.headers['x-gemini-api-key'] || req.body?.apiKey;
+      const summary = await nurseService.getNurseAISummary(patientId, { apiKey });
 
       return successResponse(
         res,
@@ -130,7 +131,7 @@ const nurseController = {
    * POST /api/nurse/ai-summary/generate
    * POST /api/nurse/patients/:id/ai-summary/generate
    * POST /api/patients/:id/nurse-ai-summary/generate
-   * Generate fresh grounded Nurse AI Summary for patient
+   * Generate fresh grounded Nurse AI Summary for patient using Gemini API or grounded clinical synthesis
    */
   async generateAISummary(req, res, next) {
     try {
@@ -139,7 +140,8 @@ const nurseController = {
         throw { statusCode: 400, message: 'patientId parameter or body is required' };
       }
 
-      const summary = await nurseService.generateNurseAISummary(patientId);
+      const apiKey = req.body?.apiKey || req.query?.apiKey || req.headers['x-gemini-api-key'];
+      const summary = await nurseService.generateNurseAISummary(patientId, { apiKey });
 
       return successResponse(
         res,
