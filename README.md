@@ -27,7 +27,7 @@
 
 **MediBuddy** (also known as *CareBridge*) is a post-discharge care monitoring platform designed to improve patient outcomes after hospital discharge. It provides:
 
-- 📱 **Patient Portal** — Daily health quizzes, medication tracking, discharge instructions, personal insights, and direct feedback submission.
+- 📱 **Patient Portal** — Medication tracking, discharge instructions, personal care insights, and direct feedback submission.
 - 👨‍👩‍👧 **Family Caregiver Portal** — Real-time updates on their loved one's recovery, daily reports, medication adherence calendars, and encouragement messaging.
 - 🏥 **Nurse/Clinical Portal** — AI-powered patient summaries, escalation management, medication adherence monitoring, and multi-patient dashboard.
 
@@ -75,7 +75,6 @@ graph TB
         API["/api Router"] --> PR[Patient Routes]
         API --> NR[Nurse Routes]
         API --> CGR[Caregiver Routes]
-        API --> QR[Quiz Routes]
         API --> IR[Insight Routes]
         API --> NOT[Notification Routes]
         API --> ESC[Escalation Routes]
@@ -83,13 +82,11 @@ graph TB
         PR --> PC[Patient Controller]
         NR --> NC[Nurse Controller]
         CGR --> CC[Caregiver Controller]
-        QR --> QC[Quiz Controller]
         IR --> IC[Insight Controller]
 
         PC --> DS["dataStore.js\nAbstraction Layer"]
         NC --> DS
         CC --> DS
-        QC --> DS
         IC --> DS
 
         DS --> MG[(MongoDB)]
@@ -134,10 +131,9 @@ graph LR
     P --> P1[Dashboard]
     P --> P2[Prescription Viewer]
     P --> P3[Medication Tracker]
-    P --> P4[Daily Quiz]
-    P --> P5[Care Insights]
-    P --> P6[Discharge Instructions]
-    P --> P7[Feedback & Appointments]
+    P --> P4[Care Insights]
+    P --> P5[Discharge Instructions]
+    P --> P6[Feedback & Appointments]
 
     C --> C1["Family Dashboard\nDaily Report"]
     C --> C2[Recovery Calendar]
@@ -201,11 +197,7 @@ graph LR
 | `POST` | `/api/patients/:patientId/reminders/:id/confirm` | Confirm medication taken |
 | `GET` | `/api/patients/:patientId/adherence` | Medication adherence stats |
 | `GET/POST` | `/api/patients/:patientId/events` | Patient events |
-| `GET` | `/api/patients/:patientId/quiz/today` | Today's quiz session |
-| `POST` | `/api/patients/:patientId/quiz/start` | Start a new quiz |
-| `GET` | `/api/patients/:patientId/quiz/sessions/:id/questions` | Quiz questions |
-| `POST` | `/api/patients/:patientId/quiz/sessions/:id/submit` | Submit quiz |
-| `POST` | `/api/patients/:patientId/quiz/sessions/:id/answer` | Record single answer |
+
 | `GET` | `/api/patients/:id/insights/latest` | Latest AI insight |
 | `POST` | `/api/patients/:id/insights/generate` | Generate AI insight |
 | `GET/POST` | `/api/patients/:id/escalations` | Patient escalations |
@@ -237,15 +229,6 @@ graph LR
 | `GET` | `/api/caregiver/patients/:patientId/encouragement` | Get encouragements |
 | `POST` | `/api/caregiver/patients/:patientId/encouragement` | Send encouragement |
 
-### Quiz — `/api/quiz`
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/quiz/today` | Today's quiz |
-| `POST` | `/api/quiz/start` | Start quiz session |
-| `GET` | `/api/quiz/sessions/:id/questions` | Questions for session |
-| `POST` | `/api/quiz/sessions/:id/submit` | Submit all answers |
-| `GET` | `/api/quiz/sessions/:id/score` | Get final score |
 
 ### Notifications — `/api/notifications`
 
@@ -311,8 +294,6 @@ erDiagram
     PatientInsight {
         string _id PK
         string patientId FK
-        string quizSessionId FK
-        number score
         string aiSummary
         string priority
         boolean aiGenerated
@@ -326,23 +307,7 @@ erDiagram
         string aiSummary
         string disclaimer
         object medicationAdherence
-        object quizPerformance
         boolean aiGenerated
-    }
-
-    QuizSession {
-        string _id PK
-        string patientId FK
-        string status
-        number score
-    }
-
-    QuizQuestion {
-        string _id PK
-        string patientId FK
-        string quizSessionId FK
-        string questionText
-        string correctAnswer
     }
 
     Document {
@@ -367,10 +332,8 @@ erDiagram
     Patient ||--o{ Escalation : "generates"
     Patient ||--o{ PatientInsight : "has"
     Patient ||--o{ NurseBrief : "has"
-    Patient ||--o{ QuizSession : "takes"
     Patient ||--o{ Document : "has"
     Patient ||--o{ ExtractedItem : "has"
-    QuizSession ||--o{ QuizQuestion : "contains"
 ```
 
 ---
@@ -431,12 +394,8 @@ flowchart TD
 ```mermaid
 flowchart TD
     A["POST /patients/:id/insights/generate"] --> B[insightService.generateInsight]
-    B --> D["Fetch patient profile,\nquiz sessions, events, adherence"]
-    D --> E{Quiz data available?}
-    E -- Yes --> F["Build factual evidence context:\nQuiz score, Correct/incorrect topics,\nAdherence stats, Recent events"]
-    E -- No --> G["Minimal context:\nPatient demographics only"]
-    F --> H["Determine target language\nen / hi / ta"]
-    G --> H
+    B --> D["Fetch patient profile,\nevents, adherence data"]
+    D --> H["Determine target language\nen / hi / ta"]
     H --> I["Build multilingual prompt\nwith localized disclaimers"]
     I --> J["GeminiService → Groq API\nLLaMA 3.3 70B"]
     J --> K{AI response valid?}
@@ -485,7 +444,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    A[Nurse opens PatientDetail] --> B["Fetch patient data:\nadherence, quiz, feedback, events"]
+    A[Nurse opens PatientDetail] --> B["Fetch patient data:\nadherence, feedback, events"]
     B --> C[nurseService.getAISummary]
     C --> D{Cached NurseBrief exists?}
     D -- Yes --> E[Return cached brief]
@@ -523,8 +482,6 @@ flowchart TD
     end
 
     subgraph AITranslation ["AI Content Localisation"]
-        E --> L["Quiz questions fetch with ?language=hi/ta"]
-        L --> M["quizService.localizeSingleQuestion\nReturns translated fields\n+ original English for audit"]
         E --> N["Insight generation with ?language=hi/ta"]
         N --> O["Localized prompt to Groq API"]
         O --> P["Response in target language\n+ localized disclaimer"]
@@ -618,17 +575,14 @@ MediBuddy/
 │       │   │   ├── Medication.jsx
 │       │   │   ├── PatientInsight.jsx
 │       │   │   ├── DischargeInstructions.jsx
-│       │   │   ├── PatientFeedback.jsx
-│       │   │   ├── DailyQuiz.jsx
-│       │   │   └── QuizResult.jsx
+│       │   │   └── PatientFeedback.jsx
 │       │   ├── nurse/
 │       │   │   ├── NurseDashboard.jsx
 │       │   │   ├── PatientList.jsx
 │       │   │   ├── PatientDetail.jsx    # AI summary integration
 │       │   │   ├── MedicationAdherence.jsx
 │       │   │   ├── AISummary.jsx
-│       │   │   ├── Escalations.jsx
-│       │   │   └── QuizPerformance.jsx
+│       │   │   └── Escalations.jsx
 │       │   └── caregiver/
 │       │       ├── CaregiverDashboard.jsx
 │       │       ├── CaregiverCalendar.jsx
@@ -639,7 +593,6 @@ MediBuddy/
 │           ├── patientService.js
 │           ├── nurseService.js
 │           ├── caregiverService.js
-│           ├── quizService.js
 │           ├── insightService.js
 │           ├── feedbackService.js
 │           ├── medicationService.js
@@ -663,7 +616,6 @@ MediBuddy/
 │   │   ├── insight.service.js       # Patient insight + AI safety
 │   │   ├── nurse.service.js         # Nurse AI briefs
 │   │   ├── caregiver.service.js     # Caregiver dashboard
-│   │   ├── quiz.service.js          # Quiz + multilingual localisation
 │   │   ├── notification.service.js  # Timed medication notifications
 │   │   ├── feedback.service.js      # Patient feedback + appointments
 │   │   ├── escalation.service.js    # Clinical escalation management
@@ -681,8 +633,6 @@ MediBuddy/
         ├── medicationReminders.json
         ├── events.json
         ├── tasks.json
-        ├── quizSessions.json
-        ├── quizQuestions.json
         ├── patientInsights.json
         ├── nurseBriefs.json
         ├── escalations.json
@@ -802,7 +752,7 @@ All demo users are defined in `data/mock/users.json`.
 | **Groq primary, Gemini fallback** | Groq's LLaMA models are faster for structured JSON generation |
 | **Language in Patient model** | Persists language preference so AI endpoints serve the correct language server-side |
 | **AI boundary enforcement** | Regex pattern matching on all AI output before saving or returning — prevents any clinical overreach |
-| **English preserved for audit** | All multilingual quiz questions and AI insights preserve original English text for clinical review |
+| **English preserved for audit** | All multilingual AI insights preserve original English text alongside translations for clinical review |
 
 ---
 
