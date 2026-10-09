@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -33,6 +34,7 @@ import {
 } from 'lucide-react';
 
 export default function PatientDashboard() {
+  const { t } = useTranslation();
   const { currentUser, logout, activePatientId } = useApp();
   const navigate = useNavigate();
   const patientId = activePatientId || currentUser?.patientId || 'P001';
@@ -144,20 +146,19 @@ export default function PatientDashboard() {
                   ID: {patient._id} ({patient.syntheticId})
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#CC785C]/10 text-[#CC785C]">
-                  {patient.gender}, {patient.age} yrs
+                  {patient.gender}, {patient.age} {t('common.years', 'yrs')}
                 </span>
               </div>
 
-
               <div className="mt-2 text-xs text-[#78716C] space-y-1">
                 <p className="font-semibold text-[#1C1917]">
-                  <strong className="text-[#78716C]">Recovery Context:</strong> {patient.condition} • {patient.procedure}
+                  <strong className="text-[#78716C]">{t('patientDashboard.conditionLabel', 'Recovery Context')}:</strong> {patient.condition} • {patient.procedure}
                 </p>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#78716C] pt-1">
-                  <span>🌐 <strong>Language:</strong> {patient.languageName}</span>
-                  <span>🚶 <strong>Mobility:</strong> {patient.mobility}</span>
-                  <span>🥗 <strong>Diet:</strong> {patient.dietaryPreference}</span>
-                  <span>📅 <strong>Discharge:</strong> {patient.dischargeDate}</span>
+                  <span>🌐 <strong>{t('common.language', 'Language')}:</strong> {patient.languageName || patient.language}</span>
+                  <span>🚶 <strong>{t('patientDashboard.mobility', 'Mobility')}:</strong> {patient.mobility}</span>
+                  <span>🥗 <strong>{t('patientDashboard.diet', 'Diet')}:</strong> {patient.dietaryPreference}</span>
+                  <span>📅 <strong>{t('patientDashboard.dischargeDate', 'Discharge')}:</strong> {patient.dischargeDate}</span>
                 </div>
               </div>
             </div>
@@ -165,7 +166,7 @@ export default function PatientDashboard() {
 
           {/* Recovery Progress Day Color Card */}
           <div className="p-4 bg-white rounded-xl border border-[#E8E2D7] shadow-2xs flex flex-col items-center md:items-end justify-center min-w-[200px]">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#78716C]">Daily Recovery Status</span>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('patientDashboard.todayOverview', 'Daily Recovery Status')}</span>
             <div className="mt-1 flex items-center gap-2">
               <StatusBadge
                 status={colorBadgeMap[progress.latestStatus]?.status}
@@ -174,7 +175,7 @@ export default function PatientDashboard() {
             </div>
             <div className="mt-2 text-center md:text-right">
               <span className="text-2xl font-extrabold text-[#1C1917] font-serif">{progress.score}%</span>
-              <p className="text-[11px] text-[#78716C]">{progress.reasons ? progress.reasons.join(', ') : 'Tasks on track'}</p>
+              <p className="text-[11px] text-[#78716C]">{progress.reasons ? progress.reasons.join(', ') : t('patientDashboard.tasksCompleted', 'Tasks on track')}</p>
             </div>
           </div>
         </div>
@@ -196,18 +197,18 @@ export default function PatientDashboard() {
           <div>
             <h3 className="text-xl font-bold text-[#1C1917] font-serif flex items-center gap-2">
               <FileText className="w-5 h-5 text-[#CC785C]" />
-              Verified Discharge Instructions
+              {t('patientDashboard.readDischarge', 'Verified Discharge Instructions')}
             </h3>
             <p className="text-xs text-[#78716C] mt-0.5">
-              Clinical instructions extracted from verified hospital discharge document.
+              {t('prescription.subtitle', 'Clinical instructions extracted from verified hospital discharge document.')}
             </p>
           </div>
-          <StatusBadge status="completed" label="Clinical Ground Truth" />
+          <StatusBadge status="completed" label={t('prescription.verifiedBadge', 'Clinical Ground Truth')} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Medications Category */}
-          <Card title="Prescribed Medications" subtitle="Dosages, frequencies, and food relations">
+          <Card title={t('prescription.activePrescriptions', { count: instructions.medications?.length || 0, defaultValue: 'Prescribed Medications' })} subtitle={t('prescription.subtitle', 'Dosages, frequencies, and food relations')}>
             {instructions.medications && instructions.medications.length > 0 ? (
               <div className="space-y-3">
                 {instructions.medications.map((item) => (
@@ -338,11 +339,11 @@ export default function PatientDashboard() {
           </Card>
 
           {/* Warning Signs Category */}
-          <Card title="Red-Flag Warning Signs" subtitle="Symptoms requiring immediate clinical outreach">
+          <Card title={t('prescription.warnings', 'Red-Flag Warning Signs')} subtitle={t('prescription.warningsSubtitle', 'Symptoms requiring immediate clinical outreach')}>
             <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-xl space-y-2 text-xs text-rose-900">
               <div className="flex items-center gap-2 text-rose-700 font-bold">
                 <ShieldAlert className="w-4 h-4" />
-                Contact Care Team Immediately If You Experience:
+                {t('patientDashboard.warningPrompt', 'Contact Care Team Immediately If You Experience:')}
               </div>
               <ul className="space-y-1 pl-5 list-disc text-[#1C1917]">
                 <li>Fever above 100.4°F (38°C) or severe chills</li>
@@ -350,7 +351,7 @@ export default function PatientDashboard() {
                 <li>Shortness of breath or persistent chest discomfort</li>
               </ul>
               <p className="text-[10px] text-rose-700 italic pt-1">
-                AI-generated — verify before acting. Call hospital helpline for emergency symptoms.
+                {t('common.aiGeneratedWarning', 'AI-generated — verify before acting')} • {t('patientDashboard.disclaimer')}
               </p>
             </div>
           </Card>

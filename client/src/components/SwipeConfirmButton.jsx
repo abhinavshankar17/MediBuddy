@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CheckCircle2, Loader2, ArrowLeft, Check, AlertCircle } from 'lucide-react';
 
 export default function SwipeConfirmButton({
@@ -9,6 +10,7 @@ export default function SwipeConfirmButton({
   loading = false,
   error = null
 }) {
+  const { t } = useTranslation();
   const [dragProgress, setDragProgress] = useState(0); // 0 to 1
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef(null);
@@ -72,11 +74,11 @@ export default function SwipeConfirmButton({
       <div className="w-full p-3 rounded-2xl bg-[#059669]/10 border border-[#059669]/30 flex items-center justify-between text-xs text-[#059669] font-bold shadow-2xs">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-[#059669]" />
-          <span>✓ Taken</span>
+          <span>{t('medication.taken', '✓ Taken')}</span>
         </div>
         {confirmedTime && (
           <span className="text-[11px] font-medium text-[#059669]/90">
-            Confirmed at {confirmedTime}
+            {t('medication.confirmedAt', { time: confirmedTime, defaultValue: `Confirmed at ${confirmedTime}` })}
           </span>
         )}
       </div>
@@ -88,7 +90,7 @@ export default function SwipeConfirmButton({
     return (
       <div className="w-full p-3 rounded-2xl bg-[#CC785C]/10 border border-[#CC785C]/30 flex items-center justify-center gap-2 text-xs text-[#CC785C] font-bold">
         <Loader2 className="w-4 h-4 animate-spin text-[#CC785C]" />
-        <span>Confirming dosage intake...</span>
+        <span>{t('medication.confirming', 'Confirming dosage intake...')}</span>
       </div>
     );
   }
@@ -116,7 +118,7 @@ export default function SwipeConfirmButton({
         {/* Center Label */}
         <div className="w-full text-center text-xs font-bold text-[#78716C] z-0 flex items-center justify-center gap-2 pointer-events-none px-4">
           <ArrowLeft className="w-3.5 h-3.5 text-[#CC785C] animate-pulse flex-shrink-0" />
-          <span className="truncate">Swipe left to confirm taken</span>
+          <span className="truncate">{t('medication.swipeToConfirm', 'Swipe left to confirm taken')}</span>
         </div>
 
         {/* Sliding Draggable Thumb Handle */}
@@ -130,7 +132,7 @@ export default function SwipeConfirmButton({
 
       {/* Fallback Direct Button for Accessibility & Instant Mobile Tap */}
       <div className="flex justify-between items-center text-[11px]">
-        <span className="text-[#A8A29E] hidden sm:inline">Drag thumb or tap</span>
+        <span className="text-[#A8A29E] hidden sm:inline">{t('medication.dragOrTap', 'Drag thumb or tap')}</span>
         <button
           onClick={() => {
             if (!loading && !isConfirmed && onConfirm) onConfirm();
@@ -138,7 +140,7 @@ export default function SwipeConfirmButton({
           disabled={disabled || loading}
           className="font-bold text-[#CC785C] hover:text-[#B86549] underline cursor-pointer p-1"
         >
-          Or tap to confirm taken &rarr;
+          {t('medication.tapToConfirm', 'Or tap to confirm taken →')}
         </button>
       </div>
 

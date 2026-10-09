@@ -1,8 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '../utils/cn';
 
 export default function StatusBadge({ status, label, icon: Icon, className = '' }) {
-  const normalized = (status || label || '').toLowerCase();
+  const { t } = useTranslation();
+  const normalized = (status || label || '').toLowerCase().replace(/[-\s]/g, '_');
+  const displayLabel = label || t(`status.${normalized}`, { defaultValue: status || '' });
 
   let colorStyle = 'bg-[#F4F0E8] text-[#78716C] border-[#E8E2D7]';
   let dotColor = 'bg-[#78716C]';
@@ -34,7 +37,7 @@ export default function StatusBadge({ status, label, icon: Icon, className = '' 
       ) : (
         <span className={`w-1.5 h-1.5 rounded-full ${dotColor} animate-pulse`} />
       )}
-      <span>{label || status}</span>
+      <span>{displayLabel}</span>
     </span>
   );
 }

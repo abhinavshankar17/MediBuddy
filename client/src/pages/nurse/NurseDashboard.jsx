@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -38,6 +39,7 @@ import {
 } from 'lucide-react';
 
 export default function NurseDashboard() {
+  const { t } = useTranslation();
   const { searchQuery, setSearchQuery } = useApp();
   const navigate = useNavigate();
 
@@ -133,11 +135,11 @@ export default function NurseDashboard() {
 
   return (
     <PageContainer
-      title="Nurse Clinical Dashboard"
-      subtitle="Cohort recovery directory, medication adherence counts, prescription uploads, and risk escalations."
+      title={t('nurse.dashboardTitle', 'Clinical Nurse Dashboard')}
+      subtitle={t('nurse.dashboardSubtitle', 'Patient census, non-adherence monitoring, and automated escalation briefs.')}
       actions={
         <div className="flex flex-wrap items-center gap-2.5">
-          <StatusBadge status="info" label={`${overview?.totalPatients || 0} Active Patients`} />
+          <StatusBadge status="info" label={`${overview?.totalPatients || 0} ${t('nurse.totalPatients', 'Active Patients')}`} />
           
           {/* Main Action: Upload Prescription PDF */}
           <button
@@ -149,14 +151,14 @@ export default function NurseDashboard() {
             className="flex items-center gap-2 px-3.5 py-1.5 bg-[#0D9488] hover:bg-[#0B7A70] text-white font-bold text-xs rounded-xl shadow-2xs transition-all cursor-pointer"
           >
             <UploadCloud className="w-4 h-4" />
-            <span>Upload Prescription PDF</span>
+            <span>{t('nurse.uploadPrescription', 'Upload Prescription PDF')}</span>
           </button>
 
           <Link
             to="/nurse/patients"
             className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F4F0E8] hover:bg-[#E8E2D7] text-[#1C1917] font-bold text-xs rounded-xl border border-[#E8E2D7] transition-all"
           >
-            <span>Patient Directory</span>
+            <span>{t('nurse.patientDirectory', 'Patient Directory')}</span>
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -164,7 +166,7 @@ export default function NurseDashboard() {
     >
       {/* Cohort Metric Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card title="Total Cohort" variant="stat">
+        <Card title={t('nurse.totalCohort', 'Total Cohort')} variant="stat">
           <div className="flex items-center justify-between mt-1">
             <span className="text-3xl font-extrabold text-[#1C1917] font-serif">{overview.totalPatients}</span>
             <div className="p-2 bg-[#0D9488]/10 text-[#0D9488] rounded-xl">
@@ -174,7 +176,7 @@ export default function NurseDashboard() {
           <p className="text-xs text-[#78716C] mt-2 font-medium">Post-discharge recovery cohort</p>
         </Card>
 
-        <Card title="Active Escalations" variant="stat">
+        <Card title={t('nurse.activeEscalations', 'Active Escalations')} variant="stat">
           <div className="flex items-center justify-between mt-1">
             <span className="text-3xl font-extrabold text-[#E11D48] font-serif">{overview.activeEscalations}</span>
             <div className="p-2 bg-[#E11D48]/10 text-[#E11D48] rounded-xl">
@@ -184,7 +186,7 @@ export default function NurseDashboard() {
           <p className="text-xs text-rose-700 mt-2 font-bold">Action queue alerts</p>
         </Card>
 
-        <Card title="Med Adherence Rate" variant="stat">
+        <Card title={t('nurse.medAdherenceRate', 'Med Adherence Rate')} variant="stat">
           <div className="flex items-center justify-between mt-1">
             <span className="text-3xl font-extrabold text-[#059669] font-serif">{overview.medAdherenceRate}%</span>
             <div className="p-2 bg-[#059669]/10 text-[#059669] rounded-lg">
@@ -194,14 +196,14 @@ export default function NurseDashboard() {
           <p className="text-xs text-[#78716C] mt-2 font-medium">Cohort dosage compliance</p>
         </Card>
 
-        <Card title="Prescriptions & Records" variant="stat">
+        <Card title={t('nurse.prescriptionsRecords', 'Prescriptions & Records')} variant="stat">
           <div className="flex items-center justify-between mt-1">
             <span className="text-3xl font-extrabold text-[#0D9488] font-serif">{prescriptions.length || overview.totalPatients}</span>
             <div className="p-2 bg-[#0D9488]/10 text-[#0D9488] rounded-lg">
               <FileText className="w-5 h-5" />
             </div>
           </div>
-          <p className="text-xs text-[#78716C] mt-2 font-medium">Verified clinical documents</p>
+          <p className="text-xs text-[#78716C] mt-2 font-medium">{t('nurse.verifiedClinicalDocs', 'Verified clinical documents')}</p>
         </Card>
       </div>
 

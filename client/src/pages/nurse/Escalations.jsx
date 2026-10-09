@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -27,6 +28,7 @@ import {
 } from 'lucide-react';
 
 export default function Escalations() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setActivePatientId } = useApp();
 
@@ -88,7 +90,7 @@ export default function Escalations() {
           text: 'text-[#CC785C]',
           border: 'border-[#CC785C]/20',
           badgeStatus: 'missed',
-          label: 'Missed Medication'
+          label: t('nurse.categoryMissedMedication')
         };
       case 'repeated_missed_medication':
         return {
@@ -97,7 +99,7 @@ export default function Escalations() {
           text: 'text-rose-700',
           border: 'border-rose-200',
           badgeStatus: 'missed',
-          label: 'Repeated Missed Medication'
+          label: t('nurse.categoryRepeatedMissed')
         };
       case 'low_quiz_score':
         return {
@@ -106,7 +108,7 @@ export default function Escalations() {
           text: 'text-amber-700',
           border: 'border-amber-200',
           badgeStatus: 'pending',
-          label: 'Low Quiz Score'
+          label: t('nurse.categoryKnowledgeGap')
         };
       case 'knowledge_gap':
         return {
@@ -115,7 +117,7 @@ export default function Escalations() {
           text: 'text-indigo-700',
           border: 'border-indigo-200',
           badgeStatus: 'info',
-          label: 'Knowledge Gap'
+          label: t('nurse.categoryKnowledgeGap')
         };
       case 'medication_question':
         return {
@@ -124,7 +126,7 @@ export default function Escalations() {
           text: 'text-cyan-700',
           border: 'border-cyan-200',
           badgeStatus: 'info',
-          label: 'Medication Question'
+          label: t('nurse.categoryMedicationQuestion')
         };
       case 'warning_sign':
         return {
@@ -133,7 +135,7 @@ export default function Escalations() {
           text: 'text-rose-700',
           border: 'border-rose-200',
           badgeStatus: 'missed',
-          label: 'Warning Sign Alert'
+          label: t('nurse.categoryWarningSign')
         };
       case 'missing_information':
         return {
@@ -142,7 +144,7 @@ export default function Escalations() {
           text: 'text-stone-700',
           border: 'border-stone-200',
           badgeStatus: 'pending',
-          label: 'Missing Information'
+          label: t('nurse.categoryMissingInfo')
         };
       case 'overdue_task':
         return {
@@ -151,7 +153,7 @@ export default function Escalations() {
           text: 'text-amber-700',
           border: 'border-amber-200',
           badgeStatus: 'pending',
-          label: 'Overdue Task'
+          label: t('nurse.categoryOverdueTask')
         };
       default:
         return {
@@ -169,11 +171,11 @@ export default function Escalations() {
   const getSeverityBadge = (severity) => {
     switch (severity) {
       case 'HIGH':
-        return <StatusBadge status="missed" label="HIGH PRIORITY" />;
+        return <StatusBadge status="missed" label={t('nurse.priorityHigh')} />;
       case 'MEDIUM':
-        return <StatusBadge status="pending" label="MEDIUM PRIORITY" />;
+        return <StatusBadge status="pending" label={t('nurse.priorityMedium')} />;
       case 'LOW':
-        return <StatusBadge status="completed" label="LOW PRIORITY" />;
+        return <StatusBadge status="completed" label={t('nurse.priorityLow')} />;
       default:
         return <StatusBadge status="info" label={severity || 'ROUTINE'} />;
     }
@@ -194,17 +196,17 @@ export default function Escalations() {
 
   if (loading) {
     return (
-      <PageContainer title="Clinical Risk Escalations">
-        <LoadingState message="Loading risk escalations, category telemetry, and patient associations..." />
+      <PageContainer title={t('nurse.escalationsTitle')}>
+        <LoadingState message={t('nurse.loadingEscalations')} />
       </PageContainer>
     );
   }
 
   if (error) {
     return (
-      <PageContainer title="Clinical Risk Escalations">
+      <PageContainer title={t('nurse.escalationsTitle')}>
         <ErrorState
-          title="Escalations Unavailable"
+          title={t('nurse.escalationsUnavailable')}
           message={error}
           onRetry={loadAlerts}
         />
@@ -214,24 +216,24 @@ export default function Escalations() {
 
   return (
     <PageContainer
-      title="Clinical Risk Escalations"
-      subtitle="Prioritized clinical risk alerts requiring nurse review, teach-back reinforcement, or patient outreach."
+      title={t('nurse.escalationsTitle')}
+      subtitle={t('nurse.escalationsSubtitle')}
       badge={
         <StatusBadge
           status={activeAlertCount > 0 ? 'missed' : 'completed'}
-          label={`${activeAlertCount} Active Escalation${activeAlertCount === 1 ? '' : 's'}`}
+          label={t('nurse.activeEscalationCount', { count: activeAlertCount })}
         />
       }
     >
       {/* Category Navigation Pills */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
         {[
-          { id: 'ALL', label: 'All Categories' },
-          { id: 'missed_medication', label: 'Missed Medication' },
-          { id: 'repeated_missed_medication', label: 'Repeated Missed' },
-          { id: 'knowledge_gap', label: 'Knowledge Gap' },
-          { id: 'medication_question', label: 'Medication Question' },
-          { id: 'warning_sign', label: 'Warning Signs' }
+          { id: 'ALL', label: t('nurse.allCategories') },
+          { id: 'missed_medication', label: t('nurse.categoryMissedMedication') },
+          { id: 'repeated_missed_medication', label: t('nurse.categoryRepeatedMissed') },
+          { id: 'knowledge_gap', label: t('nurse.categoryKnowledgeGap') },
+          { id: 'medication_question', label: t('nurse.categoryMedicationQuestion') },
+          { id: 'warning_sign', label: t('nurse.categoryWarningSign') }
         ].map((cat) => (
           <button
             key={cat.id}
@@ -254,7 +256,7 @@ export default function Escalations() {
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#78716C]" />
             <input
               type="text"
-              placeholder="Search by patient, category, reason..."
+              placeholder={t('nurse.searchEscalationsPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl text-xs text-[#1C1917] focus:outline-none focus:border-[#0D9488] shadow-2xs"
@@ -262,16 +264,16 @@ export default function Escalations() {
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <span className="text-xs font-bold text-[#78716C]">Status:</span>
+            <span className="text-xs font-bold text-[#78716C]">{t('nurse.status')}:</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="bg-white border border-[#E8E2D7] rounded-xl px-3 py-1.5 text-xs font-bold text-[#1C1917] focus:outline-none focus:border-[#0D9488] shadow-2xs cursor-pointer"
             >
-              <option value="ALL">All Statuses</option>
-              <option value="OPEN">Open Only</option>
-              <option value="IN_REVIEW">In Review</option>
-              <option value="RESOLVED">Resolved</option>
+              <option value="ALL">{t('nurse.allStatuses')}</option>
+              <option value="OPEN">{t('nurse.openOnly')}</option>
+              <option value="IN_REVIEW">{t('nurse.inReview')}</option>
+              <option value="RESOLVED">{t('nurse.resolved')}</option>
             </select>
           </div>
         </div>
@@ -284,9 +286,9 @@ export default function Escalations() {
             <div className="w-12 h-12 rounded-2xl bg-[#0D9488]/10 text-[#0D9488] flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-extrabold text-[#1C1917] font-serif">No Matching Escalations</h3>
+            <h3 className="text-base font-extrabold text-[#1C1917] font-serif">{t('nurse.noMatchingEscalations')}</h3>
             <p className="text-xs text-[#78716C]">
-              There are no risk escalation alerts matching your selected category and status filters.
+              {t('nurse.noMatchingEscalationsDesc')}
             </p>
           </div>
         </Card>
@@ -360,20 +362,20 @@ export default function Escalations() {
                     <div className="flex items-center gap-4 flex-wrap text-xs text-[#78716C] pt-1">
                       <span className="flex items-center gap-1.5 font-medium">
                         <Clock className="w-3.5 h-3.5 text-[#0D9488]" />
-                        <span>Logged: <strong>{esc.formattedTimestamp}</strong></span>
+                        <span>{t('nurse.loggedAt')} <strong>{esc.formattedTimestamp}</strong></span>
                       </span>
 
                       {esc.relatedMedication && (
                         <span className="flex items-center gap-1.5 font-medium">
                           <Pill className="w-3.5 h-3.5 text-[#CC785C]" />
-                          <span>Related Med: <strong className="text-[#1C1917]">{esc.relatedMedication}</strong></span>
+                          <span>{t('nurse.relatedMed')} <strong className="text-[#1C1917]">{esc.relatedMedication}</strong></span>
                         </span>
                       )}
 
                       {esc.relatedEvent && (
                         <span className="flex items-center gap-1.5 font-medium">
                           <FileText className="w-3.5 h-3.5 text-[#0D9488]" />
-                          <span>Event Ref: <code className="font-mono bg-[#E8E2D7]/50 px-1 rounded text-[#1C1917]">{esc.relatedEvent}</code></span>
+                          <span>{t('nurse.eventRef')} <code className="font-mono bg-[#E8E2D7]/50 px-1 rounded text-[#1C1917]">{esc.relatedEvent}</code></span>
                         </span>
                       )}
                     </div>
@@ -384,7 +386,7 @@ export default function Escalations() {
                     <div className="p-3 bg-[#FAF8F5] rounded-xl border border-[#E8E2D7] space-y-1.5">
                       <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">
                         <Sparkles className="w-3.5 h-3.5 text-[#0D9488]" />
-                        <span>Supporting Telemetry Evidence</span>
+                        <span>{t('nurse.supportingEvidence')}</span>
                       </div>
                       <ul className="space-y-1">
                         {esc.evidence.map((item, idx) => (
@@ -401,7 +403,7 @@ export default function Escalations() {
                   {isResolved && esc.resolution && (
                     <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                      <span><strong>Resolution:</strong> {esc.resolution} (Resolved by {esc.resolvedBy})</span>
+                      <span><strong>{t('nurse.resolution')}</strong> {esc.resolution} ({t('nurse.resolvedBy')} {esc.resolvedBy})</span>
                     </div>
                   )}
 
@@ -417,7 +419,7 @@ export default function Escalations() {
                         className="px-3 py-1.5 bg-white hover:bg-[#FAF8F5] border border-[#E8E2D7] text-[#0D9488] font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer"
                       >
                         <UserCheck className="w-3.5 h-3.5" />
-                        <span>View Patient Detail</span>
+                        <span>{t('nurse.viewPatientDetail')}</span>
                       </button>
 
                       {!isResolved && (
@@ -426,7 +428,7 @@ export default function Escalations() {
                           className="px-3.5 py-1.5 bg-[#0D9488] hover:bg-[#0f766e] text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
                         >
                           <Check className="w-3.5 h-3.5" />
-                          <span>Resolve Alert</span>
+                          <span>{t('nurse.resolveAlert')}</span>
                         </button>
                       )}
                     </div>
@@ -445,7 +447,7 @@ export default function Escalations() {
             <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D7]">
               <div className="flex items-center gap-2 text-[#0D9488] font-bold text-sm">
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Resolve Clinical Escalation</span>
+                <span>{t('nurse.resolveClinicalEscalation')}</span>
               </div>
               <button
                 onClick={() => setSelectedAlertForResolution(null)}
@@ -457,7 +459,7 @@ export default function Escalations() {
 
             <div className="space-y-3 text-xs">
               <div>
-                <span className="text-[#78716C]">Patient:</span>
+                <span className="text-[#78716C]">{t('common.patient')}:</span>
                 <p className="font-bold text-[#1C1917]">
                   {selectedAlertForResolution.patientName} ({selectedAlertForResolution.patientId})
                 </p>
@@ -469,12 +471,12 @@ export default function Escalations() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-[#1C1917]">Resolution Documentation:</label>
+                <label className="text-xs font-bold text-[#1C1917]">{t('nurse.resolutionDoc')}</label>
                 <textarea
                   rows={3}
                   value={resolutionNotes}
                   onChange={(e) => setResolutionNotes(e.target.value)}
-                  placeholder="e.g., Contacted patient by phone; confirmed medication schedule and reinforced meal timing instructions..."
+                  placeholder={t('nurse.resolutionDocPlaceholder')}
                   className="w-full p-3 bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl text-xs text-[#1C1917] focus:outline-none focus:border-[#0D9488]"
                 />
               </div>
@@ -485,13 +487,13 @@ export default function Escalations() {
                 onClick={() => setSelectedAlertForResolution(null)}
                 className="px-3 py-1.5 bg-white border border-[#E8E2D7] text-[#78716C] font-bold text-xs rounded-xl cursor-pointer hover:bg-[#FAF8F5]"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 onClick={() => handleResolveAlert(selectedAlertForResolution._id)}
                 className="px-4 py-1.5 bg-[#0D9488] hover:bg-[#0f766e] text-white font-bold text-xs rounded-xl shadow-xs cursor-pointer"
               >
-                Confirm Resolution
+                {t('nurse.confirmResolution')}
               </button>
             </div>
           </div>

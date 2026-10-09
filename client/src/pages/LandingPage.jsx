@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../components/PageContainer';
 import Card from '../components/Card';
 import StatusBadge from '../components/StatusBadge';
@@ -7,6 +8,7 @@ import { User, UserCheck, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-reac
 import { useApp } from '../context/AppContext';
 
 export default function LandingPage() {
+  const { t } = useTranslation();
   const { setPortalRole } = useApp();
 
   return (
@@ -16,16 +18,16 @@ export default function LandingPage() {
         <div className="text-center space-y-4 relative py-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#CC785C]/10 border border-[#CC785C]/20 text-[#CC785C] text-xs font-bold shadow-2xs">
             <Sparkles className="w-4 h-4 text-[#CC785C] animate-pulse" />
-            <span>MERN Post-Discharge Care Platform</span>
+            <span>{t('landing.heroTag', 'MERN Post-Discharge Care Platform')}</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold text-[#1C1917] font-serif tracking-tight leading-tight">
-            Seamless Patient Recovery & <br className="hidden sm:block" />
-            <span className="text-[#CC785C]">Clinical Nurse Intelligence</span>
+            {t('landing.heroTitle', 'Seamless Patient Recovery &')} <br className="hidden sm:block" />
+            <span className="text-[#CC785C]">{t('landing.heroTitleHighlight', 'Clinical Nurse Intelligence')}</span>
           </h1>
 
           <p className="text-sm sm:text-base text-[#78716C] max-w-2xl mx-auto leading-relaxed">
-            Medi Buddy connects post-discharge patients with automated medication tracking and personalized care guidelines, synthesizing real-time clinical briefs for nursing teams.
+            {t('landing.heroSubtitle', 'Medi Buddy connects post-discharge patients with automated medication tracking and personalized care guidelines, synthesizing real-time clinical briefs for nursing teams.')}
           </p>
         </div>
 
@@ -38,28 +40,28 @@ export default function LandingPage() {
                 <div className="w-12 h-12 rounded-2xl bg-[#CC785C]/10 border border-[#CC785C]/20 flex items-center justify-center text-[#CC785C] shadow-2xs group-hover:scale-105 transition-transform">
                   <User className="w-6 h-6" />
                 </div>
-                <StatusBadge status="active" label="Patient" />
+                <StatusBadge status="active" label={t('roles.patient', 'Patient')} />
               </div>
 
               <div>
-                <h2 className="text-xl font-extrabold text-[#1C1917] font-serif">Patient Care App</h2>
+                <h2 className="text-xl font-extrabold text-[#1C1917] font-serif">{t('landing.patientCardTitle', 'Patient Care App')}</h2>
                 <p className="text-xs text-[#78716C] mt-1.5 leading-relaxed font-medium">
-                  Interactive post-discharge recovery app to stay on track with dosages, exercises, and care guidelines.
+                  {t('landing.patientCardDesc', 'Interactive post-discharge recovery app to stay on track with dosages, exercises, and care guidelines.')}
                 </p>
               </div>
 
               <div className="space-y-2 pt-1 text-xs text-[#1C1917] font-medium">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#CC785C] flex-shrink-0" />
-                  <span>Scheduled Dosage Intake & Reminders</span>
+                  <span>{t('landing.patientBullet1', 'Scheduled Dosage Intake & Reminders')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#CC785C] flex-shrink-0" />
-                  <span>Digital Discharge Plan & Care Tasks</span>
+                  <span>{t('landing.patientBullet2', 'Digital Discharge Plan & Care Tasks')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#CC785C] flex-shrink-0" />
-                  <span>Daily Condition Check-ins & Quizzes</span>
+                  <span>{t('landing.patientBullet3', 'Daily Condition Check-ins & Quizzes')}</span>
                 </div>
               </div>
             </div>
@@ -70,7 +72,7 @@ export default function LandingPage() {
                 onClick={() => setPortalRole('patient')}
                 className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#CC785C] hover:bg-[#B86549] text-white font-bold text-xs shadow-xs transition-all"
               >
-                Launch Patient App <ArrowRight className="w-3.5 h-3.5" />
+                {t('landing.patientBtn', 'Launch Patient App')} <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </Card>
@@ -82,28 +84,28 @@ export default function LandingPage() {
                 <div className="w-12 h-12 rounded-2xl bg-amber-100/70 border border-amber-200 flex items-center justify-center text-amber-800 shadow-2xs group-hover:scale-105 transition-transform">
                   <UserCheck className="w-6 h-6 text-amber-700" />
                 </div>
-                <StatusBadge status="warning" label="Family Portal" />
+                <StatusBadge status="warning" label={t('roles.caregiverPortal', 'Family Portal')} />
               </div>
 
               <div>
-                <h2 className="text-xl font-extrabold text-[#1C1917] font-serif">Family & Caregiver</h2>
+                <h2 className="text-xl font-extrabold text-[#1C1917] font-serif">{t('landing.caregiverCardTitle', 'Family & Caregiver')}</h2>
                 <p className="text-xs text-[#78716C] mt-1.5 leading-relaxed font-medium">
-                  Stay closely connected with daily AI recovery reports, interactive care calendar, and review loved ones' feedback.
+                  {t('landing.caregiverCardDesc', 'Stay closely connected with daily AI recovery reports, interactive care calendar, and review loved ones\' feedback.')}
                 </p>
               </div>
 
               <div className="space-y-2 pt-1 text-xs text-[#1C1917] font-medium">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
-                  <span>Daily Non-Clinical Recovery Digest</span>
+                  <span>{t('landing.caregiverBullet1', 'Daily Non-Clinical Recovery Digest')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
-                  <span>Interactive 30-Day Recovery Calendar</span>
+                  <span>{t('landing.caregiverBullet2', 'Interactive 30-Day Recovery Calendar')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
-                  <span>Review Patient Feedback & Send Love</span>
+                  <span>{t('landing.caregiverBullet3', 'Review Patient Feedback & Send Love')}</span>
                 </div>
               </div>
             </div>
@@ -114,7 +116,7 @@ export default function LandingPage() {
                 onClick={() => setPortalRole('caregiver')}
                 className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs shadow-xs transition-all"
               >
-                Launch Caregiver Portal <ArrowRight className="w-3.5 h-3.5" />
+                {t('landing.caregiverBtn', 'Launch Caregiver Portal')} <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </Card>
@@ -126,28 +128,28 @@ export default function LandingPage() {
                 <div className="w-12 h-12 rounded-2xl bg-[#0D9488]/10 border border-[#0D9488]/20 flex items-center justify-center text-[#0D9488] shadow-2xs group-hover:scale-105 transition-transform">
                   <Sparkles className="w-6 h-6" />
                 </div>
-                <StatusBadge status="info" label="Clinical Hub" />
+                <StatusBadge status="info" label={t('roles.nursePortal', 'Clinical Hub')} />
               </div>
 
               <div>
-                <h2 className="text-xl font-extrabold text-[#1C1917] font-serif">Nurse Intelligence</h2>
+                <h2 className="text-xl font-extrabold text-[#1C1917] font-serif">{t('landing.nurseCardTitle', 'Nurse Intelligence')}</h2>
                 <p className="text-xs text-[#78716C] mt-1.5 leading-relaxed font-medium">
-                  Real-time clinical dashboard providing automated cohort adherence metrics, risk triage, and AI summaries.
+                  {t('landing.nurseCardDesc', 'Real-time clinical dashboard providing automated cohort adherence metrics, risk triage, and AI summaries.')}
                 </p>
               </div>
 
               <div className="space-y-2 pt-1 text-xs text-[#1C1917] font-medium">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#0D9488] flex-shrink-0" />
-                  <span>Cohort Adherence & Compliance</span>
+                  <span>{t('landing.nurseBullet1', 'Cohort Adherence & Compliance')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#0D9488] flex-shrink-0" />
-                  <span>AI Clinical Briefs & Knowledge Gaps</span>
+                  <span>{t('landing.nurseBullet2', 'AI Clinical Briefs & Knowledge Gaps')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#0D9488] flex-shrink-0" />
-                  <span>High-Priority Escalation Alert Queue</span>
+                  <span>{t('landing.nurseBullet3', 'High-Priority Escalation Alert Queue')}</span>
                 </div>
               </div>
             </div>
@@ -158,7 +160,7 @@ export default function LandingPage() {
                 onClick={() => setPortalRole('nurse')}
                 className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#0D9488] hover:bg-[#0B7A70] text-white font-bold text-xs shadow-xs transition-all"
               >
-                Launch Nurse Portal <ArrowRight className="w-3.5 h-3.5" />
+                {t('landing.nurseBtn', 'Launch Nurse Portal')} <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </Card>

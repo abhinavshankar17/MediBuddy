@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../components/PageContainer';
 import Card from '../components/Card';
 import StatusBadge from '../components/StatusBadge';
@@ -8,6 +9,7 @@ import { getAllDemoUsers } from '../services/authService';
 import { Stethoscope, User, UserCheck, HeartPulse, LogIn, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const { loginUser } = useApp();
   const navigate = useNavigate();
 
@@ -57,15 +59,15 @@ export default function LoginPage() {
         <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#CC785C]/10 border border-[#CC785C]/20 text-[#CC785C] text-xs font-bold shadow-2xs">
             <Stethoscope className="w-4 h-4 text-[#CC785C]" />
-            <span>Instant Demo Persona Quick-Login</span>
+            <span>{t('login.tag', 'Instant Demo Persona Quick-Login')}</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1C1917] font-serif tracking-tight">
-            Select Your User Persona to Log In
+            {t('login.title', 'Select Your User Persona to Log In')}
           </h1>
 
           <p className="text-xs sm:text-sm text-[#78716C] max-w-xl mx-auto leading-relaxed">
-            Click any demo profile card below to authenticate instantly without typing passwords.
+            {t('login.subtitle', 'Click any demo profile card below to authenticate instantly without typing passwords.')}
           </p>
         </div>
 
@@ -81,7 +83,7 @@ export default function LoginPage() {
               }`}
             >
               <User className="w-4 h-4" />
-              <span>Patients (8)</span>
+              <span>{t('login.patientTab', 'Patients')}</span>
             </button>
 
             <button
@@ -93,7 +95,7 @@ export default function LoginPage() {
               }`}
             >
               <UserCheck className="w-4 h-4" />
-              <span>Nurses & Doctors (3)</span>
+              <span>{t('login.nurseTab', 'Nurses & Doctors')}</span>
             </button>
 
             <button
@@ -105,7 +107,7 @@ export default function LoginPage() {
               }`}
             >
               <HeartPulse className="w-4 h-4" />
-              <span>Caregivers (5)</span>
+              <span>{t('login.caregiverTab', 'Caregivers')}</span>
             </button>
           </div>
         </div>

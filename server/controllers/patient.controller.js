@@ -115,6 +115,49 @@ const patientController = {
     } catch (err) {
       return next(err);
     }
+  },
+
+  /**
+   * PUT / PATCH /api/patients/:id/language
+   * Update the patient's preferred language ('en', 'hi', 'ta')
+   */
+  async updatePatientLanguage(req, res, next) {
+    try {
+      const patientId = req.params.id;
+      const { language } = req.body;
+      const validLangs = ['en', 'hi', 'ta'];
+      if (!language || !validLangs.includes(language)) {
+        return res.status(400).json({
+          success: false,
+          error: `Invalid language '${language}'. Supported languages: ${validLangs.join(', ')}`
+        });
+      }
+      const updated = await patientService.updatePatientLanguage(patientId, language);
+      return successResponse(res, updated, `Language preference updated to '${language}'`);
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  /**
+   * GET /api/patients/:id/language
+   * Get the patient's preferred language
+   */
+  async getPatientLanguage(req, res, next) {
+    try {
+      const patientId = req.params.id;
+      const patient = await patientService.getPatientById(patientId);
+      return successResponse(
+        res,
+        {
+          language: patient.language || 'en',
+          availableLanguages: ['en', 'hi', 'ta']
+        },
+        `Language preference for patient ${patientId} retrieved`
+      );
+    } catch (err) {
+      return next(err);
+    }
   }
 };
 

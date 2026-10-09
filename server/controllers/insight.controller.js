@@ -14,10 +14,11 @@ const insightController = {
   async getLatestInsight(req, res, next) {
     try {
       const patientId = req.params.patientId || req.params.id || req.query.patientId;
-      const { regenerate } = req.query;
+      const { regenerate, language } = req.query;
 
       const insight = await insightService.getLatestInsight(patientId, {
-        regenerate: regenerate === 'true'
+        regenerate: regenerate === 'true',
+        language
       });
 
       return successResponse(
@@ -38,8 +39,9 @@ const insightController = {
   async getPatientInsights(req, res, next) {
     try {
       const patientId = req.params.patientId || req.params.id || req.query.patientId;
+      const { language } = req.query;
 
-      const insights = await insightService.getPatientInsights(patientId);
+      const insights = await insightService.getPatientInsights(patientId, { language });
 
       return successResponse(
         res,

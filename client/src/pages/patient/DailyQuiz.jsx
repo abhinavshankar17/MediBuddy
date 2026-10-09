@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -28,6 +29,7 @@ import {
 } from 'lucide-react';
 
 export default function DailyQuiz() {
+  const { t } = useTranslation();
   const { currentUser, activePatientId } = useApp();
   const navigate = useNavigate();
 
@@ -166,8 +168,8 @@ export default function DailyQuiz() {
 
   return (
     <PageContainer
-      title="Daily Teach-Back Recovery Quiz"
-      subtitle="Interactive 5-question comprehension check grounded in your discharge instructions."
+      title={t('quiz.title', 'Daily Teach-Back Recovery Quiz')}
+      subtitle={t('quiz.subtitle', 'Interactive 5-question comprehension check grounded in your discharge instructions.')}
       actions={<StatusBadge status="completed" label="★ 100 Max Points" />}
     >
       {/* Quiz Cover Screen */}
@@ -180,29 +182,29 @@ export default function DailyQuiz() {
 
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#CC785C]/10 text-[#CC785C] text-xs font-bold mb-3">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>5-Question Daily Check</span>
+              <span>{t('quiz.title', '5-Question Daily Check')}</span>
             </div>
 
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1C1917] font-serif">
-              Ready for Today's Teach-Back Quiz?
+              {t('quiz.coverTitle', 'Ready for Today\'s Teach-Back Quiz?')}
             </h2>
 
             <p className="text-xs sm:text-sm text-[#78716C] mt-2 max-w-md mx-auto leading-relaxed font-medium">
-              Reinforce your knowledge on medication timing, physical restrictions, and follow-up schedules in 5 quick questions.
+              {t('quiz.coverDesc', 'Reinforce your knowledge on medication timing, physical restrictions, and follow-up schedules in 5 quick questions.')}
             </p>
 
             <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto my-6">
               <div className="p-3 bg-white rounded-xl border border-[#E8E2D7] shadow-2xs">
                 <span className="text-lg font-bold text-[#1C1917] font-serif">5</span>
-                <p className="text-[10px] text-[#78716C] font-semibold">Questions</p>
+                <p className="text-[10px] text-[#78716C] font-semibold">{t('quiz.questionProgress', 'Questions')}</p>
               </div>
               <div className="p-3 bg-white rounded-xl border border-[#E8E2D7] shadow-2xs">
                 <span className="text-lg font-bold text-[#CC785C] font-serif">100</span>
-                <p className="text-[10px] text-[#78716C] font-semibold">Knowledge Pts</p>
+                <p className="text-[10px] text-[#78716C] font-semibold">{t('quiz.scoreLabel', 'Knowledge Pts')}</p>
               </div>
               <div className="p-3 bg-white rounded-xl border border-[#E8E2D7] shadow-2xs">
                 <span className="text-lg font-bold text-[#0D9488] font-serif">~2 min</span>
-                <p className="text-[10px] text-[#78716C] font-semibold">Est. Time</p>
+                <p className="text-[10px] text-[#78716C] font-semibold">{t('common.time', 'Est. Time')}</p>
               </div>
             </div>
 
@@ -210,7 +212,7 @@ export default function DailyQuiz() {
               onClick={() => setQuizState('in_progress')}
               className="w-full sm:w-auto px-8 py-3 bg-[#CC785C] hover:bg-[#B86549] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 mx-auto cursor-pointer"
             >
-              <span>Start Quiz Now</span>
+              <span>{t('quiz.startBtn', 'Start Quiz Now')}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </Card>
@@ -290,7 +292,7 @@ export default function DailyQuiz() {
                 }`}
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Previous</span>
+                <span>{t('quiz.prevBtn', 'Previous')}</span>
               </button>
 
               {currentIndex < 4 ? (
@@ -303,7 +305,7 @@ export default function DailyQuiz() {
                       : 'bg-[#E8E2D7] text-[#78716C] cursor-not-allowed'
                   }`}
                 >
-                  <span>Next Question</span>
+                  <span>{t('quiz.nextBtn', 'Next Question')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               ) : (
@@ -316,7 +318,7 @@ export default function DailyQuiz() {
                       : 'bg-[#E8E2D7] text-[#78716C] cursor-not-allowed'
                   }`}
                 >
-                  <span>Submit Quiz</span>
+                  <span>{submitting ? t('common.loading', 'Submitting...') : t('quiz.submitBtn', 'Submit Quiz')}</span>
                   <Check className="w-4 h-4" />
                 </button>
               )}

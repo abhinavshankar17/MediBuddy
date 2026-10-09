@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -63,6 +64,7 @@ const URGENCY_LEVELS = [
 const BOOKING_STEPS = ['feedback', 'slots', 'done'];
 
 export default function PatientFeedback() {
+  const { t } = useTranslation();
   const { activePatientId, currentUser } = useApp();
   const patientId = activePatientId || currentUser?.patientId || 'P001';
 
@@ -265,8 +267,8 @@ export default function PatientFeedback() {
 
   return (
     <PageContainer
-      title="Condition Feedback & Appointments"
-      subtitle="Report your current condition and book a follow-up appointment based on urgency."
+      title={t('feedback.title', 'Condition Feedback & Appointments')}
+      subtitle={t('feedback.subtitle', 'Report your current condition and book a follow-up appointment based on urgency.')}
       actions={
         <div className="flex items-center gap-2">
           <button
@@ -274,7 +276,7 @@ export default function PatientFeedback() {
             className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl text-xs font-bold text-[#78716C] hover:text-[#1C1917] shadow-2xs transition-all cursor-pointer"
           >
             <Clock className="w-3.5 h-3.5" />
-            <span>{showHistory ? 'Hide History' : 'View History'}</span>
+            <span>{showHistory ? t('common.close', 'Hide History') : t('feedback.history', 'View History')}</span>
           </button>
           {currentStep !== 'feedback' && (
             <button
@@ -282,7 +284,7 @@ export default function PatientFeedback() {
               className="flex items-center gap-1.5 px-3 py-1.5 bg-[#CC785C] hover:bg-[#B86549] text-white rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
             >
               <MessageSquarePlus className="w-3.5 h-3.5" />
-              <span>New Feedback</span>
+              <span>{t('feedback.reportSymptoms', 'New Feedback')}</span>
             </button>
           )}
         </div>

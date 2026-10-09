@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react';
 
 export default function PatientList() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setActivePatientId } = useApp();
 
@@ -87,37 +89,37 @@ export default function PatientList() {
 
   return (
     <PageContainer
-      title="Clinical Patient Directory"
-      subtitle="Comprehensive post-discharge cohort management, recovery progress, and clinical risk monitoring for nurses and physicians."
+      title={t('nurse.patientListTitle', 'Clinical Patient Directory')}
+      subtitle={t('nurse.dashboardSubtitle', 'Comprehensive post-discharge cohort management, recovery progress, and clinical risk monitoring for nurses and physicians.')}
       badge={
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D9488]/10 text-[#0D9488] border border-[#0D9488]/20 text-xs font-bold">
           <Users className="w-3.5 h-3.5" />
-          <span>{patients.length} Active Patients</span>
+          <span>{patients.length} {t('nurse.totalPatients', 'Active Patients')}</span>
         </div>
       }
     >
       {/* 1. Cohort Quick Stats Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Total Cohort</span>
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('nurse.totalCohort', 'Total Cohort')}</span>
           <p className="text-2xl font-extrabold text-[#1C1917] font-serif">{patients.length}</p>
           <span className="text-[11px] text-[#0D9488] font-semibold">Active monitoring</span>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">High Risk</span>
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('nurse.highRisk', 'High Risk')}</span>
           <p className="text-2xl font-extrabold text-rose-700 font-serif">{highRiskCount}</p>
           <span className="text-[11px] text-rose-600 font-semibold">Priority check-in</span>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Medium Risk</span>
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('nurse.mediumRisk', 'Medium Risk')}</span>
           <p className="text-2xl font-extrabold text-amber-700 font-serif">{mediumRiskCount}</p>
           <span className="text-[11px] text-amber-600 font-semibold">Routine follow-up</span>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Stable (Low Risk)</span>
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('nurse.lowRisk', 'Low Risk')}</span>
           <p className="text-2xl font-extrabold text-emerald-700 font-serif">{lowRiskCount}</p>
           <span className="text-[11px] text-emerald-600 font-semibold">On track recovery</span>
         </div>
@@ -130,7 +132,7 @@ export default function PatientList() {
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#78716C]" />
             <input
               type="text"
-              placeholder="Search by patient name, ID, diagnosis, procedure..."
+              placeholder={t('nurse.searchPatients', 'Search by patient name, ID, diagnosis, procedure...')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl text-xs text-[#1C1917] focus:outline-none focus:border-[#0D9488] shadow-2xs"
@@ -140,10 +142,10 @@ export default function PatientList() {
           {/* Priority Filter Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
             {[
-              { id: 'ALL', label: 'All Patients' },
-              { id: 'HIGH', label: 'High Risk' },
-              { id: 'MEDIUM', label: 'Medium Risk' },
-              { id: 'LOW', label: 'Low Risk' }
+              { id: 'ALL', label: t('common.all', 'All') },
+              { id: 'HIGH', label: t('nurse.highRisk', 'High Risk') },
+              { id: 'MEDIUM', label: t('nurse.mediumRisk', 'Medium Risk') },
+              { id: 'LOW', label: t('nurse.lowRisk', 'Low Risk') }
             ].map((tab) => (
               <button
                 key={tab.id}

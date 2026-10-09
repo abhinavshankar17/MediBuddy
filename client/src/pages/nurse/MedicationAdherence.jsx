@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react';
 
 export default function MedicationAdherence() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setActivePatientId } = useApp();
 
@@ -57,17 +59,17 @@ export default function MedicationAdherence() {
 
   if (loading) {
     return (
-      <PageContainer title="Medication Adherence Monitor">
-        <LoadingState message="Aggregating cohort medication adherence logs & verification telemetry..." />
+      <PageContainer title={t('nurse.adherenceMonitorTitle')}>
+        <LoadingState message={t('nurse.loadingAdherence')} />
       </PageContainer>
     );
   }
 
   if (error || !data) {
     return (
-      <PageContainer title="Medication Adherence Monitor">
+      <PageContainer title={t('nurse.adherenceMonitorTitle')}>
         <ErrorState
-          title="Adherence Data Unavailable"
+          title={t('nurse.adherenceDataUnavailable')}
           message={error}
           onRetry={loadData}
         />
@@ -94,12 +96,12 @@ export default function MedicationAdherence() {
 
   return (
     <PageContainer
-      title="Medication Adherence Monitor"
-      subtitle="Cohort-wide medication compliance analytics, dosage verification logs, and patient response tracking for clinicians."
+      title={t('nurse.adherenceMonitorTitle')}
+      subtitle={t('nurse.adherenceMonitorSubtitle')}
       badge={
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CC785C]/10 text-[#CC785C] border border-[#CC785C]/20 text-xs font-bold">
           <Pill className="w-3.5 h-3.5" />
-          <span>{summary.overallComplianceRate}% Adherence Rate</span>
+          <span>{t('nurse.adherenceRateBadge', { rate: summary.overallComplianceRate })}</span>
         </div>
       }
     >
@@ -107,38 +109,38 @@ export default function MedicationAdherence() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Cohort Compliance</span>
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('nurse.cohortCompliance')}</span>
             <Activity className="w-4 h-4 text-[#0D9488]" />
           </div>
           <p className="text-3xl font-extrabold text-[#0D9488] font-serif">{summary.overallComplianceRate}%</p>
-          <span className="text-[11px] text-[#059669] font-semibold">{summary.totalConfirmed} of {summary.totalDosages} doses taken</span>
+          <span className="text-[11px] text-[#059669] font-semibold">{t('nurse.dosesTakenRatio', { confirmed: summary.totalConfirmed, total: summary.totalDosages })}</span>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Confirmed Doses</span>
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('nurse.confirmedDoses')}</span>
             <CheckCircle2 className="w-4 h-4 text-[#059669]" />
           </div>
           <p className="text-3xl font-extrabold text-[#1C1917] font-serif">{summary.totalConfirmed}</p>
-          <span className="text-[11px] text-[#059669] font-semibold">Verified patient responses</span>
+          <span className="text-[11px] text-[#059669] font-semibold">{t('nurse.verifiedPatientResponses')}</span>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Not Confirmed</span>
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('nurse.notConfirmed')}</span>
             <Clock className="w-4 h-4 text-[#D97706]" />
           </div>
           <p className="text-3xl font-extrabold text-[#D97706] font-serif">{summary.totalNotConfirmed}</p>
-          <span className="text-[11px] text-[#D97706] font-semibold">Awaiting patient check-in</span>
+          <span className="text-[11px] text-[#D97706] font-semibold">{t('nurse.awaitingCheckIn')}</span>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Missed Doses</span>
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('nurse.missedDoses')}</span>
             <AlertTriangle className="w-4 h-4 text-rose-600" />
           </div>
           <p className="text-3xl font-extrabold text-rose-700 font-serif">{summary.totalMissed}</p>
-          <span className="text-[11px] text-rose-600 font-semibold">Requires clinical outreach</span>
+          <span className="text-[11px] text-rose-600 font-semibold">{t('nurse.requiresOutreach')}</span>
         </div>
       </div>
 
@@ -146,7 +148,7 @@ export default function MedicationAdherence() {
       <div className="p-3.5 bg-[#FAF8F5] border border-[#E8E2D7] rounded-2xl flex items-start gap-3 shadow-2xs text-xs text-[#78716C]">
         <Info className="w-4 h-4 text-[#0D9488] flex-shrink-0 mt-0.5" />
         <p>
-          <strong className="text-[#1C1917]">Clinical Semantic Rule:</strong> Reminders without a patient response are classified as <code className="bg-white px-1.5 py-0.5 rounded border border-[#E8E2D7] font-semibold text-[#D97706]">Not confirmed</code>, not automatically marked as "Not taken". Only explicit patient check-ins or overdue escalation flags are marked as missed.
+          <strong className="text-[#1C1917]">{t('nurse.clinicalRuleTitle')}</strong> {t('nurse.clinicalRuleText')}
         </p>
       </div>
 
@@ -157,7 +159,7 @@ export default function MedicationAdherence() {
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#78716C]" />
             <input
               type="text"
-              placeholder="Search by patient name, medication..."
+              placeholder={t('nurse.searchAdherencePlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl text-xs text-[#1C1917] focus:outline-none focus:border-[#0D9488] shadow-2xs"
@@ -166,10 +168,10 @@ export default function MedicationAdherence() {
 
           <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
             {[
-              { id: 'ALL', label: 'All Patients' },
-              { id: 'FULL', label: '100% Adherent' },
-              { id: 'PENDING', label: 'Pending Confirmation' },
-              { id: 'MISSED', label: 'Missed Doses' }
+              { id: 'ALL', label: t('nurse.allPatients') },
+              { id: 'FULL', label: t('nurse.fullAdherent') },
+              { id: 'PENDING', label: t('nurse.pendingConfirmation') },
+              { id: 'MISSED', label: t('nurse.missedDoses') }
             ].map((btn) => (
               <button
                 key={btn.id}
@@ -242,7 +244,7 @@ export default function MedicationAdherence() {
                       onClick={() => handlePatientSelect(p.patientId)}
                       className="px-3 py-1.5 bg-white hover:bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl text-xs font-bold text-[#0D9488] shadow-2xs transition-all cursor-pointer flex items-center gap-1"
                     >
-                      <span>Inspect Log</span>
+                      <span>{t('nurse.inspectLog')}</span>
                       <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -251,7 +253,7 @@ export default function MedicationAdherence() {
                 {/* Medication Regimen Breakdown Pills */}
                 <div className="space-y-2">
                   <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">
-                    Today's Prescribed Regimen
+                    {t('nurse.todayRegimen')}
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {p.medications.map((m) => (

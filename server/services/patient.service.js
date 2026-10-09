@@ -124,6 +124,18 @@ const patientService = {
         completed: tasks.filter(t => t.status === 'completed').length
       }
     };
+  },
+
+  /**
+   * Update patient's language preference ('en' | 'hi' | 'ta')
+   */
+  async updatePatientLanguage(patientId, language) {
+    if (!patientId) {
+      throw { statusCode: 400, message: 'patientId parameter is required' };
+    }
+    const validLangs = ['en', 'hi', 'ta'];
+    const safeLang = validLangs.includes(language) ? language : 'en';
+    return await dataStore.updatePatientLanguage(patientId, safeLang);
   }
 };
 

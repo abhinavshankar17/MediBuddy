@@ -89,6 +89,20 @@ const notificationService = {
         const existingNotif = await dataStore.getNotificationById(notifId);
 
         if (!existingNotif) {
+          const patient = await dataStore.getPatient(reminder.patientId);
+          const lang = patient?.language || 'en';
+
+          let notifTitle = '💊 Medication Reminder';
+          let notifMsg = `Your ${reminder.medicationName} ${reminder.dose || ''} reminder has not been confirmed.\n\nPlease take your medication according to your discharge instructions and swipe to confirm.`.trim();
+
+          if (lang === 'hi') {
+            notifTitle = '💊 दवा अनुस्मारक';
+            notifMsg = `आपकी दवा ${reminder.medicationName} ${reminder.dose || ''} की खुराक अभी तक पुष्ट नहीं हुई है।\n\nकृपया अपने डिस्चार्ज निर्देशों के अनुसार दवा लें और पुष्टि करने के लिए स्वाइप करें।`.trim();
+          } else if (lang === 'ta') {
+            notifTitle = '💊 மருந்து நினைவூட்டல்';
+            notifMsg = `உங்கள் ${reminder.medicationName} ${reminder.dose || ''} மருந்து நினைவூட்டல் இன்னும் உறுதிப்படுத்தப்படவில்லை.\n\nதயவுசெய்து உங்கள் டிஸ்சார்ஜ் வழிமுறைகளின்படி மருந்தை உட்கொண்டு உறுதிப்படுத்தவும்.`.trim();
+          }
+
           const followUpNotif = await dataStore.addNotification({
             _id: notifId,
             recipientId: reminder.patientId,
@@ -96,13 +110,14 @@ const notificationService = {
             patientId: reminder.patientId,
             reminderId: reminder._id,
             type: 'medication_followup',
-            title: '💊 Medication Reminder',
-            message: `Your ${reminder.medicationName} ${reminder.dose || ''} reminder has not been confirmed.\n\nPlease take your medication according to your discharge instructions and swipe to confirm.`.trim(),
+            title: notifTitle,
+            message: notifMsg,
             metadata: {
               medicationName: reminder.medicationName,
               dose: reminder.dose,
               scheduledAt: reminder.scheduledAt,
-              elapsedMinutes: Math.floor(elapsedMinutes)
+              elapsedMinutes: Math.floor(elapsedMinutes),
+              language: lang
             },
             read: false,
             createdAt: now.toISOString()

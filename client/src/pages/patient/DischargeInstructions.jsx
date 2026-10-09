@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -24,6 +25,7 @@ import {
 } from 'lucide-react';
 
 export default function DischargeInstructions() {
+  const { t } = useTranslation();
   const { currentUser, activePatientId } = useApp();
 
   const [patient, setPatient] = useState(null);
@@ -88,21 +90,21 @@ export default function DischargeInstructions() {
   }
 
   const categoryTabs = [
-    { id: 'all', label: 'All Instructions' },
-    { id: 'medication', label: 'Medications', count: instructions.medications?.length || 0 },
-    { id: 'activity', label: 'Activity & Exercise', count: instructions.activity?.length || 0 },
-    { id: 'restriction', label: 'Restrictions', count: instructions.restrictions?.length || 0 },
-    { id: 'diet', label: 'Dietary', count: instructions.diet?.length || 0 },
-    { id: 'followup', label: 'Follow-Up', count: instructions.followUp?.length || 0 },
-    { id: 'warning', label: 'Warning Signs' }
+    { id: 'all', label: t('common.all', 'All Instructions') },
+    { id: 'medication', label: t('nav.medication', 'Medications'), count: instructions.medications?.length || 0 },
+    { id: 'activity', label: t('patientDashboard.activity', 'Activity & Exercise'), count: instructions.activity?.length || 0 },
+    { id: 'restriction', label: t('patientDashboard.restrictions', 'Restrictions'), count: instructions.restrictions?.length || 0 },
+    { id: 'diet', label: t('patientDashboard.diet', 'Dietary'), count: instructions.diet?.length || 0 },
+    { id: 'followup', label: t('patientDashboard.followUp', 'Follow-Up'), count: instructions.followUp?.length || 0 },
+    { id: 'warning', label: t('prescription.warnings', 'Warning Signs') }
   ];
 
   return (
     <PageContainer
-      title="Verified Discharge Instructions & Care Plan"
-      subtitle="Clinical discharge summary guidelines extracted and structured for post-hospital recovery."
+      title={t('patientDashboard.readDischarge', 'Verified Discharge Instructions & Care Plan')}
+      subtitle={t('prescription.subtitle', 'Clinical discharge summary guidelines extracted and structured for post-hospital recovery.')}
       actions={
-        <StatusBadge status="completed" label="Clinical Ground Truth" />
+        <StatusBadge status="completed" label={t('prescription.verifiedBadge', 'Clinical Ground Truth')} />
       }
     >
       {/* Safety Wording Disclaimer */}
@@ -110,11 +112,11 @@ export default function DischargeInstructions() {
         <div className="flex items-center gap-2 font-medium">
           <Sparkles className="w-4 h-4 text-[#CC785C] flex-shrink-0" />
           <span>
-            <strong className="text-[#CC785C]">AI-generated — verify before acting.</strong> Instructions are extracted directly from original hospital discharge documentation.
+            <strong className="text-[#CC785C]">{t('common.aiGeneratedWarning', 'AI-generated — verify before acting')}.</strong> {t('prescription.subtitle', 'Instructions are extracted directly from original hospital discharge documentation.')}
           </span>
         </div>
         <span className="text-[10px] font-bold text-[#78716C] bg-white px-2.5 py-0.5 rounded-full border border-[#E8E2D7] hidden sm:inline">
-          Discharge Date: {patient.dischargeDate}
+          {t('patientDashboard.dischargeDate', 'Discharge Date')}: {patient.dischargeDate}
         </span>
       </div>
 

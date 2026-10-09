@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Card from '../Card';
 import StatusBadge from '../StatusBadge';
 import {
@@ -31,6 +32,7 @@ export default function PatientMedicationCalendar({
   labTests = [],
   followUp = []
 }) {
+  const { t } = useTranslation();
   const popoverRef = useRef(null);
 
   // Parse discharge date or fallback to 2026-10-05
@@ -360,10 +362,10 @@ export default function PatientMedicationCalendar({
             </div>
             <div>
               <h3 className="text-sm font-bold text-[#1C1917] font-serif">
-                Recovery & Medication Calendar
+                {t('caregiver.calendarTitle', 'Recovery & Medication Calendar')}
               </h3>
               <p className="text-[11px] text-[#78716C]">
-                Click any day to inspect exact dosage times & scheduled lab tests
+                {t('caregiver.calendarSubtitle', 'Click any day to inspect exact dosage times & scheduled lab tests')}
               </p>
             </div>
           </div>
@@ -374,7 +376,7 @@ export default function PatientMedicationCalendar({
             <div className="flex items-center gap-3 text-[10px] text-[#78716C] bg-[#FAF8F5] px-2.5 py-1 rounded-xl border border-[#E8E2D7]">
               <div className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-sm bg-[#CC785C]/20 border border-[#CC785C]" />
-                <span>Rx Days</span>
+                <span>{t('nav.prescription', 'Rx Days')}</span>
               </div>
               <div className="flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-purple-600 ring-2 ring-purple-200" />
@@ -384,7 +386,7 @@ export default function PatientMedicationCalendar({
                 <span className="w-2.5 h-2.5 rounded-sm bg-[#0D9488] text-white flex items-center justify-center text-[7px] font-bold">
                   ★
                 </span>
-                <span>Discharge</span>
+                <span>{t('patientDashboard.readDischarge', 'Discharge')}</span>
               </div>
             </div>
 

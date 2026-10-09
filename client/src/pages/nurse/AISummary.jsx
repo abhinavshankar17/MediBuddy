@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -26,6 +27,7 @@ import {
 } from 'lucide-react';
 
 export default function AISummary() {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { setActivePatientId } = useApp();
@@ -119,17 +121,17 @@ export default function AISummary() {
 
   return (
     <PageContainer
-      title="AI Patient Summary & Clinical Intelligence"
-      subtitle="Structured patient briefings synthesized from check-ins, quiz results, and medication adherence logs."
+      title={t('nurse.aiSummaryTitle', 'AI Patient Summary & Clinical Intelligence')}
+      subtitle={t('nurse.dashboardSubtitle', 'Structured patient briefings synthesized from check-ins, quiz results, and medication adherence logs.')}
       badge={
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D9488]/10 text-[#0D9488] border border-[#0D9488]/20 text-xs font-bold">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Synced Backend Briefs</span>
+          <span>{t('nurse.aiBriefs', 'Synced Backend Briefs')}</span>
         </div>
       }
       actions={
         <div className="flex items-center gap-3">
-          <span className="text-xs font-bold text-[#78716C] hidden sm:inline">Active Patient:</span>
+          <span className="text-xs font-bold text-[#78716C] hidden sm:inline">{t('roles.patient', 'Active Patient')}:</span>
           <select
             value={activePatientId}
             onChange={(e) => handleSelectPatient(e.target.value)}
@@ -151,14 +153,14 @@ export default function AISummary() {
             <AlertTriangle className="w-4 h-4" />
           </div>
           <div className="space-y-0.5">
-            <p className="text-xs font-extrabold text-[#92400E]">AI-generated — verify before acting.</p>
+            <p className="text-xs font-extrabold text-[#92400E]">{t('common.aiGeneratedWarning', 'AI-generated — verify before acting')}.</p>
             <p className="text-[11px] text-[#B45309]">
               Summaries are extracted automatically from backend telemetry. Always validate claims using the supporting evidence drawer.
             </p>
           </div>
         </div>
         <span className="text-[10px] font-bold uppercase tracking-wider bg-[#FCD34D]/40 text-[#78350F] px-2.5 py-1 rounded-lg border border-[#F59E0B]/30 hidden md:inline">
-          Clinical Guidance Only
+          {t('common.aiGeneratedShort', 'AI-Generated')}
         </span>
       </div>
 

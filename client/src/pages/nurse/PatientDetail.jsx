@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -28,6 +29,7 @@ import {
 import PrescriptionUploadModal from '../../components/nurse/PrescriptionUploadModal';
 
 export default function PatientDetail() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { setActivePatientId } = useApp();
@@ -86,17 +88,17 @@ export default function PatientDetail() {
 
   if (loading) {
     return (
-      <PageContainer title="Clinical Patient Record">
-        <LoadingState message="Fetching patient record, medication table & event logs..." />
+      <PageContainer title={t('nurse.patientDetailTitle')}>
+        <LoadingState message={t('nurse.fetchingPatient')} />
       </PageContainer>
     );
   }
 
   if (error) {
     return (
-      <PageContainer title="Clinical Patient Record">
+      <PageContainer title={t('nurse.patientDetailTitle')}>
         <ErrorState
-          title="Patient Record Unavailable"
+          title={t('nurse.patientRecordUnavailable')}
           message={error}
           onRetry={() => loadPatientRecord(activePatientId)}
         />
@@ -106,10 +108,10 @@ export default function PatientDetail() {
 
   if (!detail || !detail.patient) {
     return (
-      <PageContainer title="Clinical Patient Record">
+      <PageContainer title={t('nurse.patientDetailTitle')}>
         <EmptyState
-          title="Patient Record Not Found"
-          description="The requested patient ID does not exist in the active cohort dataset."
+          title={t('nurse.patientNotFound')}
+          description={t('nurse.patientNotFoundDesc')}
         />
       </PageContainer>
     );
@@ -125,8 +127,8 @@ export default function PatientDetail() {
 
   return (
     <PageContainer
-      title={`Clinical Record: ${patient.name}`}
-      subtitle="Detailed medication adherence logs, event timestamps, and clinical evidence."
+      title={`${t('nurse.patientDetailTitle')}: ${patient.name}`}
+      subtitle={t('nurse.patientDetailSubtitle')}
       actions={
         <div className="flex items-center gap-3">
           <button
@@ -134,12 +136,12 @@ export default function PatientDetail() {
             className="flex items-center gap-1 px-3 py-1.5 bg-white border border-[#E8E2D7] rounded-xl text-xs font-bold text-[#78716C] hover:text-[#1C1917] transition-all shadow-2xs cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span>Cohort Directory</span>
+            <span>{t('nurse.cohortDirectory')}</span>
           </button>
 
           {/* Cohort Patient Selector */}
           <div className="relative flex items-center">
-            <span className="text-xs font-bold text-[#78716C] mr-2 hidden sm:inline">Switch Patient:</span>
+            <span className="text-xs font-bold text-[#78716C] mr-2 hidden sm:inline">{t('nurse.switchPatient')}</span>
             <select
               value={patient._id}
               onChange={(e) => navigate(`/nurse/patients/${e.target.value}`)}
@@ -164,7 +166,7 @@ export default function PatientDetail() {
             className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0D9488] hover:bg-[#0B7A70] text-white font-bold text-xs rounded-xl shadow-2xs transition-all cursor-pointer"
           >
             <UploadCloud className="w-4 h-4" />
-            <span>Upload PDF</span>
+            <span>{t('nurse.uploadNewPdf')}</span>
           </button>
         </div>
       }
@@ -188,39 +190,39 @@ export default function PatientDetail() {
               </div>
 
               <p className="text-xs text-[#78716C] font-semibold">
-                <strong className="text-[#1C1917]">Recovery Context:</strong> {patient.recoveryContext}
+                <strong className="text-[#1C1917]">{t('nurse.recoveryContext')}</strong> {patient.recoveryContext}
               </p>
 
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#78716C] pt-1">
-                <span>🌐 <strong>Language:</strong> {patient.languageName}</span>
-                <span>📅 <strong>Discharge Date:</strong> {patient.dischargeDate}</span>
-                <span>🚶 <strong>Mobility:</strong> {patient.mobility}</span>
-                <span>🥗 <strong>Diet:</strong> {patient.dietaryPreference}</span>
+                <span>🌐 <strong>{t('nurse.language')}</strong> {patient.languageName}</span>
+                <span>📅 <strong>{t('nurse.dischargeDate')}</strong> {patient.dischargeDate}</span>
+                <span>🚶 <strong>{t('nurse.mobility')}</strong> {patient.mobility}</span>
+                <span>🥗 <strong>{t('nurse.diet')}</strong> {patient.dietaryPreference}</span>
               </div>
             </div>
           </div>
 
           <div className="p-4 bg-white rounded-xl border border-[#E8E2D7] shadow-2xs flex flex-col items-center md:items-end justify-center min-w-[180px]">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#78716C]">Recovery Progress</span>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('nurse.recoveryProgress')}</span>
             <span className="text-xl font-extrabold text-[#0D9488] font-serif mt-0.5">{patient.recoveryDay}</span>
             <span className="text-xs font-bold text-[#059669] flex items-center gap-1 mt-1">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              Active Monitoring
+              {t('nurse.activeMonitoring')}
             </span>
           </div>
         </div>
       </Card>
 
       {/* 2. Detailed Medication Adherence Table */}
-      <Card title="Medication Adherence Table" subtitle={`Verified dosage logs for ${patient.name} (${patient._id})`}>
+      <Card title={t('nurse.medAdherenceTable')} subtitle={`${t('nurse.verifiedDosageLogs')} ${patient.name} (${patient._id})`}>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#FAF8F5] text-[#78716C] font-bold uppercase tracking-wider border-b border-[#E8E2D7]">
               <tr>
-                <th className="p-3.5">Medication</th>
-                <th className="p-3.5">Scheduled</th>
-                <th className="p-3.5">Status</th>
-                <th className="p-3.5 text-right">Evidence Action</th>
+                <th className="p-3.5">{t('nurse.medication')}</th>
+                <th className="p-3.5">{t('nurse.scheduled')}</th>
+                <th className="p-3.5">{t('nurse.status')}</th>
+                <th className="p-3.5 text-right">{t('nurse.evidenceAction')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#F4F0E8]">
@@ -251,10 +253,10 @@ export default function PatientDetail() {
                         className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-[#FAF8F5] border border-[#E8E2D7] rounded-lg text-xs font-bold text-[#0D9488] shadow-2xs transition-all cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5" />
-                        <span>Inspect Event ({row.supportingEventId})</span>
+                        <span>{t('nurse.inspectEvent')} ({row.supportingEventId})</span>
                       </button>
                     ) : (
-                      <span className="text-[11px] text-[#A8A29E] italic">No Log Event</span>
+                      <span className="text-[11px] text-[#A8A29E] italic">{t('nurse.noLogEvent')}</span>
                     )}
                   </td>
                 </tr>
@@ -265,9 +267,9 @@ export default function PatientDetail() {
       </Card>
 
       {/* 3. Event History Section */}
-      <Card title="Medication Event History" subtitle="Relevant timestamped medication reminders & response logs">
+      <Card title={t('nurse.eventHistory')} subtitle={t('nurse.eventHistorySubtitle')}>
         {patientEvents.length === 0 ? (
-          <p className="text-xs text-[#78716C]">No medication events logged for this patient yet.</p>
+          <p className="text-xs text-[#78716C]">{t('nurse.noEventsLogged')}</p>
         ) : (
           <div className="space-y-3">
             {patientEvents.map((evt) => (
@@ -283,7 +285,7 @@ export default function PatientDetail() {
                     </div>
                     {evt.payload && Object.keys(evt.payload).length > 0 && (
                       <p className="text-[#78716C] mt-1 text-[11px]">
-                        Payload Details: <code className="bg-[#E8E2D7]/50 px-1 rounded font-mono">{JSON.stringify(evt.payload)}</code>
+                        {t('nurse.eventPayload')} <code className="bg-[#E8E2D7]/50 px-1 rounded font-mono">{JSON.stringify(evt.payload)}</code>
                       </p>
                     )}
                   </div>
@@ -314,7 +316,7 @@ export default function PatientDetail() {
             <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D7]">
               <div className="flex items-center gap-2 text-[#0D9488] font-bold text-sm">
                 <Sparkles className="w-4 h-4" />
-                <span>Event Evidence Grounding ({selectedEventEvidence._id})</span>
+                <span>{t('nurse.eventGroundingModal')} ({selectedEventEvidence._id})</span>
               </div>
               <button
                 onClick={() => setSelectedEventEvidence(null)}
@@ -330,7 +332,7 @@ export default function PatientDetail() {
                 <span className="font-mono font-bold text-[#1C1917]">{selectedEventEvidence._id}</span>
               </div>
               <div className="flex justify-between py-1 border-b border-[#F4F0E8]">
-                <span className="text-[#78716C]">Patient</span>
+                <span className="text-[#78716C]">{t('common.patient')}</span>
                 <span className="font-bold text-[#1C1917]">{patient.name} ({patient._id})</span>
               </div>
               <div className="flex justify-between py-1 border-b border-[#F4F0E8]">
@@ -346,7 +348,7 @@ export default function PatientDetail() {
                 <span className="font-bold text-[#1C1917]">{selectedEventEvidence.timestamp}</span>
               </div>
               <div className="space-y-1 pt-1">
-                <span className="text-[#78716C] font-bold">Event Payload:</span>
+                <span className="text-[#78716C] font-bold">{t('nurse.eventPayload')}</span>
                 <pre className="p-3 bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl text-[11px] font-mono text-[#1C1917] overflow-x-auto">
                   {JSON.stringify(selectedEventEvidence.payload || {}, null, 2)}
                 </pre>
@@ -358,7 +360,7 @@ export default function PatientDetail() {
                 onClick={() => setSelectedEventEvidence(null)}
                 className="px-4 py-2 bg-[#0D9488] text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer"
               >
-                Close Grounding Drawer
+                {t('nurse.closeModal')}
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -25,6 +26,7 @@ import {
 } from 'lucide-react';
 
 export default function PatientInsight() {
+  const { t, i18n } = useTranslation();
   const { currentUser, activePatientId } = useApp();
   const patientId = activePatientId || currentUser?.patientId || 'P001';
 
@@ -120,10 +122,17 @@ export default function PatientInsight() {
     ? new Date(insight.generatedAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
     : 'Oct 08, 2026';
 
+  const activeLang = i18n.language || 'en';
+  const displayedSummary = activeLang === 'ta' && insight.aiSummaryTa
+    ? insight.aiSummaryTa
+    : activeLang === 'hi' && insight.aiSummaryHi
+    ? insight.aiSummaryHi
+    : insight.aiSummary;
+
   return (
     <PageContainer
-      title="Personalized Recovery Insights"
-      subtitle="Synthesized knowledge strengths, gaps, and ground-truth evidence."
+      title={t('insights.title', 'Personalized Recovery Insights')}
+      subtitle={t('insights.subtitle', 'Synthesized knowledge strengths, gaps, and ground-truth evidence.')}
       actions={
         <StatusBadge
           status={priorityBadgeMap[insight.priority]?.status}
@@ -136,11 +145,11 @@ export default function PatientInsight() {
         <div className="flex items-center gap-2 font-medium">
           <Sparkles className="w-4 h-4 text-[#CC785C] flex-shrink-0" />
           <span>
-            <strong className="text-[#CC785C]">AI-generated — verify before acting.</strong> Educational insights synthesize patient recovery check-ins and dosage log events.
+            <strong className="text-[#CC785C]">{t('common.aiGeneratedWarning', 'AI-generated — verify before acting')}.</strong> {t('insights.subtitle', 'Educational insights synthesize patient recovery check-ins and dosage log events.')}
           </span>
         </div>
         <span className="text-[10px] font-bold text-[#78716C] bg-white px-2.5 py-0.5 rounded border border-[#E8E2D7] hidden sm:inline">
-          Generated: {formattedDate}
+          {t('common.date', 'Generated')}: {formattedDate}
         </span>
       </div>
 
@@ -153,8 +162,8 @@ export default function PatientInsight() {
                 <Lightbulb className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#1C1917] font-serif">Recovery Overview & Focus Signal</h3>
-                <p className="text-xs text-[#78716C]">Comprehension Rating: {insight.score}%</p>
+                <h3 className="text-lg font-bold text-[#1C1917] font-serif">{t('insights.clinicalSummary', 'Recovery Overview & Focus Signal')}</h3>
+                <p className="text-xs text-[#78716C]">{t('insights.comprehensionScore', 'Comprehension Rating')}: {insight.score}%</p>
               </div>
             </div>
 
@@ -164,13 +173,13 @@ export default function PatientInsight() {
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl text-xs font-bold text-[#CC785C] shadow-2xs transition-all cursor-pointer"
               >
                 <Eye className="w-3.5 h-3.5" />
-                <span>Inspect Evidence ({evidenceEvents.length})</span>
+                <span>{t('insights.evidenceEvents', 'Inspect Evidence')} ({evidenceEvents.length})</span>
               </button>
             )}
           </div>
 
           <p className="text-xs sm:text-sm text-[#1C1917] leading-relaxed font-medium bg-white p-4 rounded-xl border border-[#E8E2D7]">
-            "{insight.aiSummary}"
+            "{displayedSummary}"
           </p>
         </div>
       </Card>

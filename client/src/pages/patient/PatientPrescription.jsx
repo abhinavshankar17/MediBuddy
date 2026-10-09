@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '../../context/AppContext';
 import { getPatientPrescriptionData, getAllPatients } from '../../services/patientService';
 import PageContainer from '../../components/PageContainer';
@@ -37,6 +38,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 export default function PatientPrescription() {
+  const { t } = useTranslation();
   const { activePatientId, setActivePatientId } = useApp();
   const prescriptionRef = useRef(null);
 
@@ -167,14 +169,14 @@ export default function PatientPrescription() {
 
   return (
     <PageContainer
-      title="Medical Prescription & Orders"
-      subtitle="Complete doctor-authorized discharge prescription, all prescribed medicines, and clinical care directives."
+      title={t('prescription.title', 'Medical Prescription & Orders')}
+      subtitle={t('prescription.subtitle', 'Complete doctor-authorized discharge prescription, all prescribed medicines, and clinical care directives.')}
       actions={
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Patient Selector for easy navigation */}
           {allPatients.length > 0 && (
             <div className="flex items-center gap-1.5 bg-[#FAF8F5] border border-[#E8E2D7] rounded-xl px-2.5 py-1 text-xs shadow-2xs">
-              <span className="text-[#78716C] font-semibold text-[11px] hidden sm:inline">Patient:</span>
+              <span className="text-[#78716C] font-semibold text-[11px] hidden sm:inline">{t('roles.patient', 'Patient')}:</span>
               <select
                 value={patient?._id || currentPatientId}
                 onChange={(e) => handlePatientChange(e.target.value)}
@@ -195,7 +197,7 @@ export default function PatientPrescription() {
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#FAF8F5] hover:bg-[#F4F0E8] text-[#1C1917] font-bold text-xs rounded-xl border border-[#E8E2D7] transition-all cursor-pointer shadow-2xs"
           >
             <Printer className="w-4 h-4 text-[#78716C]" />
-            <span>Print Slip</span>
+            <span>{t('prescription.print', 'Print Slip')}</span>
           </button>
 
           <button
@@ -205,7 +207,7 @@ export default function PatientPrescription() {
             className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#CC785C] hover:bg-[#B6664C] text-white font-bold text-xs rounded-xl shadow-2xs transition-all cursor-pointer disabled:opacity-50"
           >
             <Download className="w-4 h-4" />
-            <span>{downloading ? 'Generating PDF...' : 'Download Official PDF'}</span>
+            <span>{downloading ? t('common.loading', 'Generating PDF...') : t('prescription.downloadPdf', 'Download Official PDF')}</span>
           </button>
         </div>
       }
@@ -235,7 +237,7 @@ export default function PatientPrescription() {
                 : 'text-[#78716C] hover:text-[#1C1917]'
             }`}
           >
-            Prescription Slip
+            {t('prescription.tabPrescription', 'Prescription Slip')}
           </button>
           <button
             onClick={() => setActiveTab('schedule')}
@@ -245,7 +247,7 @@ export default function PatientPrescription() {
                 : 'text-[#78716C] hover:text-[#1C1917]'
             }`}
           >
-            Dosage Cards ({medications.length})
+            {t('prescription.tabSchedule', 'Dosage Cards')} ({medications.length})
           </button>
           {uploadedDocuments.length > 0 && (
             <button
@@ -256,7 +258,7 @@ export default function PatientPrescription() {
                   : 'text-[#78716C] hover:text-[#1C1917]'
               }`}
             >
-              Uploaded PDFs ({uploadedDocuments.length})
+              {t('prescription.tabDocuments', 'Uploaded PDFs')} ({uploadedDocuments.length})
             </button>
           )}
         </div>

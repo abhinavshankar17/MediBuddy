@@ -42,13 +42,100 @@ const validateExactFiveQuestions = (questions) => {
 };
 
 /**
+ * Multilingual Question Translations (English, Hindi, Tamil)
+ * Preserves clinical medication names, dosages, and safety logic.
+ */
+const QUESTION_TRANSLATIONS = {
+  'When should you take Paracetamol?': {
+    hi: {
+      question: 'पैरासिटामोल (Paracetamol) आपको कब लेनी चाहिए?',
+      options: ['नाश्ते से पहले', 'भोजन के बाद', 'सोते समय', 'केवल दर्द होने पर'],
+      correctAnswer: 'भोजन के बाद'
+    },
+    ta: {
+      question: 'பாராசிட்டமால் (Paracetamol) எப்போது உட்கொள்ள வேண்டும்?',
+      options: ['காலை உணவுக்கு முன்', 'உணவுக்குப் பிறகு', 'படுக்கைக்குச் செல்லும் முன்', 'வலி இருக்கும் போது மட்டும்'],
+      correctAnswer: 'உணவுக்குப் பிறகு'
+    }
+  },
+  'When should you take Omeprazole?': {
+    hi: {
+      question: 'ओमेप्राजोल (Omeprazole) आपको कब लेनी चाहिए?',
+      options: ['दोपहर के भोजन के बाद', 'नाश्ते से पहले', 'सोते समय', 'रात के खाने के बाद'],
+      correctAnswer: 'नाश्ते से पहले'
+    },
+    ta: {
+      question: 'ஒமிபிரசோல் (Omeprazole) எப்போது உட்கொள்ள வேண்டும்?',
+      options: ['மதிய உணவுக்குப் பிறகு', 'காலை உணவுக்கு முன்', 'படுக்கைக்குச் செல்லும் முன்', 'இரவு உணவுக்குப் பிறகு'],
+      correctAnswer: 'காலை உணவுக்கு முன்'
+    }
+  },
+  'How many times a day should you perform knee exercises?': {
+    hi: {
+      question: 'आपको दिन में कितनी बार घुटने का व्यायाम करना चाहिए?',
+      options: ['दिन में एक बार', 'दिन में दो बार', 'दिन में तीन बार', 'केवल जब मन करे'],
+      correctAnswer: 'दिन में दो बार'
+    },
+    ta: {
+      question: 'நாளைக்கு எத்தனை முறை முழங்கால் உடற்பயிற்சி செய்ய வேண்டும்?',
+      options: ['நாளைக்கு ஒரு முறை', 'நாளைக்கு இரண்டு முறை', 'நாளைக்கு மூன்று முறை', 'தோன்றும் போது மட்டும்'],
+      correctAnswer: 'நாளைக்கு இரண்டு முறை'
+    }
+  },
+  'What assistance should you use while walking?': {
+    hi: {
+      question: 'चलते समय आपको किस सहायता का उपयोग करना चाहिए?',
+      options: ['किसी सहायता की आवश्यकता नहीं', 'वॉकर (Walker)', 'व्हीलचेयर (Wheelchair)', 'छड़ी (Cane)'],
+      correctAnswer: 'वॉकर (Walker)'
+    },
+    ta: {
+      question: 'நடக்கும் போது எந்த உதவி சாதனத்தைப் பயன்படுத்த வேண்டும்?',
+      options: ['எந்த உதவியும் தேவையில்லை', 'வாக்கர் (Walker)', 'சக்கர நாற்காலி (Wheelchair)', 'ஊன்றுகோல் (Cane)'],
+      correctAnswer: 'வாக்கர் (Walker)'
+    }
+  },
+  'When is your follow-up clinic visit?': {
+    hi: {
+      question: 'आपकी अगली क्लिनिक फॉलो-अप जांच कब है?',
+      options: ['डिस्चार्ज के 2 सप्ताह बाद', 'डिस्चार्ज के 1 सप्ताह बाद', 'डिस्चार्ज के 1 महीने बाद', 'आवश्यकता नहीं'],
+      correctAnswer: 'डिस्चार्ज के 1 सप्ताह बाद'
+    },
+    ta: {
+      question: 'உங்கள் அடுத்த கிளினிக் பரிசோதனை எப்போது?',
+      options: ['டிஸ்சார்ஜ் ஆன 2 வாரங்களுக்குப் பிறகு', 'டிஸ்சார்ஜ் ஆன 1 வாரத்திற்குப் பிறகு', 'டிஸ்சார்ஜ் ஆன 1 மாதத்திற்குப் பிறகு', 'தேவையில்லை'],
+      correctAnswer: 'டிஸ்சார்ஜ் ஆன 1 வாரத்திற்குப் பிறகு'
+    }
+  }
+};
+
+const localizeSingleQuestion = (q, lang = 'en') => {
+  if (!q || !lang || lang === 'en') return q;
+  const match = QUESTION_TRANSLATIONS[q.question];
+  if (match && match[lang]) {
+    const loc = match[lang];
+    return {
+      ...q,
+      question: loc.question,
+      options: loc.options,
+      correctAnswer: loc.correctAnswer,
+      originalQuestion: q.question,
+      originalText: q.question,
+      originalOptions: q.options,
+      originalCorrectAnswer: q.correctAnswer,
+      language: lang
+    };
+  }
+  return q;
+};
+
+/**
  * Service for daily quiz operations, answer storage, and educational scoring
  */
 const quizService = {
   /**
    * Retrieve today's quiz for a patient
    */
-  async getTodayQuiz(patientId, date = '2026-10-08') {
+  async getTodayQuiz(patientId, date = '2026-10-08', options = {}) {
     if (!patientId) {
       throw { statusCode: 400, message: 'patientId is required' };
     }
@@ -69,15 +156,25 @@ const quizService = {
     validateExactFiveQuestions(questions);
 
     const isCompleted = todaySession.status === 'completed';
+    const targetLang = (typeof date === 'object' && date.language) ? date.language : (options.language || patient.language || 'en');
+    const localized = questions.map(q => localizeSingleQuestion(q, targetLang));
     const safeQuestions = isCompleted
-      ? questions
-      : questions.map(sanitizeQuestionForPatient);
+      ? localized
+      : localized.map(sanitizeQuestionForPatient);
+
+    const disclaimer = targetLang === 'hi'
+      ? 'एआई-जनरेटेड सामग्री — उपयोग करने से पहले सत्यापित करें'
+      : targetLang === 'ta'
+      ? 'AI உருவாக்கிய உள்ளடக்கம் — செயல்படுவதற்கு முன் சரிபார்க்கவும்'
+      : 'AI-generated content — verify before acting';
 
     return {
       session: todaySession,
       totalQuestions: 5,
       questions: safeQuestions,
-      isCompleted
+      isCompleted,
+      language: targetLang,
+      disclaimer
     };
   },
 
@@ -160,7 +257,7 @@ const quizService = {
   /**
    * Retrieve questions for a specific quiz session
    */
-  async getQuizQuestions(sessionId, patientId = null) {
+  async getQuizQuestions(sessionId, patientId = null, options = {}) {
     if (!sessionId) {
       throw { statusCode: 400, message: 'sessionId is required' };
     }
@@ -178,10 +275,17 @@ const quizService = {
     const questions = await dataStore.getQuizQuestionsBySessionId(sessionId);
     validateExactFiveQuestions(questions);
 
+    let targetLang = options.language || 'en';
+    if (!options.language && session.patientId) {
+      const patient = await dataStore.getPatient(session.patientId);
+      if (patient?.language) targetLang = patient.language;
+    }
+
+    const localized = questions.map(q => localizeSingleQuestion(q, targetLang));
     const isCompleted = session.status === 'completed';
     const safeQuestions = isCompleted
-      ? questions
-      : questions.map(sanitizeQuestionForPatient);
+      ? localized
+      : localized.map(sanitizeQuestionForPatient);
 
     return {
       sessionId,
@@ -189,7 +293,8 @@ const quizService = {
       totalQuestions: 5,
       status: session.status,
       isCompleted,
-      questions: safeQuestions
+      questions: safeQuestions,
+      language: targetLang
     };
   },
 
@@ -462,7 +567,24 @@ const quizService = {
       }
 
       const selectedAnswer = userAns.selectedAnswer;
-      const isCorrect = selectedAnswer === q.correctAnswer;
+      let isCorrect = selectedAnswer === q.correctAnswer;
+      if (!isCorrect && selectedAnswer) {
+        // Evaluate against localized options across supported languages
+        for (const testLang of ['hi', 'ta']) {
+          const locQ = localizeSingleQuestion(q, testLang);
+          if (locQ && locQ.correctAnswer === selectedAnswer) {
+            isCorrect = true;
+            break;
+          }
+          if (locQ && Array.isArray(locQ.options)) {
+            const selIdx = locQ.options.indexOf(selectedAnswer);
+            if (selIdx !== -1 && q.options[selIdx] === q.correctAnswer) {
+              isCorrect = true;
+              break;
+            }
+          }
+        }
+      }
 
       if (isCorrect) {
         correctCount++;

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '../context/AppContext';
 import {
   LayoutDashboard,
@@ -25,6 +26,7 @@ import {
 } from 'lucide-react';
 
 export default function Sidebar() {
+  const { t } = useTranslation();
   const {
     currentUser,
     logout,
@@ -46,27 +48,27 @@ export default function Sidebar() {
   const isNurse = !isCaregiver && (portalRole === 'nurse' || location.pathname.startsWith('/nurse'));
 
   const patientNavItems = [
-    { label: 'Patient Dashboard', path: '/patient', icon: LayoutDashboard },
-    { label: 'Prescription & Rx', path: '/patient/prescription', icon: FileCheck },
-    { label: 'Medication Schedule', path: '/patient/medication', icon: Pill },
-    { label: 'Care Insights', path: '/patient/insights', icon: Lightbulb },
-    { label: 'Discharge Plan', path: '/patient/discharge', icon: FileText },
-    { label: 'Feedback & Book', path: '/patient/feedback', icon: MessageSquarePlus }
+    { label: t('nav.patientDashboard', 'Patient Dashboard'), path: '/patient', icon: LayoutDashboard },
+    { label: t('nav.prescription', 'Prescription & Rx'), path: '/patient/prescription', icon: FileCheck },
+    { label: t('nav.medication', 'Medication Schedule'), path: '/patient/medication', icon: Pill },
+    { label: t('nav.insights', 'Care Insights'), path: '/patient/insights', icon: Lightbulb },
+    { label: t('nav.discharge', 'Discharge Plan'), path: '/patient/discharge', icon: FileText },
+    { label: t('nav.feedback', 'Feedback & Book'), path: '/patient/feedback', icon: MessageSquarePlus }
   ];
 
   const caregiverNavItems = [
-    { label: 'Daily Report', path: '/caregiver', icon: LayoutDashboard },
-    { label: 'Recovery Calendar', path: '/caregiver/calendar', icon: Calendar },
-    { label: 'Patient Feedback', path: '/caregiver/feedback', icon: MessageSquare, badge: 'Review' }
+    { label: t('nav.dailyReport', 'Daily Report'), path: '/caregiver', icon: LayoutDashboard },
+    { label: t('nav.calendar', 'Recovery Calendar'), path: '/caregiver/calendar', icon: Calendar },
+    { label: t('nav.patientFeedback', 'Patient Feedback'), path: '/caregiver/feedback', icon: MessageSquare, badge: t('common.review', 'Review') }
   ];
 
   const nurseNavItems = [
-    { label: 'Nurse Dashboard', path: '/nurse', icon: LayoutDashboard },
-    { label: 'Patient Directory', path: '/nurse/patients', icon: Users },
-    { label: 'Patient Record', path: `/nurse/patients/${activePatientId || 'P001'}`, icon: UserCheck },
-    { label: 'Med Adherence', path: '/nurse/adherence', icon: Activity },
-    { label: 'AI Summaries', path: '/nurse/ai-summary', icon: Sparkles },
-    { label: 'Escalation Alerts', path: '/nurse/escalations', icon: ShieldAlert, badge: 'Active' }
+    { label: t('nav.nurseDashboard', 'Nurse Dashboard'), path: '/nurse', icon: LayoutDashboard },
+    { label: t('nav.patientDirectory', 'Patient Directory'), path: '/nurse/patients', icon: Users },
+    { label: t('nav.patientRecord', 'Patient Record'), path: `/nurse/patients/${activePatientId || 'P001'}`, icon: UserCheck },
+    { label: t('nav.adherence', 'Med Adherence'), path: '/nurse/adherence', icon: Activity },
+    { label: t('nav.aiSummaries', 'AI Summaries'), path: '/nurse/ai-summary', icon: Sparkles },
+    { label: t('nav.escalations', 'Escalation Alerts'), path: '/nurse/escalations', icon: ShieldAlert, badge: t('common.active', 'Active') }
   ];
 
   const navItems = isCaregiver ? caregiverNavItems : isNurse ? nurseNavItems : patientNavItems;
@@ -85,7 +87,7 @@ export default function Sidebar() {
             <HeartPulse className="w-4 h-4" />
           </div>
           <span className="font-bold text-sm text-[#1C1917] font-serif">
-            {isCaregiver ? 'Family Caregiver' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
+            {isCaregiver ? t('roles.caregiver') : isNurse ? t('roles.nurse') : t('roles.patient')}
           </span>
         </div>
         <button
@@ -104,9 +106,9 @@ export default function Sidebar() {
             <HeartPulse className="w-4 h-4" />
           </div>
           <div>
-            <p className="text-[10px] uppercase tracking-wider font-extrabold text-[#78716C]">Active View</p>
+            <p className="text-[10px] uppercase tracking-wider font-extrabold text-[#78716C]">{t('common.status', 'Portal')}</p>
             <p className="text-xs font-bold text-[#1C1917]">
-              {isCaregiver ? 'Caregiver Portal' : isNurse ? 'Nurse Workspace' : 'Patient Portal'}
+              {isCaregiver ? t('roles.caregiver') : isNurse ? t('roles.nurse') : t('roles.patient')}
             </p>
           </div>
         </div>
@@ -116,7 +118,7 @@ export default function Sidebar() {
       {/* Navigation List */}
       <div className="flex-1 space-y-1 overflow-y-auto pr-1">
         <p className="px-3 text-[10px] font-extrabold uppercase tracking-widest text-[#78716C] mb-2 hidden md:block">
-          {isCaregiver ? 'Caregiver Views' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
+          {isCaregiver ? t('roles.caregiver') : isNurse ? t('roles.nurse') : t('roles.patient')}
         </p>
 
         {navItems.map((item) => {
@@ -171,7 +173,7 @@ export default function Sidebar() {
           className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-white hover:bg-rose-50 border border-[#E8E2D7] hover:border-rose-200 rounded-xl text-[11px] font-bold text-rose-700 transition-colors shadow-2xs cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
-          <span>Log Out of Account</span>
+          <span>{t('common.logout', 'Log Out of Account')}</span>
         </button>
       </div>
     </div>

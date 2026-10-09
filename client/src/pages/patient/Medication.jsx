@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -14,6 +15,7 @@ import { useApp } from '../../context/AppContext';
 import { Pill, Clock, Calendar, Utensils, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
 
 export default function Medication() {
+  const { t } = useTranslation();
   const { currentUser, activePatientId } = useApp();
   
   const [reminders, setReminders] = useState([]);
@@ -124,23 +126,23 @@ export default function Medication() {
 
   return (
     <PageContainer
-      title="Medication Schedule & Dosage Confirmation"
-      subtitle="Track your daily dosage timing, instructions, and swipe to confirm intake."
+      title={t('medication.title', 'Medication Schedule & Dosage Confirmation')}
+      subtitle={t('medication.subtitle', 'Track your daily dosage timing, instructions, and swipe to confirm intake.')}
       actions={
         <button
           onClick={() => loadMedications(activePatientId || currentUser?.patientId || 'P001')}
           className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-[#E8E2D7] text-xs font-bold text-[#1C1917] hover:bg-[#FAF8F5] transition-all shadow-2xs cursor-pointer"
-          title="Refresh Schedule"
+          title={t('common.refresh', 'Refresh Schedule')}
         >
           <RefreshCw className="w-3.5 h-3.5 text-[#CC785C]" />
-          <span>Refresh Schedule</span>
+          <span>{t('common.refresh', 'Refresh Schedule')}</span>
         </button>
       }
     >
       {reminders.length === 0 ? (
         <EmptyState
-          title="No Medications Scheduled"
-          description="There are no active medication reminders for this patient profile."
+          title={t('medication.noMedicationsFound', 'No Medications Scheduled')}
+          description={t('medication.noMedicationsFound', 'There are no active medication reminders for this patient profile.')}
         />
       ) : (
         <div className="space-y-6">
@@ -171,18 +173,18 @@ export default function Medication() {
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#78716C] pt-1">
                           <span className="flex items-center gap-1.5">
                             <Clock className="w-3.5 h-3.5 text-[#CC785C]" />
-                            <strong>Timing:</strong> {med.timing}
+                            <strong>{t('common.time', 'Timing')}:</strong> {med.timing}
                           </span>
                           <span className="flex items-center gap-1.5">
                             <Calendar className="w-3.5 h-3.5 text-[#0D9488]" />
-                            <strong>Frequency:</strong> {med.frequency}
+                            <strong>{t('prescription.frequency', 'Frequency')}:</strong> {med.frequency}
                           </span>
                           <span className="flex items-center gap-1.5">
                             <Utensils className="w-3.5 h-3.5 text-[#D97706]" />
-                            <strong>Meal Instruction:</strong> {med.foodRelation}
+                            <strong>{t('prescription.instructions', 'Meal Instruction')}:</strong> {med.foodRelation}
                           </span>
                           <span>
-                            <strong>Duration:</strong> {med.duration}
+                            <strong>{t('prescription.duration', 'Duration')}:</strong> {med.duration}
                           </span>
                         </div>
                       </div>

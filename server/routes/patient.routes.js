@@ -20,6 +20,11 @@ router.get('/', patientController.getPatients);
 // Patient Profile & Baseline Recovery Information
 router.get('/:id', patientController.getPatientById);
 
+// Patient Language Preference
+router.get('/:id/language', patientController.getPatientLanguage);
+router.put('/:id/language', patientController.updatePatientLanguage);
+router.patch('/:id/language', patientController.updatePatientLanguage);
+
 // Patient Recovery Information
 router.get('/:id/recovery', patientController.getPatientRecovery);
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -11,6 +12,7 @@ import { useApp } from '../../context/AppContext';
 import { Award, CheckCircle2, AlertTriangle, ArrowRight, Lightbulb, Sparkles, Check, HelpCircle } from 'lucide-react';
 
 export default function QuizResult() {
+  const { t } = useTranslation();
   const { currentUser, activePatientId } = useApp();
   const navigate = useNavigate();
 
@@ -75,9 +77,9 @@ export default function QuizResult() {
 
   return (
     <PageContainer
-      title="Your Recovery Check"
-      subtitle="Knowledge comprehension feedback from your 5-question teach-back check."
-      actions={<StatusBadge status="completed" label="Teach-Back Signal" />}
+      title={t('quiz.resultTitle', 'Your Recovery Check')}
+      subtitle={t('quiz.subtitle', 'Knowledge comprehension feedback from your 5-question teach-back check.')}
+      actions={<StatusBadge status="completed" label={t('prescription.verifiedBadge', 'Teach-Back Signal')} />}
     >
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Main Score Banner Card */}
@@ -87,20 +89,20 @@ export default function QuizResult() {
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1C1917] font-serif">
-            Your Recovery Check
+            {t('quiz.resultTitle', 'Your Recovery Check')}
           </h2>
 
           <div className="my-4">
             <span className="text-5xl font-extrabold text-[#059669] font-serif tracking-tight">
-              {correctCount} / {totalQuestions} correct
+              {correctCount} / {totalQuestions}
             </span>
             <p className="text-xs font-bold text-[#78716C] mt-1">
-              Comprehension Rating: {score}%
+              {t('quiz.scoreLabel', 'Comprehension Rating')}: {score}%
             </p>
           </div>
 
           <p className="text-xs text-[#78716C] max-w-sm mx-auto font-medium">
-            Great job checking your discharge instructions today! Use these findings to guide your recovery routines.
+            {score >= 80 ? t('quiz.passedMessage', 'Great job! You have a solid grasp of your recovery instructions.') : t('quiz.reviewMessage', 'Good effort! Please review the areas below with your caregiver or nurse.')}
           </p>
 
           <div className="mt-6 flex justify-center gap-3 flex-wrap">
@@ -109,14 +111,14 @@ export default function QuizResult() {
               className="flex items-center gap-2 px-5 py-2.5 bg-[#CC785C] hover:bg-[#B86549] text-white font-bold text-xs rounded-xl shadow-xs transition-all"
             >
               <Lightbulb className="w-4 h-4" />
-              <span>View Detailed Care Insights</span>
+              <span>{t('quiz.viewInsightsBtn', 'View Recovery Insights')}</span>
             </Link>
 
             <Link
               to="/patient"
               className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-[#FAF8F5] text-[#1C1917] font-bold text-xs rounded-xl border border-[#E8E2D7] shadow-2xs transition-all"
             >
-              <span>Return to Dashboard</span>
+              <span>{t('common.back', 'Return to Dashboard')}</span>
             </Link>
           </div>
         </Card>
@@ -124,7 +126,7 @@ export default function QuizResult() {
         {/* Strengths & Areas to Review Breakdown */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Strengths Card */}
-          <Card title="Knowledge Strengths" subtitle="Topics answered correctly">
+          <Card title={t('insights.strengths', 'Knowledge Strengths')} subtitle={t('insights.strengthsSubtitle', 'Topics answered correctly')}>
             <div className="space-y-2.5">
               {strengthsList.map((item, idx) => (
                 <div key={idx} className="p-3 bg-emerald-50/60 border border-emerald-200/80 rounded-xl flex items-center gap-3 text-xs text-emerald-900">

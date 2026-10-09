@@ -8,6 +8,8 @@ import {
   deleteNotification,
   clearAllNotifications
 } from '../services/notificationService';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
 import {
   Stethoscope,
   Bell,
@@ -23,6 +25,7 @@ import {
 } from 'lucide-react';
 
 export default function Header() {
+  const { t } = useTranslation();
   const {
     currentUser,
     activePatientId,
@@ -174,7 +177,10 @@ export default function Header() {
         {/* If on Login Page, show minimal header action */}
         {isLoginPage ? (
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-[#78716C] hidden sm:inline">Care Portal Authentication</span>
+            <span className="text-xs font-bold text-[#78716C] hidden sm:inline">
+              {t('login.tag', 'Care Portal Authentication')}
+            </span>
+            <LanguageSwitcher />
           </div>
         ) : (
           <>
@@ -343,6 +349,9 @@ export default function Header() {
               )}
             </div>
 
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+
             {/* Dedicated Authenticated Workspace Badge */}
             <div
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 shadow-2xs ${
@@ -361,7 +370,7 @@ export default function Header() {
                 <User className="w-3.5 h-3.5" />
               )}
               <span className="hidden sm:inline">
-                {isCaregiverUser ? 'Caregiver Portal' : isNurseUser ? 'Nurse Portal' : 'Patient App'}
+                {isCaregiverUser ? t('roles.caregiverPortal', 'Caregiver Portal') : isNurseUser ? t('roles.nursePortal', 'Nurse Portal') : t('roles.patientApp', 'Patient App')}
               </span>
             </div>
 
@@ -369,7 +378,7 @@ export default function Header() {
             <button
               onClick={handleLogout}
               className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 bg-[#FAF8F5] hover:bg-rose-50 border border-[#E8E2D7] hover:border-rose-200 rounded-xl text-xs font-bold text-[#1C1917] hover:text-rose-700 shadow-2xs transition-all cursor-pointer"
-              title="Logout from Account"
+              title={t('common.logout', 'Logout from Account')}
             >
               <div className="w-5 h-5 rounded-full bg-[#CC785C] text-white font-serif flex items-center justify-center text-[10px] flex-shrink-0">
                 {currentUser?.name ? currentUser.name.charAt(0) : 'U'}

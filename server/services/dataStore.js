@@ -110,6 +110,37 @@ const dataStore = {
   },
 
   /**
+   * Update a patient's preferred language ('en', 'hi', 'ta')
+   * @param {string} patientId
+   * @param {string} language
+   */
+  async updatePatientLanguage(patientId, language) {
+    const validLangs = ['en', 'hi', 'ta'];
+    const safeLang = validLangs.includes(language) ? language : 'en';
+
+    const dbStatus = getDBStatus();
+    if (dbStatus.connected) {
+      try {
+        await Patient.updateOne(
+          { $or: [{ _id: patientId }, { syntheticId: patientId }] },
+          { $set: { language: safeLang } }
+        );
+      } catch (err) {
+        // Fallback to cache
+      }
+    }
+
+    const { patients } = getCache();
+    const patient = patients.find(p => p._id === patientId || p.syntheticId === patientId);
+    if (patient) {
+      patient.language = safeLang;
+      this.emitPatientUpdate(patientId, { type: 'language_changed', language: safeLang });
+      return patient;
+    }
+    return { _id: patientId, language: safeLang };
+  },
+
+  /**
    * List all patients with optional filtering
    * @param {Object} filter 
    */

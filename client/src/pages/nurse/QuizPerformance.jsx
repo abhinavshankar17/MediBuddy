@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react';
 
 export default function QuizPerformance() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setActivePatientId } = useApp();
 
@@ -57,17 +59,17 @@ export default function QuizPerformance() {
 
   if (loading) {
     return (
-      <PageContainer title="Cohort Teach-Back Quiz Analytics">
-        <LoadingState message="Aggregating quiz comprehension logs & knowledge gap analysis..." />
+      <PageContainer title={t('nurse.aiBriefs', 'Cohort Teach-Back Quiz Analytics')}>
+        <LoadingState message={t('common.loading', 'Aggregating quiz comprehension logs & knowledge gap analysis...')} />
       </PageContainer>
     );
   }
 
   if (error || !data) {
     return (
-      <PageContainer title="Cohort Teach-Back Quiz Analytics">
+      <PageContainer title={t('nurse.aiBriefs', 'Cohort Teach-Back Quiz Analytics')}>
         <ErrorState
-          title="Analytics Unavailable"
+          title={t('common.error', 'Analytics Unavailable')}
           message={error}
           onRetry={loadData}
         />
@@ -93,8 +95,8 @@ export default function QuizPerformance() {
 
   return (
     <PageContainer
-      title="Cohort Teach-Back Quiz Analytics"
-      subtitle="Comprehension rates, score distributions, and real-time knowledge gap detection for nurses and physicians."
+      title={t('nurse.aiBriefs', 'Cohort Teach-Back Quiz Analytics')}
+      subtitle={t('nurse.dashboardSubtitle', 'Comprehension rates, score distributions, and real-time knowledge gap detection for nurses and physicians.')}
       badge={
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D9488]/10 text-[#0D9488] border border-[#0D9488]/20 text-xs font-bold">
           <BarChart3 className="w-3.5 h-3.5" />
@@ -106,7 +108,7 @@ export default function QuizPerformance() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-4 bg-white rounded-2xl border border-[#E8E2D7] shadow-2xs space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">Quizzes Completed</span>
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#78716C]">{t('caregiver.quizUnderstanding', 'Quizzes Completed')}</span>
             <CheckCircle2 className="w-4 h-4 text-[#059669]" />
           </div>
           <p className="text-3xl font-extrabold text-[#1C1917] font-serif">{summary.completedCount} / {summary.totalCount}</p>

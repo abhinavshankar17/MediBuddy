@@ -13,8 +13,8 @@ const quizController = {
   async getTodayQuiz(req, res, next) {
     try {
       const patientId = req.params.patientId || req.query.patientId;
-      const { date } = req.query;
-      const quizData = await quizService.getTodayQuiz(patientId, date);
+      const { date, language } = req.query;
+      const quizData = await quizService.getTodayQuiz(patientId, date, { language });
       return successResponse(
         res,
         quizData,
@@ -33,8 +33,8 @@ const quizController = {
   async startQuiz(req, res, next) {
     try {
       const patientId = req.params.patientId || req.body.patientId || req.query.patientId;
-      const { date } = req.body;
-      const sessionData = await quizService.startQuiz(patientId, date);
+      const { date, language } = req.body;
+      const sessionData = await quizService.startQuiz(patientId, date, { language });
       return successResponse(
         res,
         sessionData,
@@ -55,7 +55,8 @@ const quizController = {
     try {
       const sessionId = req.params.id;
       const patientId = req.params.patientId || req.query.patientId || null;
-      const questionsData = await quizService.getQuizQuestions(sessionId, patientId);
+      const { language } = req.query;
+      const questionsData = await quizService.getQuizQuestions(sessionId, patientId, { language });
       return successResponse(
         res,
         questionsData,

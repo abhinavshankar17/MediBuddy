@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -34,6 +35,7 @@ import {
 } from 'lucide-react';
 
 export default function CaregiverDashboard() {
+  const { t } = useTranslation();
   const { activePatientId, setActivePatientId, currentUser } = useApp();
   const navigate = useNavigate();
 
@@ -176,14 +178,14 @@ export default function CaregiverDashboard() {
 
   return (
     <PageContainer
-      title={`Daily Recovery Report: ${patient.name}`}
+      title={`${t('caregiver.dashboardTitle', 'Daily Recovery Report')}: ${patient.name}`}
       subtitle={`Dedicated family care oversight for your ${patient.relationship.toLowerCase()} recovering from ${patient.condition}.`}
       actions={
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Patient Switcher if multiple linked */}
           {linkedPatients.length > 1 && (
             <div className="flex items-center gap-1.5 bg-white border border-[#E8E2D7] rounded-xl px-3 py-1.5 shadow-2xs">
-              <span className="text-xs text-[#78716C] font-semibold">Caring For:</span>
+              <span className="text-xs text-[#78716C] font-semibold">{t('roles.caregiver', 'Caring For')}:</span>
               <select
                 value={patient._id}
                 onChange={(e) => handlePatientSwitch(e.target.value)}
@@ -204,7 +206,7 @@ export default function CaregiverDashboard() {
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#E07A5F] hover:bg-[#CC785C] text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
           >
             <Heart className="w-3.5 h-3.5 fill-current" />
-            <span>Send Encouragement</span>
+            <span>{t('caregiver.sendEncouragement', 'Send Encouragement')}</span>
           </button>
         </div>
       }

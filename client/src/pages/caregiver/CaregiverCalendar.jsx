@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -28,6 +29,7 @@ import {
 import { useRealtimeSync } from '../../utils/realtimeSync';
 
 export default function CaregiverCalendar() {
+  const { t } = useTranslation();
   const { activePatientId, setActivePatientId, currentUser } = useApp();
   const navigate = useNavigate();
 
@@ -127,15 +129,15 @@ export default function CaregiverCalendar() {
 
   if (loading && !calendarData) {
     return (
-      <PageContainer title="Recovery Calendar" subtitle="Tracking daily recovery milestones & scheduled care">
-        <LoadingState message="Loading loved one's recovery schedule & calendar..." />
+      <PageContainer title={t('caregiver.recoveryCalendar', 'Recovery & Care Calendar')} subtitle={t('caregiver.recoverySubtitle', 'Comprehensive view of daily health scores, medication progress, and clinical appointments')}>
+        <LoadingState message={t('common.loading', 'Loading care schedule & calendar...')} />
       </PageContainer>
     );
   }
 
   if (error && !calendarData) {
     return (
-      <PageContainer title="Recovery Calendar" subtitle="Tracking daily recovery milestones & scheduled care">
+      <PageContainer title={t('caregiver.recoveryCalendar', 'Recovery & Care Calendar')} subtitle={t('caregiver.recoverySubtitle', 'Comprehensive view of daily health scores, medication progress, and clinical appointments')}>
         <ErrorState message={error} onRetry={loadCalendar} />
       </PageContainer>
     );
@@ -143,8 +145,8 @@ export default function CaregiverCalendar() {
 
   return (
     <PageContainer
-      title="Recovery & Care Calendar"
-      subtitle="Comprehensive view of daily health scores, medication progress, and clinical appointments"
+      title={t('caregiver.recoveryCalendar', 'Recovery & Care Calendar')}
+      subtitle={t('caregiver.recoverySubtitle', 'Comprehensive view of daily health scores, medication progress, and clinical appointments')}
       actions={
         <div className="flex items-center gap-2">
           {linkedPatients.length > 1 && (
@@ -168,7 +170,7 @@ export default function CaregiverCalendar() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#FAF8F5] border border-[#E8E2D7] text-xs font-bold text-[#1C1917] transition-all shadow-2xs cursor-pointer"
           >
             <Activity className="w-3.5 h-3.5 text-[#CC785C]" />
-            <span>Daily Report</span>
+            <span>{t('nav.dailyReport', 'Daily Report')}</span>
           </button>
         </div>
       }
@@ -184,31 +186,31 @@ export default function CaregiverCalendar() {
               <div className="flex items-center gap-2">
                 <h2 className="text-xl font-bold font-serif">{activePatientObj.name}</h2>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/15 text-white/90 border border-white/20">
-                  {activePatientObj.relationship || 'Loved One'}
+                  {activePatientObj.relationship || t('roles.caregiver', 'Family Member')}
                 </span>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#059669]/25 text-emerald-300 border border-emerald-400/30">
-                  Post-Discharge
+                  {t('caregiver.postDischarge', 'Post-Discharge')}
                 </span>
               </div>
               <p className="text-xs text-stone-300 mt-1">
-                Discharged on <span className="text-white font-medium">{calendarData?.dischargeDate || 'Oct 5, 2026'}</span> • Full 30-Day Recovery Monitoring
+                {t('caregiver.dischargedOn', 'Discharged on')} <span className="text-white font-medium">{calendarData?.dischargeDate || 'Oct 5, 2026'}</span> • {t('caregiver.full30DayMonitoring', 'Full 30-Day Recovery Monitoring')}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 bg-white/10 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/15">
             <div className="text-center px-2">
-              <p className="text-[10px] uppercase font-bold text-stone-300">Total Doses</p>
-              <p className="text-base font-extrabold text-white">96% Taken</p>
+              <p className="text-[10px] uppercase font-bold text-stone-300">{t('caregiver.totalDoses', 'Total Doses')}</p>
+              <p className="text-base font-extrabold text-white">96% {t('caregiver.dosesTaken', 'Taken')}</p>
             </div>
             <div className="h-6 w-px bg-white/20" />
             <div className="text-center px-2">
-              <p className="text-[10px] uppercase font-bold text-stone-300">Milestones</p>
-              <p className="text-base font-extrabold text-[#FCD34D]">5 Scheduled</p>
+              <p className="text-[10px] uppercase font-bold text-stone-300">{t('caregiver.milestones', 'Milestones')}</p>
+              <p className="text-base font-extrabold text-[#FCD34D]">5 {t('caregiver.scheduled', 'Scheduled')}</p>
             </div>
             <div className="h-6 w-px bg-white/20" />
             <div className="text-center px-2">
-              <p className="text-[10px] uppercase font-bold text-stone-300">Next Visit</p>
+              <p className="text-[10px] uppercase font-bold text-stone-300">{t('caregiver.nextVisit', 'Next Visit')}</p>
               <p className="text-base font-extrabold text-emerald-300">Oct 12</p>
             </div>
           </div>
@@ -245,7 +247,7 @@ export default function CaregiverCalendar() {
                   }}
                   className="px-2.5 py-1 rounded-lg border border-[#E8E2D7] bg-[#FAF8F5] hover:bg-[#F4F0E8] text-xs font-bold text-[#78716C] hover:text-[#1C1917] transition-colors cursor-pointer"
                 >
-                  Today
+                  {t('caregiver.today', 'Today')}
                 </button>
                 <button
                   onClick={handleNextMonth}
@@ -372,22 +374,22 @@ export default function CaregiverCalendar() {
               <div className="flex items-center gap-4 flex-wrap">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#059669]" />
-                  <span>On Track (Green)</span>
+                  <span>{t('caregiver.onTrackGreen', 'On Track (Green)')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#D97706]" />
-                  <span>Needs Attention (Yellow)</span>
+                  <span>{t('caregiver.needsAttentionYellow', 'Needs Attention (Yellow)')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#DC2626]" />
-                  <span>Doctor Review (Red)</span>
+                  <span>{t('caregiver.doctorReviewRed', 'Doctor Review (Red)')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
-                  <span>Milestone / Visit</span>
+                  <span>{t('caregiver.milestoneVisit', 'Milestone / Visit')}</span>
                 </div>
               </div>
-              <span className="text-[11px] font-medium text-[#A8A29E]">Click any date to inspect details</span>
+              <span className="text-[11px] font-medium text-[#A8A29E]">{t('caregiver.clickDateHint', 'Click any date to inspect details')}</span>
             </div>
           </Card>
 
@@ -396,9 +398,9 @@ export default function CaregiverCalendar() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Flag className="w-4 h-4 text-[#CC785C]" />
-                <h4 className="font-bold text-sm text-[#1C1917]">Key Recovery Milestones</h4>
+                <h4 className="font-bold text-sm text-[#1C1917]">{t('caregiver.keyMilestones', 'Key Recovery Milestones')}</h4>
               </div>
-              <span className="text-xs font-semibold text-[#78716C]">30-Day Plan</span>
+              <span className="text-xs font-semibold text-[#78716C]">{t('caregiver.thirtyDayPlan', '30-Day Plan')}</span>
             </div>
 
             <div className="space-y-3">
@@ -432,7 +434,7 @@ export default function CaregiverCalendar() {
                         <span className="text-[10px] font-semibold text-[#78716C]">{m.date}</span>
                       </div>
                       <p className="text-[11px] text-[#78716C] mt-0.5">
-                        {isPassed ? 'Completed successfully' : 'Upcoming care event'}
+                        {isPassed ? t('caregiver.completedSuccessfully', 'Completed successfully') : t('caregiver.upcomingCareEvent', 'Upcoming care event')}
                       </p>
                     </div>
                   </div>
@@ -448,7 +450,7 @@ export default function CaregiverCalendar() {
             {/* Header with Selected Date */}
             <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#E8E2D7]">
               <div>
-                <p className="text-[10px] uppercase font-extrabold tracking-wider text-[#78716C]">Inspecting Date</p>
+                <p className="text-[10px] uppercase font-extrabold tracking-wider text-[#78716C]">{t('caregiver.inspectingDate', 'Inspecting Date')}</p>
                 <h4 className="font-bold text-base font-serif text-[#1C1917]">
                   {new Date(selectedDate + 'T00:00:00').toLocaleDateString(undefined, {
                     weekday: 'short',
@@ -462,12 +464,12 @@ export default function CaregiverCalendar() {
                 status={selectedDayInfo.statusColor || 'GREEN'}
                 label={
                   selectedDayInfo.statusColor === 'GREEN'
-                    ? 'On Track'
+                    ? t('status.onTrack', 'On Track')
                     : selectedDayInfo.statusColor === 'YELLOW'
-                    ? 'Caution'
+                    ? t('status.caution', 'Caution')
                     : selectedDayInfo.statusColor === 'RED'
-                    ? 'Review Needed'
-                    : 'Scheduled'
+                    ? t('status.reviewNeeded', 'Review Needed')
+                    : t('status.scheduled', 'Scheduled')
                 }
               />
             </div>
@@ -477,7 +479,7 @@ export default function CaregiverCalendar() {
               <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E2D7]">
                 <div className="flex items-center gap-1.5 text-xs text-[#78716C] mb-1">
                   <Activity className="w-3.5 h-3.5 text-[#CC785C]" />
-                  <span>Recovery Score</span>
+                  <span>{t('caregiver.recoveryScore', 'Recovery Score')}</span>
                 </div>
                 <p className="text-xl font-extrabold text-[#1C1917]">
                   {selectedDayInfo.score ? `${selectedDayInfo.score}/100` : '85/100'}
@@ -488,19 +490,19 @@ export default function CaregiverCalendar() {
               <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E2D7]">
                 <div className="flex items-center gap-1.5 text-xs text-[#78716C] mb-1">
                   <Pill className="w-3.5 h-3.5 text-[#0D9488]" />
-                  <span>Doses Taken</span>
+                  <span>{t('caregiver.dosesTaken', 'Doses Taken')}</span>
                 </div>
                 <p className="text-xl font-extrabold text-[#1C1917]">
                   {selectedDayInfo.dosesTaken || 3} / {selectedDayInfo.dosesTotal || 3}
                 </p>
-                <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">100% adherence</p>
+                <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">100% {t('caregiver.adherenceRate', 'adherence')}</p>
               </div>
             </div>
 
             {/* Daily Scheduled Routine */}
             <div className="mb-4">
               <h5 className="text-xs font-bold text-[#1C1917] uppercase tracking-wider mb-2.5">
-                Daily Regimen & Care Checklist
+                {t('caregiver.dailyRegimen', 'Daily Regimen & Care Checklist')}
               </h5>
               <div className="space-y-2">
                 <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E8E2D7] text-xs">
@@ -542,7 +544,7 @@ export default function CaregiverCalendar() {
               <div className="p-3 rounded-xl bg-[#0D9488]/10 border border-[#0D9488]/25 mb-4">
                 <div className="flex items-center gap-2 text-xs font-bold text-[#0D9488] mb-1">
                   <Stethoscope className="w-4 h-4" />
-                  <span>Scheduled Consultation</span>
+                  <span>{t('caregiver.scheduledConsultation', 'Scheduled Consultation')}</span>
                 </div>
                 <p className="text-xs text-[#1C1917] font-semibold">Post-Operative Wound Dressing Check</p>
                 <p className="text-[11px] text-[#78716C]">Clinic Room 204 • 10:00 AM with Nurse Specialist</p>
@@ -556,14 +558,14 @@ export default function CaregiverCalendar() {
                 className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-[#FAF8F5] hover:bg-[#F4F0E8] border border-[#E8E2D7] rounded-xl text-xs font-bold text-[#1C1917] transition-all cursor-pointer"
               >
                 <Smile className="w-3.5 h-3.5 text-[#CC785C]" />
-                <span>Review Patient Feedback</span>
+                <span>{t('caregiver.reviewFeedback', 'Review Patient Feedback')}</span>
               </button>
               <button
                 onClick={() => navigate('/caregiver')}
                 className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-[#CC785C] hover:bg-[#B5674E] text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
               >
                 <Heart className="w-3.5 h-3.5" />
-                <span>Return to Daily Summary</span>
+                <span>{t('caregiver.returnToSummary', 'Return to Daily Summary')}</span>
               </button>
             </div>
           </Card>

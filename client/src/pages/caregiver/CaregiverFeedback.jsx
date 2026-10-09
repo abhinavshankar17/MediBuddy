@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import StatusBadge from '../../components/StatusBadge';
@@ -32,6 +33,7 @@ import {
 import { useRealtimeSync } from '../../utils/realtimeSync';
 
 export default function CaregiverFeedback() {
+  const { t } = useTranslation();
   const { activePatientId, setActivePatientId, currentUser } = useApp();
   const navigate = useNavigate();
 
@@ -173,8 +175,8 @@ export default function CaregiverFeedback() {
 
   return (
     <PageContainer
-      title="Patient Feedback Review"
-      subtitle={`Review symptom updates, daily feelings, and notes sent by ${activePatientObj.name}`}
+      title={t('caregiver.feedbackReviewTitle', 'Patient Feedback Review')}
+      subtitle={t('caregiver.feedbackReviewSubtitle', 'Review symptom updates, daily feelings, and notes sent by {{name}}', { name: activePatientObj.name })}
       actions={
         <div className="flex items-center gap-2">
           {linkedPatients.length > 1 && (
@@ -198,7 +200,7 @@ export default function CaregiverFeedback() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#FAF8F5] border border-[#E8E2D7] text-xs font-bold text-[#1C1917] transition-all shadow-2xs cursor-pointer"
           >
             <Activity className="w-3.5 h-3.5 text-[#CC785C]" />
-            <span>Daily Report</span>
+            <span>{t('nav.dailyReport', 'Daily Report')}</span>
           </button>
         </div>
       }
@@ -220,9 +222,9 @@ export default function CaregiverFeedback() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="p-4 rounded-2xl bg-gradient-to-br from-[#2B2724] to-[#3D3733] text-white shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-stone-300">Total Check-in Notes</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-stone-300">{t('caregiver.totalCheckInNotes', 'Total Check-in Notes')}</p>
             <p className="text-2xl font-serif font-bold text-white mt-0.5">{feedbacks.length}</p>
-            <p className="text-[11px] text-stone-300 mt-1">Submitted during home recovery</p>
+            <p className="text-[11px] text-stone-300 mt-1">{t('caregiver.submittedDuringRecovery', 'Submitted during home recovery')}</p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-[#CC785C] flex items-center justify-center text-white">
             <MessageSquare className="w-5 h-5" />
@@ -231,10 +233,10 @@ export default function CaregiverFeedback() {
 
         <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E2D7] shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Awaiting Caregiver Review</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">{t('caregiver.awaitingReview', 'Awaiting Caregiver Review')}</p>
             <p className="text-2xl font-serif font-bold text-[#CC785C] mt-0.5">{pendingCount}</p>
             <p className="text-[11px] text-[#78716C] mt-1">
-              {pendingCount > 0 ? 'Action suggested' : 'All feedback reviewed'}
+              {pendingCount > 0 ? t('status.actionSuggested', 'Action suggested') : t('status.allReviewed', 'All feedback reviewed')}
             </p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
@@ -244,11 +246,11 @@ export default function CaregiverFeedback() {
 
         <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E2D7] shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Caregiver Support</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">{t('caregiver.caregiverSupport', 'Caregiver Support')}</p>
             <p className="text-2xl font-serif font-bold text-emerald-700 mt-0.5">
               {feedbacks.length - pendingCount}
             </p>
-            <p className="text-[11px] text-[#78716C] mt-1">Acknowledged with care notes</p>
+            <p className="text-[11px] text-[#78716C] mt-1">{t('caregiver.acknowledgedWithNotes', 'Acknowledged with care notes')}</p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
             <CheckCircle2 className="w-5 h-5" />
@@ -264,8 +266,8 @@ export default function CaregiverFeedback() {
               <Heart className="w-4 h-4" />
             </div>
             <div>
-              <p className="text-xs font-bold text-[#1C1917]">Send Loved One Encouragement</p>
-              <p className="text-[10px] text-[#78716C]">Deliver a supportive note right to their dashboard</p>
+              <p className="text-xs font-bold text-[#1C1917]">{t('caregiver.sendLovedOneEncouragement', 'Send Loved One Encouragement')}</p>
+              <p className="text-[10px] text-[#78716C]">{t('caregiver.supportiveNoteSubtitle', 'Deliver a supportive note right to their dashboard')}</p>
             </div>
           </div>
           <input
@@ -281,7 +283,7 @@ export default function CaregiverFeedback() {
             className="flex items-center justify-center gap-1.5 px-4 py-2 bg-[#CC785C] hover:bg-[#B5674E] disabled:opacity-50 text-white rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer flex-shrink-0"
           >
             <Send className="w-3.5 h-3.5" />
-            <span>{sendingQuick ? 'Sending...' : 'Send Note'}</span>
+            <span>{sendingQuick ? t('common.loading', 'Sending...') : t('caregiver.sendBtn', 'Send Note')}</span>
           </button>
         </form>
       </Card>
@@ -291,10 +293,10 @@ export default function CaregiverFeedback() {
         <div className="flex items-center gap-1.5">
           <Filter className="w-3.5 h-3.5 text-[#78716C] mr-1" />
           {[
-            { id: 'all', label: `All Notes (${feedbacks.length})` },
-            { id: 'pending', label: `Needs Review (${pendingCount})` },
-            { id: 'urgent', label: 'Urgent / Priority' },
-            { id: 'reviewed', label: 'Reviewed' }
+            { id: 'all', label: `${t('caregiver.feedbackFilterAll', 'All Entries')} (${feedbacks.length})` },
+            { id: 'pending', label: `${t('caregiver.feedbackFilterPending', 'Needs Review')} (${pendingCount})` },
+            { id: 'urgent', label: t('caregiver.feedbackFilterUrgent', 'Urgent Attention') },
+            { id: 'reviewed', label: t('caregiver.feedbackFilterReviewed', 'Reviewed') }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -380,12 +382,12 @@ export default function CaregiverFeedback() {
                     {isPending ? (
                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        <span>Awaiting Family Review</span>
+                        <span>{t('caregiver.awaitingReview', 'Awaiting Family Review')}</span>
                       </span>
                     ) : (
                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" />
-                        <span>Reviewed by Family</span>
+                        <span>{t('caregiver.acknowledgedWithNotes', 'Reviewed by Family')}</span>
                       </span>
                     )}
                   </div>
@@ -400,7 +402,7 @@ export default function CaregiverFeedback() {
                         <Activity className="w-3.5 h-3.5" />
                       </div>
                       <p className="text-[11px] font-bold text-[#78716C] uppercase tracking-wider">
-                        Patient's Reported Condition:
+                        {t('feedback.reportSymptoms', "Patient's Reported Condition")}:
                       </p>
                     </div>
                     <p className="text-sm font-bold text-[#1C1917] ml-8">
@@ -411,7 +413,7 @@ export default function CaregiverFeedback() {
                   {/* Symptoms & Feelings Snapshot */}
                   {Array.isArray(f.symptoms) && f.symptoms.length > 0 && (
                     <div className="flex items-center gap-1.5 flex-wrap text-xs">
-                      <span className="text-[#78716C] font-semibold">Reported Feelings / Symptoms:</span>
+                      <span className="text-[#78716C] font-semibold">{t('feedback.reportSymptoms', 'Reported Feelings / Symptoms')}:</span>
                       {f.symptoms.map((s, idx) => (
                         <span
                           key={idx}
@@ -427,7 +429,7 @@ export default function CaregiverFeedback() {
                   {f.notes && (
                     <div className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E8E2D7]">
                       <p className="text-[11px] font-bold text-[#78716C] uppercase tracking-wider mb-1">
-                        Additional Note from {activePatientObj.name}:
+                        {t('common.notes', 'Additional Note')} {t('common.from', 'from')} {activePatientObj.name}:
                       </p>
                       <p className="text-xs text-[#1C1917] leading-relaxed italic">
                         "{f.notes}"
@@ -443,10 +445,10 @@ export default function CaregiverFeedback() {
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-bold text-emerald-900 flex items-center gap-1.5">
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-                        Caregiver Acknowledgment Note:
+                        {t('caregiver.caregiverSupport', 'Caregiver Acknowledgment Note')}:
                       </span>
                       <span className="text-[10px] text-emerald-700">
-                        {f.reviewedAt ? new Date(f.reviewedAt).toLocaleDateString() : 'Acknowledged'}
+                        {f.reviewedAt ? new Date(f.reviewedAt).toLocaleDateString() : t('status.reviewed', 'Acknowledged')}
                       </span>
                     </div>
                     <p className="text-emerald-950 font-medium">
@@ -459,7 +461,7 @@ export default function CaregiverFeedback() {
                     {isCurrentlyEditing ? (
                       <div className="space-y-2 animate-fade-in">
                         <label className="text-xs font-bold text-[#1C1917] block">
-                          Add a note or action for family records:
+                          {t('caregiver.caregiverNotePlaceholder', 'Add note from family caregiver...')}:
                         </label>
                         <textarea
                           rows={2}
@@ -470,7 +472,7 @@ export default function CaregiverFeedback() {
                               [f._id]: e.target.value
                             })
                           }
-                          placeholder="e.g. Checked on Mom, got her an ice pack and reminded her to rest before dinner."
+                          placeholder={t('caregiver.caregiverNotePlaceholder', 'Add note from family caregiver...')}
                           className="w-full p-2.5 rounded-xl border border-[#E8E2D7] text-xs bg-white text-[#1C1917] focus:outline-none focus:border-[#CC785C] focus:ring-2 focus:ring-[#CC785C]/15"
                         />
                         <div className="flex items-center gap-2 justify-end">
@@ -478,7 +480,7 @@ export default function CaregiverFeedback() {
                             onClick={() => setReviewingId(null)}
                             className="px-3 py-1.5 rounded-xl border border-[#E8E2D7] text-xs font-bold text-[#78716C] hover:bg-[#FAF8F5] cursor-pointer"
                           >
-                            Cancel
+                            {t('common.cancel', 'Cancel')}
                           </button>
                           <button
                             onClick={() => handleReview(f._id)}
@@ -486,7 +488,7 @@ export default function CaregiverFeedback() {
                             className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#059669] hover:bg-[#047857] text-white rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
                           >
                             <Check className="w-3.5 h-3.5" />
-                            <span>{submittingReview ? 'Saving...' : 'Confirm Review'}</span>
+                            <span>{submittingReview ? t('common.loading', 'Saving...') : t('common.save', 'Confirm Review')}</span>
                           </button>
                         </div>
                       </div>
@@ -506,7 +508,7 @@ export default function CaregiverFeedback() {
                             className="flex items-center gap-1.5 px-3 py-1.5 bg-[#CC785C] hover:bg-[#B5674E] text-white rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
                           >
                             <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>Mark as Reviewed</span>
+                            <span>{t('caregiver.markReviewed', 'Mark as Reviewed')}</span>
                           </button>
 
                           <button
@@ -515,7 +517,7 @@ export default function CaregiverFeedback() {
                             }}
                             className="px-3 py-1.5 bg-[#FAF8F5] hover:bg-[#F4F0E8] border border-[#E8E2D7] text-xs font-bold text-[#1C1917] rounded-xl transition-all cursor-pointer"
                           >
-                            Add Caregiver Note
+                            {t('common.notes', 'Add Caregiver Note')}
                           </button>
                         </div>
 
