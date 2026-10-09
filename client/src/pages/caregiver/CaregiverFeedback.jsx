@@ -101,10 +101,10 @@ export default function CaregiverFeedback() {
   const handleReview = async (feedbackId) => {
     try {
       setSubmittingReview(true);
-      const note = caregiverNoteText[feedbackId] || 'Acknowledged and noted by family caregiver.';
+      const note = caregiverNoteText[feedbackId] || 'Acknowledged and noted by family member.';
       const updated = await reviewFeedback(patientId, feedbackId, {
         caregiverId,
-        caregiverName: currentUser?.name || 'Family Caregiver',
+        caregiverName: currentUser?.name || 'Family Member',
         caregiverNote: note,
         status: 'reviewed'
       });
@@ -131,7 +131,7 @@ export default function CaregiverFeedback() {
       setSendingQuick(true);
       await sendEncouragement(patientId, {
         caregiverId,
-        caregiverName: currentUser?.name || 'Family Caregiver',
+        caregiverName: currentUser?.name || 'Family Member',
         message: quickEncouragement,
         tag: 'love'
       });
@@ -231,7 +231,7 @@ export default function CaregiverFeedback() {
 
         <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E2D7] shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Awaiting Caregiver Review</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Awaiting Family Review</p>
             <p className="text-2xl font-serif font-bold text-[#CC785C] mt-0.5">{pendingCount}</p>
             <p className="text-[11px] text-[#78716C] mt-1">
               {pendingCount > 0 ? 'Action suggested' : 'All feedback reviewed'}
@@ -244,7 +244,7 @@ export default function CaregiverFeedback() {
 
         <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E2D7] shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Caregiver Support</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#78716C]">Family Support</p>
             <p className="text-2xl font-serif font-bold text-emerald-700 mt-0.5">
               {feedbacks.length - pendingCount}
             </p>
@@ -443,7 +443,7 @@ export default function CaregiverFeedback() {
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-bold text-emerald-900 flex items-center gap-1.5">
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-                        Caregiver Acknowledgment Note:
+                        Family Acknowledgment Note:
                       </span>
                       <span className="text-[10px] text-emerald-700">
                         {f.reviewedAt ? new Date(f.reviewedAt).toLocaleDateString() : 'Acknowledged'}
@@ -515,7 +515,7 @@ export default function CaregiverFeedback() {
                             }}
                             className="px-3 py-1.5 bg-[#FAF8F5] hover:bg-[#F4F0E8] border border-[#E8E2D7] text-xs font-bold text-[#1C1917] rounded-xl transition-all cursor-pointer"
                           >
-                            Add Caregiver Note
+                            Add Family Note
                           </button>
                         </div>
 

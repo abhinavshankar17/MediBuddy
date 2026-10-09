@@ -543,7 +543,7 @@ export default function CaregiverDashboard() {
 
                       {fb.caregiverNote && (
                         <p className="text-[11px] text-emerald-800 font-medium">
-                          Caregiver response: "{fb.caregiverNote}"
+                          Family response: "{fb.caregiverNote}"
                         </p>
                       )}
 

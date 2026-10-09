@@ -105,7 +105,7 @@ export default function LoginPage() {
               }`}
             >
               <HeartPulse className="w-4 h-4" />
-              <span>Caregivers (5)</span>
+              <span>Family (5)</span>
             </button>
           </div>
         </div>
@@ -125,7 +125,7 @@ export default function LoginPage() {
                   </div>
                   <StatusBadge
                     status={user.role === 'patient' ? 'completed' : user.role === 'nurse' ? 'info' : 'warning'}
-                    label={user.role.toUpperCase()}
+                    label={user.role === 'caregiver' ? 'FAMILY' : user.role.toUpperCase()}
                   />
                 </div>
 

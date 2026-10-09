@@ -175,10 +175,10 @@ export default function PatientInsight() {
         </div>
       </Card>
 
-      {/* Family Encouragements & Caregiver Messages Section */}
+      {/* Family Encouragements & Messages Section */}
       <Card
         className="border-[#E8E2D7] bg-gradient-to-br from-white via-[#FAF8F5] to-rose-50/20 shadow-xs"
-        title="Family Encouragements & Caregiver Messages"
+        title="Family Encouragements & Messages"
         subtitle="Personal words of love and support sent by your family to cheer on your daily recovery"
         badge={
           encouragements.length > 0 ? (
@@ -194,7 +194,7 @@ export default function PatientInsight() {
             <Heart className="w-8 h-8 text-[#A8A29E] mx-auto mb-2 opacity-50" />
             <p className="text-xs font-bold text-[#1C1917]">No family messages yet today</p>
             <p className="text-[11px] text-[#78716C] mt-0.5 max-w-sm mx-auto">
-              When your family members or caregivers send supportive notes from their portal, they will appear here in real time.
+              When your family members send supportive notes from their portal, they will appear here in real time.
             </p>
           </div>
         ) : (

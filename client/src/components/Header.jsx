@@ -160,7 +160,7 @@ export default function Header() {
                         : 'bg-[#CC785C]/10 text-[#CC785C] border border-[#CC785C]/20'
                     }`}
                   >
-                    {currentUser.role.toUpperCase()}
+                    {isCaregiverUser ? 'FAMILY' : currentUser.role.toUpperCase()}
                   </span>
                 )}
               </div>
@@ -361,7 +361,7 @@ export default function Header() {
                 <User className="w-3.5 h-3.5" />
               )}
               <span className="hidden sm:inline">
-                {isCaregiverUser ? 'Caregiver Portal' : isNurseUser ? 'Nurse Portal' : 'Patient App'}
+                {isCaregiverUser ? 'Family Portal' : isNurseUser ? 'Nurse Portal' : 'Patient App'}
               </span>
             </div>
 

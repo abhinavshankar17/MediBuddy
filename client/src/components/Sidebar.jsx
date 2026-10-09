@@ -85,7 +85,7 @@ export default function Sidebar() {
             <HeartPulse className="w-4 h-4" />
           </div>
           <span className="font-bold text-sm text-[#1C1917] font-serif">
-            {isCaregiver ? 'Family Caregiver' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
+            {isCaregiver ? 'Family Portal' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
           </span>
         </div>
         <button
@@ -106,7 +106,7 @@ export default function Sidebar() {
           <div>
             <p className="text-[10px] uppercase tracking-wider font-extrabold text-[#78716C]">Active View</p>
             <p className="text-xs font-bold text-[#1C1917]">
-              {isCaregiver ? 'Caregiver Portal' : isNurse ? 'Nurse Workspace' : 'Patient Portal'}
+              {isCaregiver ? 'Family Portal' : isNurse ? 'Nurse Workspace' : 'Patient Portal'}
             </p>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function Sidebar() {
       {/* Navigation List */}
       <div className="flex-1 space-y-1 overflow-y-auto pr-1">
         <p className="px-3 text-[10px] font-extrabold uppercase tracking-widest text-[#78716C] mb-2 hidden md:block">
-          {isCaregiver ? 'Caregiver Views' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
+          {isCaregiver ? 'Family Views' : isNurse ? 'Clinical Controls' : 'Care Navigation'}
         </p>
 
         {navItems.map((item) => {
@@ -161,7 +161,7 @@ export default function Sidebar() {
           <div className="flex-1 min-w-0">
             <p className="text-xs font-bold text-[#1C1917] truncate">{currentUser?.name || 'Logged In User'}</p>
             <p className="text-[10px] text-[#78716C] truncate">
-              {currentUser?.role ? currentUser.role.toUpperCase() : 'USER'} • {activePatientId}
+              {currentUser?.role === 'caregiver' ? 'FAMILY' : currentUser?.role ? currentUser.role.toUpperCase() : 'USER'} • {activePatientId}
             </p>
           </div>
         </div>
